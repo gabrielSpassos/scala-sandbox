@@ -1,4 +1,4 @@
-@()
+@(message: String)
 
 @main("Play UI") {
     <h3>Message Page</h3>
@@ -9,4 +9,6 @@
             <input type="submit">
         </fieldset>
     </form>
+
+    <p>@message</p>
 }

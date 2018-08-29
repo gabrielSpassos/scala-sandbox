@@ -8,5 +8,9 @@ GET     /                           controllers.HomeController.index()
 
 GET     /messages                           controllers.MessagesController.getMessage()
 
+GET     /messages/:message          controllers.MessagesController.getMessagePathParam(message: String)
+
+POST    /messages                   controllers.MessagesController.sendUser(username: String, userage: Int)
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
