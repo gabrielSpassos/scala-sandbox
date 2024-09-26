@@ -1,7 +1,5 @@
 import AreaInstances._
 
-// For more information on writing tests, see
-// https://scalameta.org/munit/docs/getting-started.html
 class ShapeAreaTest extends munit.FunSuite {
   val rectangle: Rectangle = Rectangle(2, 4)
   val circle: Circle = Circle(3.5)

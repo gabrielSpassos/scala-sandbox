@@ -13,6 +13,7 @@
   - Instances of type class
   - Interface objects
   - Interface syntax
+- Working with type classes in Scala means we have to work with implicit values and implicit parameters. Any definitions marked implicit in Scala must be placed inside an object or trait rather than at the top level.
 
 ## sbt project compiled with Scala 3
 
