@@ -1,3 +1,5 @@
+package show
+
 import cats.Show
 import cats.instances.int.*
 import cats.instances.string.*
