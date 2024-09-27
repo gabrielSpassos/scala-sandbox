@@ -1,3 +1,5 @@
+package show
+
 import cats.Show
 import cats.implicits.toShow
 

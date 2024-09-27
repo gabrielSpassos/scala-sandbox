@@ -4,6 +4,16 @@
 - https://typelevel.org/cats/
 - https://www.baeldung.com/scala/cats-intro
 
+A Good presentation:
+Finishes on time (5 min)
+Has code
+Has Trade-offs Pros and Cons
+Has video/demo
+Has images
+Explain how it works
+Explain the architecture
+Compare with similar solutions
+
 ## About
 
 - a Scala library that provides abstractions supporting a typeful, functional programming style
