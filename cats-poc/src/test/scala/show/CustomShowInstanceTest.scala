@@ -1,7 +1,7 @@
 package show
 
 import cats.Show
-import cats.implicits._
+import cats.implicits.*
 
 import java.time.ZonedDateTime
 import java.util.Date

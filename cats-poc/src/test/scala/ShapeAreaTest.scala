@@ -1,4 +1,4 @@
-import AreaInstances._
+import AreaInstances.*
 
 class ShapeAreaTest extends munit.FunSuite {
   val rectangle: Rectangle = Rectangle(2, 4)
