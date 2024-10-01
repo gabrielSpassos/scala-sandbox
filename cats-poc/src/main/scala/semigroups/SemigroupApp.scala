@@ -1,5 +1,6 @@
 package semigroups
 
+import cats.Semigroup
 import cats.syntax.apply.* // for tupled and mapN
 
 object SemigroupApp extends App {
@@ -10,7 +11,13 @@ object SemigroupApp extends App {
   private val optionTuple2 = (Option(123), Option("abc"), Option(true), Option(2.5)).tupled
   println(optionTuple2)
 
-  private final case class Person(name: String, lastName: String, birthYear: Int, height: Double)
+  val map1 = Map("foo" -> Option(1), "bar" -> Option(1), "tar" -> None, "cats" -> None)
+  val map2 = Map("foo" -> Option(2), "cats" -> Option(4))
+  val mapSemigroupCombine = Semigroup[Map[String, Option[Int]]].combine(map1, map2)
+  println(mapSemigroupCombine)
+
+  private final case class Person(name: String, lastName: String,
+                                  birthYear: Int, height: Double)
 
   private val personMapResult = (
     Option("Gabriel"),

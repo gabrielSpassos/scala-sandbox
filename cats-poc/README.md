@@ -23,7 +23,11 @@ Compare with similar solutions
   - Instances of type class
   - Interface objects
   - Interface syntax
-- Working with type classes in Scala means we have to work with implicit values and implicit parameters. Any definitions marked implicit in Scala must be placed inside an object or trait rather than at the top level.
+- Working with type classes in Scala means we have to work with implicit values and implicit parameters.
+Any definitions marked implicit in Scala must be placed inside an object or trait rather than at the top level.
+
+- Functors allow us to sequence computations ignoring some complication
+  - Monand is a type of functors
 
 - The name cats comes from Category theory
 
