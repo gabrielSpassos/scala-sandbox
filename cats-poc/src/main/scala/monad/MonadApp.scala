@@ -11,6 +11,5 @@ object MonadApp extends App {
   private val result: Option[String] = value.flatMap(p => Some(p.name ++ " " ++ p.lastName))
 
   println(result) // Some(Gabriel Passos)
-
-
+  
 }

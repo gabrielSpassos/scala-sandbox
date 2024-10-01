@@ -26,7 +26,7 @@ Compare with similar solutions
 - Working with type classes in Scala means we have to work with implicit values and implicit parameters. Any definitions marked implicit in Scala must be placed inside an object or trait rather than at the top level.
 
 - The name cats comes from Category theory
-  - 
+
 ## sbt project compiled with Scala 3
 
 ### Usage
