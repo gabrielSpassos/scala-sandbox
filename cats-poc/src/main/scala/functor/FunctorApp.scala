@@ -1,13 +1,13 @@
 package functor
 
 import cats.*
+import cats.data.EitherT
 import cats.implicits.*
-import functor.FutureApp.future1
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.*
 import scala.concurrent.{Await, Future}
-import scala.util.Random
+import scala.util.{Failure, Random, Success, Try}
 
 // A Functor allows you to map over a wrapped value (like Option, List, etc.).
 object FunctorApp extends App {
@@ -48,6 +48,39 @@ object EitherExample extends App {
 
   println(successResult) // Output: Right(80.0)
   println(failureResult) // Output: Left(Cannot withdrawal 200.0)
+}
+
+object EitherTApp extends App {
+
+  def getBalanceByUser(userId: String): Either[String, Double] =
+    if (userId == null) Left(s"Cannot found user")
+    else Right(100.0)
+
+  def withdrawal(balance: Double, amount: Double): Either[String, Double] =
+    if (amount > balance) Left(s"Cannot withdrawal $amount")
+    else Right(balance - amount)
+
+  def withdrawalProgramAsync(userId: String, amount: Double): EitherT[Future, String, Double] =
+    for {
+      balance <- EitherT(Future.successful(getBalanceByUser(userId)))
+      result <- EitherT(Future.successful(withdrawal(balance, amount)))
+    } yield result
+
+  withdrawalProgramAsync("userId1", 20.0).value.onComplete {
+    case Success(value) => println(value) // Right(80.0)
+    case Failure(exception) => println(s"Failed $exception")
+  }
+
+  withdrawalProgramAsync("userId2", 150.0).value.onComplete {
+    case Success(value) => println(value) // Left(Cannot withdrawal 150.0)
+    case Failure(exception) => println(s"Failed $exception")
+  }
+
+  withdrawalProgramAsync(null, 50.0).value.onComplete {
+    case Success(value) => println(value) // Left(Cannot found user)
+    case Failure(exception) => println(s"Failed $exception")
+  }
+
 }
 
 object FutureApp extends App {
