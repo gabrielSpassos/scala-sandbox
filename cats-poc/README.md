@@ -42,6 +42,11 @@ Any definitions marked implicit in Scala must be placed inside an object or trai
 
 - Fibers
   - Fibers are the fundamental abstraction in Cats Effect
+  - enables concurrent operations
+    - concurrent = execute multiple tasks on same core, with context switch
+    - Concurrency without Blocking:
+      - suspend execution when face blocking operations, allowing other fiber to run
+      - with this blocking management, we can optimize the resource utilization
   - lightweight threads
     - "green threads" or "coroutines"
   - The Cats Effect IO runtime implements fibers in roughly 150 bytes per fiber
