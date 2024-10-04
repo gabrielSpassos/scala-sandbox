@@ -141,8 +141,8 @@ object FiberConcurrencyApp2 extends IOApp.Simple {
     }
 
   def concurrentIO(userId: String) = for {
-    fiber1 <- IO.delay(updateUser(userId)).start // Start a fiber for the first IO
-    fiber2 <- IO.delay(updateUserAddress(userId)).start // Start another fiber
+    fiber1 <- IO(updateUser(userId)).printIO.start // Start a fiber for the first IO
+    fiber2 <- IO(updateUserAddress(userId)).printIO.start // Start another fiber
     result1 <- fiber1.join // Wait for the first fiber to complete
     result2 <- fiber2.join // Wait for the second fiber to complete
   } yield (result1, result2)

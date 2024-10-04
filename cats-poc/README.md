@@ -15,30 +15,40 @@ Compare with similar solutions
 
 ## About
 
-- a Scala library that provides abstractions supporting a typeful, functional programming style
-- tooling for building asynchronous and concurrent applications.
-- Type Class (https://www.baeldung.com/scala/type-classes) it allows extend libs with new functionality, without traditional inheritance.
-  In Scala Cats, components of type classes can be specified as:
-  - Type class
-  - Instances of type class
-  - Interface objects
-  - Interface syntax
-- Working with type classes in Scala means we have to work with implicit values and implicit parameters.
-Any definitions marked implicit in Scala must be placed inside an object or trait rather than at the top level.
+- The name cats comes from Category theory
+
+- a Scala library that provides abstractions supporting a typeful, functional programming style 
+ tooling for building asynchronous and concurrent applications.
+
+- Type Class (https://www.baeldung.com/scala/type-classes) it allows extend libs with new functionality, 
+  without traditional inheritance.
+  
+  - In Scala Cats, components of type classes can be specified as:
+    - Type class
+    - Instances of type class
+    - Interface objects
+    - Interface syntax
+  - Working with type classes in Scala means we have to work with implicit values and implicit parameters.
+  Any definitions marked implicit in Scala must be placed inside an object or trait rather than at the top level.
 
 - data types
-  - transformer
-  - nested either
-  - compose
-  - EitherT[F[_], L, R] = F[Either[L, R]]
-    - F[_] = Monand -> type class
-    - L = Left
-    - R = Right
+  - abstractions for functional programing
+  
+  - EitherT
+    - monand transformer
+    - more composability in nested context (Future, Option)
+    - EitherT[F[_], L, R] = F[Either[L, R]]
+      - F[_] = Monand -> type class
+      - L = Left
+      - R = Right
 
 - Functors allow us to sequence computations ignoring some complication
   - Monand is a type of functors
 
-- The name cats comes from Category theory
+- Cats effects
+  - effects comes from "side-effects"
+  - pure function don't have side effects (sample: print to console, manage resource)
+  - lib to handle with these side effects async and functional programing way
 
 - Fibers
   - Fibers are the fundamental abstraction in Cats Effect
