@@ -2,3 +2,4 @@
 # Add key=value pairs of SDKs to use below
 java=17.0.12-amzn
 scala=2.13.15
+sbt=1.10.2
