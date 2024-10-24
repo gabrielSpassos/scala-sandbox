@@ -1,5 +1,7 @@
 # Scala 2 POC
 
+- https://docs.scala-lang.org/tour/tour-of-scala.html
+
 ### Tips
 
 * Create project
@@ -17,3 +19,8 @@ sbt
 ~run
 ```
 The `~` is to activate the hot reload
+
+* Execute tests
+```
+sbt test
+```
