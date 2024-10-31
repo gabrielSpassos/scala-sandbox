@@ -55,8 +55,7 @@ object FutureSample extends App {
     case Success(number)    => println("Succeed with: " + number)
   }
 
-
-  def printSucceedResult[A](result: A): Unit = println("Succeed: " + result)
+  private def printSucceedResult[A](result: A): Unit = println("Succeed: " + result)
 
   private def createMagicNumber(): Int = {
     Thread.sleep(1000L)
