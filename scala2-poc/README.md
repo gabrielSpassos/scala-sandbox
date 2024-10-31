@@ -1,7 +1,7 @@
 # Scala 2 POC
 
 - https://docs.scala-lang.org/tour/tour-of-scala.html
-- https://docs.scala-lang.org/tour/extractor-objects.html
+- https://docs.scala-lang.org/tour/upper-type-bounds.html
 
 ### Tips
 
