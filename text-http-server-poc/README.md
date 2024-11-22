@@ -5,6 +5,18 @@
 ### Usage
 * http://localhost:8080/hello
 * `curl http://localhost:8080/hello`
+* ```
+  curl --request POST \
+  --url http://localhost:8080/orders \
+  --header 'content-type: application/json' \
+  --data '{
+    "items": [{
+      "id": 1,
+      "name": "t-shirt"
+    }]
+  }'
+  ```
+* `curl --request GET --url http://localhost:8080/items/1`
 
 ### Tips
 
@@ -31,6 +43,6 @@ sbt test
 
 ### Todo
 - [x] https://doc.akka.io/libraries/akka-http/current/introduction.html#routing-dsl-for-http-servers
-- [ ] https://doc.akka.io/libraries/akka-http/current/introduction.html#marshalling
-
+- [x] https://doc.akka.io/libraries/akka-http/current/introduction.html#marshalling
+- [ ] https://doc.akka.io/libraries/akka-http/current/introduction.html#streaming
 
