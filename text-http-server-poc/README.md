@@ -17,6 +17,9 @@
   }'
   ```
 * `curl --request GET --url http://localhost:8080/items/1`
+* `curl --limit-rate 50b http://localhost:8080/numbers`
+* `curl -X PUT "http://localhost:8080/auction?bid=22&user=Martin"`
+* `curl http://localhost:8080/auction`
 
 ### Tips
 
@@ -44,5 +47,6 @@ sbt test
 ### Todo
 - [x] https://doc.akka.io/libraries/akka-http/current/introduction.html#routing-dsl-for-http-servers
 - [x] https://doc.akka.io/libraries/akka-http/current/introduction.html#marshalling
-- [ ] https://doc.akka.io/libraries/akka-http/current/introduction.html#streaming
+- [x] https://doc.akka.io/libraries/akka-http/current/introduction.html#streaming
+- [ ] https://doc.akka.io/libraries/akka-http/current/introduction.html#low-level-http-server-apis
 
