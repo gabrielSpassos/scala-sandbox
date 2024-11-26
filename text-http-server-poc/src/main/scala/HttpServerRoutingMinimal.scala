@@ -12,7 +12,7 @@ import scala.io.StdIn
 object HttpServerRoutingMinimal {
 
   def main(args: Array[String]): Unit = {
-    implicit val system = ActorSystem(Behaviors.empty, "text-http-server")
+    implicit val system = ActorSystem(Behaviors.empty, "simple-http-server")
     implicit val executionContext = system.executionContext
 
     val routes: Route = path("hello") {

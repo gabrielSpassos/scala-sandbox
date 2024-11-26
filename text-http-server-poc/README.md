@@ -25,6 +25,17 @@
 * `curl http://localhost:8080/ping`
 * `curl http://localhost:8080/crash`
 * `curl http://localhost:8080/foo`
+* curl --request POST \
+  --url http://localhost:8080/pages/foo
+* curl --request GET \
+  --url http://localhost:8080/pages/foo
+* curl --request PUT \
+  --url http://localhost:8080/pages/foo \
+  --header 'content-type: application/json' \
+  --data '{
+  "content": "12345"
+  }'
+
 
 ### Tips
 
