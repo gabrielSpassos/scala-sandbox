@@ -22,22 +22,38 @@ object TextHttpServer {
 
   implicit val orderFormat: RootJsonFormat[WebPage] = jsonFormat1(WebPage.apply)
 
-  val webPagesMap = collection.mutable.Map[String, WebPage]()
+  private val webPagesMap = collection.mutable.Map[String, WebPage]()
 
-  def createWebPage(key: String): WebPage = {
+  private def createWebPage(key: String): Either[String, WebPage] = {
+    if (key.isBlank || key.isEmpty) {
+      return Left("Invalid key")
+    }
+
     if (webPagesMap.contains(key)) {
-      webPagesMap(key)
+      Right(webPagesMap(key))
     } else {
       webPagesMap += (key -> WebPage(""))
-      webPagesMap(key)
+      Right(webPagesMap(key))
     }
   }
 
-  def getWebPage(key: String): Option[WebPage] = {
+  private def getWebPage(key: String): Option[WebPage] = {
     webPagesMap.get(key)
   }
 
-  def updateWebPage(key: String, webPage: WebPage): WebPage = {
+  private def updateWebPage(key: String, webPage: WebPage): Either[String, WebPage] = {
+//    val updatedWebPage: WebPage = for {
+//      updatedKey <- wrapUpdate(key, webPage)
+//      _ = webPagesMap(updatedKey.toString) //todo: why this is a char
+//    }
+
+    getWebPage(key) match {
+      case Some(_) => Right(wrapUpdate(key, webPage))
+      case None => Left("Invalid key")
+    }
+  }
+
+  private def wrapUpdate(key: String, webPage: WebPage): WebPage = {
     webPagesMap(key) = webPage
     webPage
   }
@@ -47,9 +63,12 @@ object TextHttpServer {
       Directives.concat(
         Directives.post {
           pathPrefix("pages" / RemainingPath) { pageKey =>
-            val webPage: WebPage = createWebPage(pageKey.toString())
+            val maybePage = createWebPage(pageKey.toString())
 
-            complete(webPage)
+            maybePage match {
+              case Right(page) => complete(page)
+              case Left(message) => complete(StatusCodes.BadRequest, message)
+            }
           }
         },
         Directives.get {
@@ -65,9 +84,12 @@ object TextHttpServer {
         Directives.put {
           path("pages" / RemainingPath) { pageKey =>
             entity(as[WebPage]) { webPage =>
-              val updatedPage: WebPage = updateWebPage(pageKey.toString(), webPage)
+              val maybePage = updateWebPage(pageKey.toString(), webPage)
 
-              complete(updatedPage)
+              maybePage match {
+                case Right(page) => complete(page)
+                case Left(message) => complete(StatusCodes.BadRequest, message)
+              }
             }
           }
         }
