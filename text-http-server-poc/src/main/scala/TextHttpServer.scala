@@ -41,21 +41,22 @@ object TextHttpServer {
     webPagesMap.get(key)
   }
 
-  private def updateWebPage(key: String, webPage: WebPage): Either[String, WebPage] = {
-//    val updatedWebPage: WebPage = for {
-//      updatedKey <- wrapUpdate(key, webPage)
-//      _ = webPagesMap(updatedKey.toString) //todo: why this is a char
-//    }
-
-    getWebPage(key) match {
-      case Some(_) => Right(wrapUpdate(key, webPage))
-      case None => Left("Invalid key")
+  private def updateWebPage(key: String, webPage: WebPage): Option[Either[String, WebPage]] = {
+    def wrapUpdate(key: String, webPage: WebPage): WebPage = {
+      webPagesMap(key) = webPage
+      webPage
     }
-  }
 
-  private def wrapUpdate(key: String, webPage: WebPage): WebPage = {
-    webPagesMap(key) = webPage
-    webPage
+    for {
+      _ <- getWebPage(key)
+      updatedPage = wrapUpdate(key, webPage)
+    } yield {
+      updatedPage match {
+        case page: WebPage => Right(page)
+        case _ => Left("Invalid key")
+      }
+    }
+
   }
 
   def main(args: Array[String]): Unit = {
@@ -87,8 +88,9 @@ object TextHttpServer {
               val maybePage = updateWebPage(pageKey.toString(), webPage)
 
               maybePage match {
-                case Right(page) => complete(page)
-                case Left(message) => complete(StatusCodes.BadRequest, message)
+                case Some(Right(page)) => complete(page)
+                case Some(Left(message)) => complete(StatusCodes.BadRequest, message)
+                case None => complete(StatusCodes.NotFound)
               }
             }
           }
