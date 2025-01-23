@@ -9,7 +9,13 @@ import org.springframework.stereotype.Service
 class CardService @Autowired()(private val cardDAO: CardDAO) {
 
   def findAll(): List[CardDTO] = {
-    cardDAO.findAll().map(entity => CardDTO.toDTO(entity))
+    cardDAO.findAll()
+      .map(entity => CardDTO.toDTO(entity))
+  }
+  
+  def findByNumber(number: String): Option[CardDTO] = {
+    cardDAO.findByNumber(number)
+      .map(entity => CardDTO.toDTO(entity))
   }
 
 }

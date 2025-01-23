@@ -28,12 +28,23 @@ class CardDAO @Autowired()(private val jdbcTemplate: JdbcTemplate,
       expirationDate = LocalDate.parse("2028-05-30"),
       cvv = "987"
     )
-    cardRepository.save(card)
+    save(card)
     println("Inserted basic data via repository")
   }
 
   def findAll(): List[CardEntity] = {
     cardRepository.findAll().asScala.toList
+  }
+
+  def findByNumber(number: String): Option[CardEntity] = {
+    cardRepository.findByNumber(number) match {
+      case card => Some(card)
+      case null => None
+    }
+  }
+  
+  def save(cardEntity: CardEntity): CardEntity = {
+    cardRepository.save(cardEntity)
   }
 
 }

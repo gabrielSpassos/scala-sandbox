@@ -7,4 +7,8 @@ import org.springframework.stereotype.Repository
 import java.util.UUID
 
 @Repository
-trait CardRepository extends CrudRepository[CardEntity, UUID]
+trait CardRepository extends CrudRepository[CardEntity, UUID] {
+  
+  def findByNumber(number: String): CardEntity
+  
+}
