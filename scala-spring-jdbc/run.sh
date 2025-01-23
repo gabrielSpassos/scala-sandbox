@@ -1,3 +1,3 @@
 #!/bin/bash
 
-sbt clean compile run
+sbt clean compile ~run

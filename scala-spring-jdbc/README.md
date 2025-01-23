@@ -6,6 +6,20 @@ This POC has:
 - Spring Boot 3.4.1
 - SBT 1.10.2
 
+### Requests
+
+* Fetch all cards
+```
+curl --request GET \
+  --url http://localhost:8080/cards
+```
+
+* Fetch card by number
+```
+curl --request GET \
+  --url http://localhost:8080/cards/{{cardNumber}}
+```
+
 ### Observation 
 
 1. Necessary that the API/Controller response body was type `class` (with getters and setter) **NOT** `case class`.
