@@ -3,10 +3,11 @@ package com.gabrielspassos.controller
 import com.fasterxml.jackson.core.`type`.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.gabrielspassos.Application
+import com.gabrielspassos.DataMock.{createCardEntity, createRandomCardNumber}
 import com.gabrielspassos.controller.response.CardResponse
 import com.gabrielspassos.dao.CardDAO
 import com.gabrielspassos.entity.CardEntity
-import org.junit.jupiter.api.Assertions.{assertEquals, assertFalse, assertNotNull, assertNull, assertTrue}
+import org.junit.jupiter.api.Assertions.{assertEquals, assertFalse, assertNotNull, assertTrue}
 import org.junit.jupiter.api.{Test, TestInstance}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -19,8 +20,6 @@ import java.net.http.{HttpClient, HttpRequest, HttpResponse}
 import java.time.LocalDate
 import scala.util.Random
 
-class CardControllerIntegrationTest
-
 @SpringBootTest(
   webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
   classes = Array(classOf[Application])
@@ -28,7 +27,7 @@ class CardControllerIntegrationTest
 @EnableAutoConfiguration
 @ComponentScan(Array("com.*"))
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class PersonControllerIntegrationTests @Autowired()(private val cardDAO: CardDAO) {
+class CardControllerIntegrationTest @Autowired()(private val cardDAO: CardDAO) {
 
   @LocalServerPort
   var randomServerPort: Int = 0
@@ -54,14 +53,7 @@ class PersonControllerIntegrationTests @Autowired()(private val cardDAO: CardDAO
 
   @Test
   def shouldGetCardByNumberSuccessfully(): Unit = {
-    val card = CardEntity(
-      institutionName = "NuBank",
-      brand = "MasterCard",
-      number = createRandomCardNumber(),
-      name = "Test Tester",
-      expirationDate = LocalDate.parse("2028-05-30"),
-      cvv = Random().between(111, 999).toString
-    )
+    val card = createCardEntity().copy(id = null)
     val savedCard = cardDAO.save(card)
 
     val url = s"http://localhost:$randomServerPort/cards/${card.number}"
@@ -97,8 +89,4 @@ class PersonControllerIntegrationTests @Autowired()(private val cardDAO: CardDAO
     assertTrue(response.body().isEmpty)
   }
 
-  private def createRandomCardNumber(): String = {
-    val randomValue = Random.between(111111111111L, 999999999999L).toString
-    "5548" + randomValue
-  }
 }

@@ -78,3 +78,16 @@ def findByNumber(number: String): Option[CardEntity] = {
     }
 }
 ```
+
+3. Enable spring tests
+* add plugin into the `plugins.sbt`:
+```
+resolvers += Resolver.jcenterRepo
+
+addSbtPlugin("com.github.sbt.junit" % "sbt-jupiter-interface" % "0.13.3")
+```
+
+* add dependency into the `build.sbt`:
+```
+"com.github.sbt.junit" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % Test,
+```
