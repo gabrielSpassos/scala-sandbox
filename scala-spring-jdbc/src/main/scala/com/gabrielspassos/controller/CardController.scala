@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.{GetMapping, PathVariable, RequestMapping, RestController}
 
 import java.util
-import java.util.stream.{Collectors, StreamSupport}
 import scala.jdk.CollectionConverters.*
 
 @RestController
@@ -16,9 +15,9 @@ class CardController @Autowired()(private val cardService: CardService) {
 
   @GetMapping
   def findAll(): ResponseEntity[util.List[CardResponse]] = {
-    val cards = StreamSupport.stream(cardService.findAll().asJava.spliterator(), false)
+    val cards = cardService.findAll()
       .map(dto => new CardResponse(dto))
-      .collect(Collectors.toList())
+      .asJava
     ResponseEntity.ok(cards)
   }
 

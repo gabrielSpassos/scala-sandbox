@@ -6,7 +6,7 @@ import com.gabrielspassos.Application
 import com.gabrielspassos.controller.response.CardResponse
 import com.gabrielspassos.dao.CardDAO
 import com.gabrielspassos.entity.CardEntity
-import org.junit.jupiter.api.Assertions.{assertEquals, assertFalse, assertNotNull}
+import org.junit.jupiter.api.Assertions.{assertEquals, assertFalse, assertNotNull, assertNull, assertTrue}
 import org.junit.jupiter.api.{Test, TestInstance}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -37,7 +37,7 @@ class PersonControllerIntegrationTests @Autowired()(private val cardDAO: CardDAO
   private val objectMapper = ObjectMapper()
 
   @Test
-  def getCardsSuccessfully(): Unit = {
+  def shouldGetCardsSuccessfully(): Unit = {
     val url = s"http://localhost:$randomServerPort/cards"
     val response = client.send(
       HttpRequest.newBuilder().uri(URI.create(url)).GET().build(),
@@ -53,7 +53,7 @@ class PersonControllerIntegrationTests @Autowired()(private val cardDAO: CardDAO
   }
 
   @Test
-  def getCardByNumberSuccessfully(): Unit = {
+  def shouldGetCardByNumberSuccessfully(): Unit = {
     val card = CardEntity(
       institutionName = "NuBank",
       brand = "MasterCard",
@@ -82,6 +82,19 @@ class PersonControllerIntegrationTests @Autowired()(private val cardDAO: CardDAO
     assertEquals(savedCard.name, responseBody.name)
     assertEquals(savedCard.expirationDate.toString, responseBody.expirationDate)
     assertEquals(savedCard.cvv, responseBody.cvv)
+  }
+
+  @Test
+  def shouldNotFoundCardByNumber(): Unit = {
+    val url = s"http://localhost:$randomServerPort/cards/1234567890"
+    val response = client.send(
+      HttpRequest.newBuilder().uri(URI.create(url)).GET().build(),
+      HttpResponse.BodyHandlers.ofString()
+    )
+
+    assertEquals(404, response.statusCode())
+    assertNotNull(response.body())
+    assertTrue(response.body().isEmpty)
   }
 
   private def createRandomCardNumber(): String = {

@@ -38,11 +38,11 @@ class CardDAO @Autowired()(private val jdbcTemplate: JdbcTemplate,
 
   def findByNumber(number: String): Option[CardEntity] = {
     cardRepository.findByNumber(number) match {
-      case card => Some(card)
       case null => None
+      case card => Some(card)
     }
   }
-  
+
   def save(cardEntity: CardEntity): CardEntity = {
     cardRepository.save(cardEntity)
   }

@@ -27,22 +27,22 @@ class CardResponse(
   def setId(id: String): Unit = {
     this.id = id
   }
-  
+
   def getInstitutionName: String = institutionName
   def setInstitutionName(institutionName: String): Unit = {
     this.institutionName = institutionName
   }
-  
+
   def getBrand: String = brand
   def setBrand(brand: String): Unit = {
     this.brand = brand
   }
-  
+
   def getNumber: String = number
   def setNumber(number: String): Unit = {
     this.number = number
   }
-  
+
   def getName: String = name
   def setName(name: String): Unit = {
     this.name = name
@@ -52,10 +52,10 @@ class CardResponse(
   def setExpirationDate(expirationDate: String): Unit = {
     this.expirationDate = expirationDate
   }
-  
+
   def getCvv: String = cvv
   def setCvv(cvv: String): Unit = {
     this.cvv = cvv
   }
-  
+
 }
