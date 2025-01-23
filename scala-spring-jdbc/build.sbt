@@ -6,5 +6,19 @@ ThisBuild / scalaVersion := "3.6.2"
 
 ThisBuild / organization := "com.gabrielspassos"
 
-val springVersion = "3.4.1"
+val springBootVersion = "3.4.1"
 val javaVersion = "21"
+
+libraryDependencies ++= Seq(
+  "org.springframework.boot" % "spring-boot-starter-web" % springBootVersion,
+  "org.springframework.boot" % "spring-boot-starter-jdbc" % springBootVersion,
+  "org.springframework.boot" % "spring-boot-starter-data-jdbc" % springBootVersion,
+  "org.springframework.boot" % "spring-boot-starter-test" % springBootVersion % Test,
+  "com.h2database" % "h2" % "2.3.232" % Runtime
+)
+
+javacOptions ++= Seq(
+  "--release", javaVersion
+)
+
+Compile / mainClass := Some("com.gabrielspassos.Application")
