@@ -69,7 +69,7 @@ class CardResponse(
 }
 ```
 
-2. When using the pattern matcher and the dependency returns null the case `null => ?` , needs to be the first implementation
+2. When using the pattern matcher and the dependency returns null the case `null => ???` , needs to be the first implementation
 ```scala
 def findByNumber(number: String): Option[CardEntity] = {
     cardRepository.findByNumber(number) match {
