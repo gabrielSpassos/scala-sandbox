@@ -20,6 +20,12 @@ curl --request GET \
   --url http://localhost:8080/cards/{{cardNumber}}
 ```
 
+* Fetch bank by code
+```
+curl --request GET \
+  --url http://localhost:8080/banks/{{bankCode}}
+```
+
 ### Observation 
 
 1. Necessary that the API/Controller response body was type `class` (with getters and setter) **NOT** `case class`, 

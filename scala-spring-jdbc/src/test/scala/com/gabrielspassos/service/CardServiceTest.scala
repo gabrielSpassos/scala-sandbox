@@ -1,8 +1,7 @@
 package com.gabrielspassos.service
 
-import com.gabrielspassos.DataMock.{createCardEntity, createRandomCardNumber}
+import com.gabrielspassos.DataMock.createCardEntity
 import com.gabrielspassos.dao.CardDAO
-import com.gabrielspassos.entity.CardEntity
 import org.junit.jupiter.api.Assertions.{assertEquals, assertFalse, assertNotNull}
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -10,7 +9,6 @@ import org.mockito.Mock
 import org.mockito.Mockito.when
 import org.mockito.junit.jupiter.MockitoExtension
 
-import java.util.UUID
 import scala.compiletime.uninitialized
 
 @ExtendWith(Array(classOf[MockitoExtension]))
