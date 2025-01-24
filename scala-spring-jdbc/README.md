@@ -83,7 +83,7 @@ class CardResponse(
 }
 ```
 
-2. When using the pattern matcher and the dependency returns null the case `null => ???` , needs to be the first implementation
+2. When using the pattern matcher and the dependency returns null the case `null => ???` , needs to be the first implementation, otherwise the `null` will be considered as a valid value.
 ```scala
 def findByNumber(number: String): Option[CardEntity] = {
     cardRepository.findByNumber(number) match {
@@ -104,4 +104,10 @@ addSbtPlugin("com.github.sbt.junit" % "sbt-jupiter-interface" % "0.13.3")
 * add dependency into the `build.sbt`:
 ```
 "com.github.sbt.junit" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % Test,
+```
+
+* output:
+```
+[info] Passed: Total 5, Failed 0, Errors 0, Passed 5
+[success] Total time: 4 s, completed Jan 24, 2025, 4:43:05AM
 ```
