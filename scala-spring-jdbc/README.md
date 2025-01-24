@@ -26,6 +26,9 @@ curl --request GET \
   --url http://localhost:8080/banks/{{bankCode}}
 ```
 
+### Swagger
+- http://localhost:8080/swagger-ui/index.html
+
 ### Observation 
 
 1. Necessary that the API/Controller response body was type `class` (with getters and setter) **NOT** `case class`, 

@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean
 
 @SpringBootApplication
 class Application @Autowired()(private val cardDAO: CardDAO, private val bankDAO: BankDAO) {
-  
+
   @Bean
   def commandLineRunner(): CommandLineRunner = new CommandLineRunner {
     override def run(args: String*): Unit = {
@@ -18,7 +18,7 @@ class Application @Autowired()(private val cardDAO: CardDAO, private val bankDAO
       bankDAO.insertBasicData()
     }
   }
-  
+
 }
 
 object Application {
