@@ -22,7 +22,8 @@ curl --request GET \
 
 ### Observation 
 
-1. Necessary that the API/Controller response body was type `class` (with getters and setter) **NOT** `case class`.
+1. Necessary that the API/Controller response body was type `class` (with getters and setter) **NOT** `case class`, 
+otherwise the spring will not be able to serialize the response, and the output would look like `{}` instead a proper JSON.
 ```scala
 class CardResponse(
  var id: String,
@@ -83,7 +84,43 @@ class CardResponse(
 }
 ```
 
-2. When using the pattern matcher and the dependency returns null the case `null => ???` , needs to be the first implementation, otherwise the `null` will be considered as a valid value.
+2. As alternative is also possible to create your own **Java** class and use it as response.
+```java
+public class BankResponse {
+
+    private String code;
+    private String name;
+
+    public BankResponse() {
+        this.code = null;
+        this.name = null;
+    }
+
+    public BankResponse(String code, String name) {
+        this.code = code;
+        this.name = name;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+}
+```
+
+3. When using the pattern matcher and the dependency returns null the case `null => ???` , needs to be the first implementation, otherwise the `null` will be considered as a valid value.
 ```scala
 def findByNumber(number: String): Option[CardEntity] = {
     cardRepository.findByNumber(number) match {
@@ -93,7 +130,7 @@ def findByNumber(number: String): Option[CardEntity] = {
 }
 ```
 
-3. Enable spring tests
+4. Enable spring tests
 * add plugin into the `plugins.sbt`:
 ```
 resolvers += Resolver.jcenterRepo

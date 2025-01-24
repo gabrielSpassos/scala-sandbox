@@ -3,7 +3,7 @@ package com.gabrielspassos.controller
 import com.fasterxml.jackson.core.`type`.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.gabrielspassos.Application
-import com.gabrielspassos.DataMock.{createCardEntity, createRandomCardNumber}
+import com.gabrielspassos.DataMock.createCardEntity
 import com.gabrielspassos.controller.response.CardResponse
 import com.gabrielspassos.dao.CardDAO
 import com.gabrielspassos.entity.CardEntity
@@ -17,8 +17,6 @@ import org.springframework.context.annotation.ComponentScan
 
 import java.net.URI
 import java.net.http.{HttpClient, HttpRequest, HttpResponse}
-import java.time.LocalDate
-import scala.util.Random
 
 @SpringBootTest(
   webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,

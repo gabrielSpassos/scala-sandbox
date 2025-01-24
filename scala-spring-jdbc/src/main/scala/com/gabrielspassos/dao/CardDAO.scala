@@ -18,7 +18,7 @@ class CardDAO @Autowired()(private val jdbcTemplate: JdbcTemplate,
       "VALUES ('NuBank', 'MasterCard', '5162305254037431', 'John Smith', '2030-12-30', '123')")
     jdbcTemplate.execute("INSERT INTO card (id, institution_name, brand, number, name, expiration_date, cvv) " +
       "VALUES (uuid(), 'NuBank', 'MasterCard', '5162306263962296', 'Mary Book', '2027-08-30', '456')")
-    println("Inserted basic data via jdbcTemplate")
+    println("Inserted basic card data via jdbcTemplate")
 
     val card = CardEntity(
       institutionName = "NuBank",
@@ -29,7 +29,7 @@ class CardDAO @Autowired()(private val jdbcTemplate: JdbcTemplate,
       cvv = "987"
     )
     save(card)
-    println("Inserted basic data via repository")
+    println("Inserted basic card data via repository")
   }
 
   def findAll(): List[CardEntity] = {

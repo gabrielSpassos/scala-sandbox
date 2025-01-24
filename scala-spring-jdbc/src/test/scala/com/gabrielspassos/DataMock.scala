@@ -1,6 +1,6 @@
 package com.gabrielspassos
 
-import com.gabrielspassos.entity.CardEntity
+import com.gabrielspassos.entity.{BankEntity, CardEntity}
 
 import java.time.LocalDate
 import java.util.UUID
@@ -22,6 +22,14 @@ object DataMock {
       name = "Teste Tester",
       expirationDate = LocalDate.parse("2028-05-30"),
       cvv = Random().between(111, 999).toString
+    )
+  }
+  
+  def createBankEntity(): BankEntity = {
+    BankEntity(
+      id = UUID.randomUUID(),
+      code = "341",
+      name = "Itau"
     )
   }
 }
