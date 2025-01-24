@@ -5,7 +5,7 @@ import com.gabrielspassos.Application
 import com.gabrielspassos.DataMock.createBankEntity
 import com.gabrielspassos.contracts.response.BankResponse
 import com.gabrielspassos.dao.BankDAO
-import org.junit.jupiter.api.Assertions.{assertEquals, assertNotNull}
+import org.junit.jupiter.api.Assertions.{assertEquals, assertNotNull, assertTrue}
 import org.junit.jupiter.api.{Test, TestInstance}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -50,6 +50,19 @@ class BankControllerIntegrationTest @Autowired()(private val bankDAO: BankDAO) {
     assertNotNull(responseBody)
     assertEquals(savedBank.code, responseBody.getCode)
     assertEquals(savedBank.name, responseBody.getName)
+  }
+
+  @Test
+  def shouldNotFoundBankByCode(): Unit = {
+    val url = s"http://localhost:$randomServerPort/banks/99999"
+    val response = client.send(
+      HttpRequest.newBuilder().uri(URI.create(url)).GET().build(),
+      HttpResponse.BodyHandlers.ofString()
+    )
+
+    assertEquals(404, response.statusCode())
+    assertNotNull(response.body())
+    assertTrue(response.body().isEmpty)
   }
 
 }
