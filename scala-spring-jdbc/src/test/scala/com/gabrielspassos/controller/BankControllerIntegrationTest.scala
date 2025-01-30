@@ -27,7 +27,7 @@ import java.net.http.{HttpClient, HttpRequest, HttpResponse}
 @ComponentScan(Array("com.*"))
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class BankControllerIntegrationTest @Autowired()(private val bankDAO: BankDAO) {
-gi
+
   @LocalServerPort
   var randomServerPort: Int = 0
 
