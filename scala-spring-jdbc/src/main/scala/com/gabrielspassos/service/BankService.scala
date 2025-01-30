@@ -7,6 +7,11 @@ import org.springframework.stereotype.Service
 
 @Service
 class BankService @Autowired()(private val bankDAO: BankDAO) {
+  
+  def save(bankDTO: BankDTO): BankDTO = {
+    val bankEntity = bankDAO.save(BankDTO.fromDTOToEntity(bankDTO))
+    BankDTO.toDTO(bankEntity)
+  }
 
   def findByCode(code: String): Option[BankDTO] = {
     bankDAO.findByCode(code)

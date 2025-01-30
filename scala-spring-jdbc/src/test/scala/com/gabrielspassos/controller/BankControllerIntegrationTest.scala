@@ -4,15 +4,16 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.gabrielspassos.Application
 import com.gabrielspassos.DataMock.createBankEntity
 import com.gabrielspassos.contracts.v1.response.BankResponse
-import com.gabrielspassos.controller.v1.response.GenericApiResponse
 import com.gabrielspassos.dao.BankDAO
-import org.junit.jupiter.api.Assertions.{assertEquals, assertNotNull, assertNull}
+import org.junit.jupiter.api.Assertions.{assertEquals, assertNotNull, assertTrue}
 import org.junit.jupiter.api.{Test, TestInstance}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.context.annotation.ComponentScan
+import org.springframework.http.HttpHeaders.{ACCEPT, CONTENT_TYPE}
+import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 
 import java.net.URI
 import java.net.http.{HttpClient, HttpRequest, HttpResponse}
@@ -47,15 +48,11 @@ class BankControllerIntegrationTest @Autowired()(private val bankDAO: BankDAO) {
     assertEquals(200, response.statusCode())
     assertNotNull(response.body())
 
-    val responseBody = objectMapper.readValue(response.body(), classOf[GenericApiResponse[BankResponse]])
-    val innerBody = objectMapper.readValue(objectMapper.writeValueAsString(responseBody.body), classOf[BankResponse])
+    val responseBody = objectMapper.readValue(response.body(), classOf[BankResponse])
 
     assertNotNull(responseBody)
-    assertNotNull(responseBody.body)
-    assertEquals(savedBank.code, innerBody.getCode)
-    assertEquals(savedBank.name, innerBody.getName)
-    assertEquals(200, responseBody.statusCode)
-    assertEquals("OK", responseBody.message)
+    assertEquals(savedBank.code, responseBody.getCode)
+    assertEquals(savedBank.name, responseBody.getName)
   }
 
   @Test
@@ -66,14 +63,74 @@ class BankControllerIntegrationTest @Autowired()(private val bankDAO: BankDAO) {
       HttpResponse.BodyHandlers.ofString()
     )
 
-    assertEquals(200, response.statusCode())
+    assertEquals(404, response.statusCode())
     assertNotNull(response.body())
+    assertTrue(response.body().isEmpty)
+  }
 
-    val responseBody = objectMapper.readValue(response.body(), classOf[GenericApiResponse[BankResponse]])
-    assertNotNull(responseBody)
-    assertNull(responseBody.body)
-    assertEquals(404, responseBody.statusCode)
-    assertEquals("Not Found", responseBody.message)
+  @Test
+  def shouldCreateBank(): Unit = {
+    val request =
+      """
+      {
+        "code": "700",
+        "name": "Fake Bank"
+      }
+      """
+    val url = s"http://localhost:$randomServerPort/v1/banks"
+
+    val response = client.send(
+      HttpRequest.newBuilder()
+        .uri(URI(url))
+        .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+        .header(ACCEPT, APPLICATION_JSON_VALUE)
+        .POST(HttpRequest.BodyPublishers.ofString(request))
+        .build(),
+      HttpResponse.BodyHandlers.ofString()
+    )
+
+    assertEquals(201, response.statusCode())
+    assertNotNull(response.body())
+    assertEquals("{\"code\":\"700\",\"name\":\"Fake Bank\"}", response.body())
+  }
+
+  @Test
+  def shouldFailToCreateBank(): Unit = {
+    val request =
+      """
+        {
+          "code": "999",
+          "name": "Fake Bank 2"
+        }
+        """
+    val url = s"http://localhost:$randomServerPort/v1/banks"
+
+    val response1 = client.send(
+      HttpRequest.newBuilder()
+        .uri(URI(url))
+        .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+        .header(ACCEPT, APPLICATION_JSON_VALUE)
+        .POST(HttpRequest.BodyPublishers.ofString(request))
+        .build(),
+      HttpResponse.BodyHandlers.ofString()
+    )
+
+    val response2 = client.send(
+      HttpRequest.newBuilder()
+        .uri(URI(url))
+        .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+        .header(ACCEPT, APPLICATION_JSON_VALUE)
+        .POST(HttpRequest.BodyPublishers.ofString(request))
+        .build(),
+      HttpResponse.BodyHandlers.ofString()
+    )
+
+    assertEquals(201, response1.statusCode())
+    assertNotNull(response1.body())
+    assertEquals("{\"code\":\"999\",\"name\":\"Fake Bank 2\"}", response1.body())
+
+    assertEquals(500, response2.statusCode())
+    assertNotNull(response2.body())
   }
 
 }

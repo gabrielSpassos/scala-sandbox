@@ -1,23 +1,27 @@
 package com.gabrielspassos.controller.v1
 
-import com.gabrielspassos.contracts.v1.BankControllerContract
+import com.gabrielspassos.contract.impl.BankContractImpl
+import com.gabrielspassos.contracts.v1.request.BankRequest
 import com.gabrielspassos.contracts.v1.response.BankResponse
-import com.gabrielspassos.controller.v1.response.GenericApiResponse
-import com.gabrielspassos.dto.BankDTO.fromDTOToResponse
-import com.gabrielspassos.service.BankService
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.{GetMapping, PathVariable, RequestMapping, RestController}
+import org.springframework.http.{HttpStatus, ResponseEntity}
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping(Array("/v1/banks"))
-class BankController @Autowired()(private val bankService: BankService) extends BankControllerContract {
+class BankController @Autowired()(private val bankContract: BankContractImpl) {
+
+  @PostMapping
+  def createBank(@RequestBody bankRequest: BankRequest): ResponseEntity[BankResponse] = {
+    val bankResponse = bankContract.createBank(bankRequest)
+    ResponseEntity.status(HttpStatus.CREATED).body(bankResponse)
+  }
   
   @GetMapping(Array("/{code}"))
-  def findByCode(@PathVariable("code") code: String): GenericApiResponse[BankResponse] = {
-    bankService.findByCode(code) match {
-      case Some(bank) => GenericApiResponse.ok(fromDTOToResponse(bank))
-      case None => GenericApiResponse.notFound(null)
+  def findByCode(@PathVariable("code") code: String): ResponseEntity[BankResponse] = {
+    Option(bankContract.findByCode(code)) match {
+      case Some(bank) => ResponseEntity.ok(bank)
+      case None => ResponseEntity.notFound().build()
     }
   }
 }
