@@ -18,7 +18,7 @@ class BankController @Autowired()(private val bankContract: BankContractImpl) {
   }
   
   @GetMapping(Array("/{code}"))
-  def findByCode(@PathVariable("code") code: String): ResponseEntity[BankResponse] = {
+  def findByCode(@PathVariable(name = "code", required = true) code: String): ResponseEntity[BankResponse] = {
     Option(bankContract.findByCode(code)) match {
       case Some(bank) => ResponseEntity.ok(bank)
       case None => ResponseEntity.notFound().build()
