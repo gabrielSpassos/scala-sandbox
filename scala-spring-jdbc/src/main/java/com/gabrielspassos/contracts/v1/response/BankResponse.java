@@ -1,4 +1,4 @@
-package com.gabrielspassos.contracts.response;
+package com.gabrielspassos.contracts.v1.response;
 
 public class BankResponse {
 

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.`type`.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.gabrielspassos.Application
 import com.gabrielspassos.DataMock.createCardEntity
-import com.gabrielspassos.controller.response.CardResponse
+import com.gabrielspassos.controller.v1.response.CardResponse
 import com.gabrielspassos.dao.CardDAO
 import com.gabrielspassos.entity.CardEntity
 import org.junit.jupiter.api.Assertions.{assertEquals, assertFalse, assertNotNull, assertTrue}
@@ -35,7 +35,7 @@ class CardControllerIntegrationTest @Autowired()(private val cardDAO: CardDAO) {
 
   @Test
   def shouldGetCardsSuccessfully(): Unit = {
-    val url = s"http://localhost:$randomServerPort/cards"
+    val url = s"http://localhost:$randomServerPort/v1/cards"
     val response = client.send(
       HttpRequest.newBuilder().uri(URI.create(url)).GET().build(),
       HttpResponse.BodyHandlers.ofString()
@@ -54,7 +54,7 @@ class CardControllerIntegrationTest @Autowired()(private val cardDAO: CardDAO) {
     val card = createCardEntity().copy(id = null)
     val savedCard = cardDAO.save(card)
 
-    val url = s"http://localhost:$randomServerPort/cards/${card.number}"
+    val url = s"http://localhost:$randomServerPort/v1/cards/${card.number}"
     val response = client.send(
       HttpRequest.newBuilder().uri(URI.create(url)).GET().build(),
       HttpResponse.BodyHandlers.ofString()
@@ -76,7 +76,7 @@ class CardControllerIntegrationTest @Autowired()(private val cardDAO: CardDAO) {
 
   @Test
   def shouldNotFoundCardByNumber(): Unit = {
-    val url = s"http://localhost:$randomServerPort/cards/1234567890"
+    val url = s"http://localhost:$randomServerPort/v1/cards/1234567890"
     val response = client.send(
       HttpRequest.newBuilder().uri(URI.create(url)).GET().build(),
       HttpResponse.BodyHandlers.ofString()

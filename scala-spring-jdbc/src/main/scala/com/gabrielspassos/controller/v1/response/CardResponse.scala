@@ -1,4 +1,4 @@
-package com.gabrielspassos.controller.response
+package com.gabrielspassos.controller.v1.response
 
 import com.gabrielspassos.dto.CardDTO
 

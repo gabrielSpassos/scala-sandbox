@@ -1,6 +1,6 @@
-package com.gabrielspassos.controller
+package com.gabrielspassos.controller.v1
 
-import com.gabrielspassos.controller.response.CardResponse
+import com.gabrielspassos.controller.v1.response.CardResponse
 import com.gabrielspassos.service.CardService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -10,7 +10,7 @@ import java.util
 import scala.jdk.CollectionConverters.*
 
 @RestController
-@RequestMapping(Array("/cards"))
+@RequestMapping(Array("/v1/cards"))
 class CardController @Autowired()(private val cardService: CardService) {
 
   @GetMapping

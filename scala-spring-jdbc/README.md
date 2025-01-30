@@ -11,19 +11,19 @@ This POC has:
 * Fetch all cards
 ```
 curl --request GET \
-  --url http://localhost:8080/cards
+  --url http://localhost:8080/v1/cards
 ```
 
 * Fetch card by number
 ```
 curl --request GET \
-  --url http://localhost:8080/cards/{{cardNumber}}
+  --url http://localhost:8080/v1/cards/{{cardNumber}}
 ```
 
 * Fetch bank by code
 ```
 curl --request GET \
-  --url http://localhost:8080/banks/{{bankCode}}
+  --url http://localhost:8080/v1/banks/{{bankCode}}
 ```
 
 ### Swagger

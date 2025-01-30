@@ -3,9 +3,10 @@ package com.gabrielspassos.controller
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.gabrielspassos.Application
 import com.gabrielspassos.DataMock.createBankEntity
-import com.gabrielspassos.contracts.response.BankResponse
+import com.gabrielspassos.contracts.v1.response.BankResponse
+import com.gabrielspassos.controller.v1.response.GenericApiResponse
 import com.gabrielspassos.dao.BankDAO
-import org.junit.jupiter.api.Assertions.{assertEquals, assertNotNull, assertTrue}
+import org.junit.jupiter.api.Assertions.{assertEquals, assertNotNull, assertNull}
 import org.junit.jupiter.api.{Test, TestInstance}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -37,7 +38,7 @@ class BankControllerIntegrationTest @Autowired()(private val bankDAO: BankDAO) {
     val bank = createBankEntity().copy(id = null)
     val savedBank = bankDAO.save(bank)
 
-    val url = s"http://localhost:$randomServerPort/banks/${bank.code}"
+    val url = s"http://localhost:$randomServerPort/v1/banks/${bank.code}"
     val response = client.send(
       HttpRequest.newBuilder().uri(URI.create(url)).GET().build(),
       HttpResponse.BodyHandlers.ofString()
@@ -46,23 +47,33 @@ class BankControllerIntegrationTest @Autowired()(private val bankDAO: BankDAO) {
     assertEquals(200, response.statusCode())
     assertNotNull(response.body())
 
-    val responseBody = objectMapper.readValue(response.body(), classOf[BankResponse])
+    val responseBody = objectMapper.readValue(response.body(), classOf[GenericApiResponse[BankResponse]])
+    val innerBody = objectMapper.readValue(objectMapper.writeValueAsString(responseBody.body), classOf[BankResponse])
+
     assertNotNull(responseBody)
-    assertEquals(savedBank.code, responseBody.getCode)
-    assertEquals(savedBank.name, responseBody.getName)
+    assertNotNull(responseBody.body)
+    assertEquals(savedBank.code, innerBody.getCode)
+    assertEquals(savedBank.name, innerBody.getName)
+    assertEquals(200, responseBody.statusCode)
+    assertEquals("OK", responseBody.message)
   }
 
   @Test
   def shouldNotFoundBankByCode(): Unit = {
-    val url = s"http://localhost:$randomServerPort/banks/99999"
+    val url = s"http://localhost:$randomServerPort/v1/banks/99999"
     val response = client.send(
       HttpRequest.newBuilder().uri(URI.create(url)).GET().build(),
       HttpResponse.BodyHandlers.ofString()
     )
 
-    assertEquals(404, response.statusCode())
+    assertEquals(200, response.statusCode())
     assertNotNull(response.body())
-    assertTrue(response.body().isEmpty)
+
+    val responseBody = objectMapper.readValue(response.body(), classOf[GenericApiResponse[BankResponse]])
+    assertNotNull(responseBody)
+    assertNull(responseBody.body)
+    assertEquals(404, responseBody.statusCode)
+    assertEquals("Not Found", responseBody.message)
   }
 
 }

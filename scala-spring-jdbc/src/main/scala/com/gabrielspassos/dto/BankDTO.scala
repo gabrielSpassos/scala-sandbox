@@ -1,6 +1,6 @@
 package com.gabrielspassos.dto
 
-import com.gabrielspassos.contracts.response.BankResponse
+import com.gabrielspassos.contracts.v1.response.BankResponse
 import com.gabrielspassos.entity.BankEntity
 
 import java.util.UUID
