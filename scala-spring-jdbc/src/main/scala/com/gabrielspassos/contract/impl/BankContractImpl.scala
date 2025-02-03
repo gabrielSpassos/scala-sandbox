@@ -22,5 +22,11 @@ class BankContractImpl @Autowired(private val bankService: BankService) extends 
       case Some(bank) => BankDTO.fromDTOToResponse(bank)
       case _ => null
   }
-  
+
+  override def deleteByCode(code: String): BankResponse = {
+    bankService.deleteByCode(code) match
+      case Right(bank) => BankResponse()
+      case Left(error) => throw new RuntimeException(error)
+  }
+    
 }

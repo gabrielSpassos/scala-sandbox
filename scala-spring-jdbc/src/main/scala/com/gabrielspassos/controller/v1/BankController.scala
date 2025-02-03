@@ -24,4 +24,10 @@ class BankController @Autowired()(private val bankContract: BankContractImpl) {
       case None => ResponseEntity.notFound().build()
     }
   }
+
+  @DeleteMapping(Array("/{code}"))
+  def deleteByCode(@PathVariable(name = "code", required = true) code: String): ResponseEntity[BankResponse] = {
+    val bankResponse = bankContract.deleteByCode(code)
+    ResponseEntity.ok(bankResponse)
+  }
 }

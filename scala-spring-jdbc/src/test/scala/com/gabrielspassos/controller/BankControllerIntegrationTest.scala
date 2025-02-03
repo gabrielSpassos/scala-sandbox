@@ -5,6 +5,7 @@ import com.gabrielspassos.Application
 import com.gabrielspassos.DataMock.createBankEntity
 import com.gabrielspassos.contracts.v1.response.BankResponse
 import com.gabrielspassos.dao.BankDAO
+import com.gabrielspassos.entity.BankEntity
 import org.junit.jupiter.api.Assertions.{assertEquals, assertNotNull, assertTrue}
 import org.junit.jupiter.api.{Test, TestInstance}
 import org.springframework.beans.factory.annotation.Autowired
@@ -17,6 +18,7 @@ import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 
 import java.net.URI
 import java.net.http.{HttpClient, HttpRequest, HttpResponse}
+import java.util.UUID
 
 
 @SpringBootTest(
@@ -132,5 +134,28 @@ class BankControllerIntegrationTest @Autowired()(private val bankDAO: BankDAO) {
     assertEquals(500, response2.statusCode())
     assertNotNull(response2.body())
   }
+
+  @Test
+  def shouldDeleteBankByCodeSuccessfully(): Unit = {
+    val bank = BankEntity(
+      id = null,
+      code = "888",
+      name = "Test Delete Bank"
+    )
+    val savedBank = bankDAO.save(bank)
+
+    val url = s"http://localhost:$randomServerPort/v1/banks/${bank.code}"
+    val response = client.send(
+      HttpRequest.newBuilder().uri(URI.create(url)).DELETE().build(),
+      HttpResponse.BodyHandlers.ofString()
+    )
+
+    assertEquals(200, response.statusCode())
+    assertNotNull(response.body())
+    assertTrue(response.body().isBlank)
+    assertTrue(response.body().isEmpty)
+  }
+  
+  
 
 }

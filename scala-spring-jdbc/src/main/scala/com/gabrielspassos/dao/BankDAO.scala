@@ -29,5 +29,10 @@ class BankDAO @Autowired()(private val jdbcTemplate: JdbcTemplate,
   def save(bankEntity: BankEntity): BankEntity = {
     bankRepository.save(bankEntity)
   }
+  
+  def delete(bankEntity: BankEntity): BankEntity = {
+    bankRepository.delete(bankEntity)
+    bankEntity
+  }
 
 }

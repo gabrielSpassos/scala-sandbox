@@ -18,4 +18,12 @@ class BankService @Autowired()(private val bankDAO: BankDAO) {
       .map(entity => BankDTO.toDTO(entity))
   }
   
+  def deleteByCode(code: String): Either[String, BankDTO] = {
+    bankDAO.findByCode(code) match
+      case None => Left(s"Bank not found by code $code")
+      case Some(bankEntity) =>
+        val deletedBank = bankDAO.delete(bankEntity)
+        Right(BankDTO.toDTO(deletedBank))
+  }
+  
 }

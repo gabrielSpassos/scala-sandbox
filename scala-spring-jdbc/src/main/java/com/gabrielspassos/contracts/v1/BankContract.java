@@ -8,5 +8,7 @@ public interface BankContract {
     BankResponse createBank(BankRequest bankRequest);
 
     BankResponse findByCode(String code);
+
+    BankResponse deleteByCode(String code);
     
 }
