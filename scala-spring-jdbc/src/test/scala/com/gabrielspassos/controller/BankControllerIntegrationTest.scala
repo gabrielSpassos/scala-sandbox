@@ -18,7 +18,6 @@ import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 
 import java.net.URI
 import java.net.http.{HttpClient, HttpRequest, HttpResponse}
-import java.util.UUID
 
 
 @SpringBootTest(
@@ -152,8 +151,7 @@ class BankControllerIntegrationTest @Autowired()(private val bankDAO: BankDAO) {
 
     assertEquals(200, response.statusCode())
     assertNotNull(response.body())
-    assertTrue(response.body().isBlank)
-    assertTrue(response.body().isEmpty)
+    assertEquals("{\"code\":null,\"name\":null}", response.body())
   }
   
   
