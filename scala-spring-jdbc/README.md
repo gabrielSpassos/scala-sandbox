@@ -5,6 +5,7 @@ This POC has:
 - Java 21
 - Spring Boot 3.4.1
 - SBT 1.10.2
+- GSON (without exclude jackson)
 
 ### Requests
 
