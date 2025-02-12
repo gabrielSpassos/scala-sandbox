@@ -13,21 +13,27 @@ object DataMock {
     "5548" + randomValue
   }
   
-  def createCardEntity(): CardEntity = {
+  def createRandomCVV(): String = {
+    Random().between(111, 999).toString
+  }
+  
+  def createCardEntity(id: UUID = UUID.randomUUID(),
+                       number: String = createRandomCardNumber(),
+                       cvv: String = createRandomCVV()): CardEntity = {
     CardEntity(
-      id = UUID.randomUUID(),
+      id = id,
       institutionName = "NuBank",
       brand = "MasterCard",
-      number = createRandomCardNumber(),
+      number = number,
       name = "Teste Tester",
       expirationDate = LocalDate.parse("2028-05-30"),
-      cvv = Random().between(111, 999).toString
+      cvv = cvv
     )
   }
   
-  def createBankEntity(): BankEntity = {
+  def createBankEntity(id: UUID = UUID.randomUUID()): BankEntity = {
     BankEntity(
-      id = UUID.randomUUID(),
+      id = id,
       code = "341",
       name = "Itau"
     )
