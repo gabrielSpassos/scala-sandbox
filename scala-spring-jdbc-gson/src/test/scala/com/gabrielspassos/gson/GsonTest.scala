@@ -4,12 +4,11 @@ import com.gabrielspassos.DataMock
 import com.gabrielspassos.DataMock.createGson
 import com.gabrielspassos.contracts.v1.response.BankResponse
 import com.gabrielspassos.dto.{BankDTO, CardDTO, UserDTO, WalletDTO}
-import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import org.junit.jupiter.api.Assertions.{assertEquals, assertNotNull, assertNull}
 import org.junit.jupiter.api.Test
 
 import java.util.UUID
-import scala.collection.mutable.ListBuffer
 
 class GsonTest {
 
@@ -152,7 +151,8 @@ class GsonTest {
     val json = """[{"id":"6fa5eeee-780d-4afd-9883-68adbcc1575d", "code":"600", "name":"Fake bank"}]"""
     val gson = createGson
 
-    val banks: Array[BankDTO] = gson.fromJson(json, classOf[Array[BankDTO]])
+    val collectionType = new TypeToken[List[BankDTO]]() {}.getType
+    val banks: List[BankDTO] = gson.fromJson(json, collectionType)
 
     assertNotNull(banks)
     assertEquals(1, banks.length)

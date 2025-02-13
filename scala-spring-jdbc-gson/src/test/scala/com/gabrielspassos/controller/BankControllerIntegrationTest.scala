@@ -1,7 +1,7 @@
 package com.gabrielspassos.controller
 
 import com.gabrielspassos.Application
-import com.gabrielspassos.DataMock.createBankEntity
+import com.gabrielspassos.DataMock.{createBankEntity, createGson}
 import com.gabrielspassos.contracts.v1.response.BankResponse
 import com.gabrielspassos.dao.BankDAO
 import com.gabrielspassos.entity.BankEntity
@@ -33,7 +33,7 @@ class BankControllerIntegrationTest @Autowired()(private val bankDAO: BankDAO) {
   var randomServerPort: Int = 0
 
   private val client = HttpClient.newHttpClient()
-  private val objectMapper = GsonBuilder().create()
+  private val objectMapper = createGson
 
   @Test
   def shouldGetCardByNumberSuccessfully(): Unit = {

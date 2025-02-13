@@ -1,11 +1,10 @@
 package com.gabrielspassos.controller
 
 import com.gabrielspassos.Application
-import com.gabrielspassos.DataMock.createCardEntity
+import com.gabrielspassos.DataMock.{createCardEntity, createGson}
 import com.gabrielspassos.controller.v1.response.CardResponse
 import com.gabrielspassos.dao.CardDAO
 import com.gabrielspassos.entity.CardEntity
-import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import org.junit.jupiter.api.Assertions.{assertEquals, assertFalse, assertNotNull, assertTrue}
 import org.junit.jupiter.api.{Test, TestInstance}
@@ -31,7 +30,7 @@ class CardControllerIntegrationTest @Autowired()(private val cardDAO: CardDAO) {
   var randomServerPort: Int = 0
 
   private val client = HttpClient.newHttpClient()
-  private val objectMapper = GsonBuilder().create()
+  private val objectMapper = createGson
 
   @Test
   def shouldGetCardsSuccessfully(): Unit = {
