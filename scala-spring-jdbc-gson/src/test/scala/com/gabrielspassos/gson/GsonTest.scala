@@ -1,14 +1,15 @@
 package com.gabrielspassos.gson
 
 import com.gabrielspassos.DataMock
+import com.gabrielspassos.DataMock.createGson
 import com.gabrielspassos.contracts.v1.response.BankResponse
 import com.gabrielspassos.dto.{BankDTO, CardDTO, UserDTO, WalletDTO}
-import com.google.gson.*
+import com.google.gson.GsonBuilder
 import org.junit.jupiter.api.Assertions.{assertEquals, assertNotNull, assertNull}
 import org.junit.jupiter.api.Test
 
-import java.time.LocalDate
 import java.util.UUID
+import scala.collection.mutable.ListBuffer
 
 class GsonTest {
 
@@ -16,9 +17,9 @@ class GsonTest {
   def shouldReadJsonSuccessfully(): Unit = {
     // given
     val json = """{"code":"600", "name":"Fake bank"}"""
+    val gson = createGson
 
     // when
-    val gson = new GsonBuilder().create()
     val bank = gson.fromJson(json, classOf[BankResponse])
 
     // then
@@ -30,9 +31,9 @@ class GsonTest {
   def shouldReadJsonSuccessfullyWithNullValue(): Unit = {
     // given
     val json = """{"code":"600", "name":null}"""
+    val gson = createGson
 
     // when
-    val gson = new GsonBuilder().create()
     val bank = gson.fromJson(json, classOf[BankResponse])
 
     // then
@@ -44,9 +45,9 @@ class GsonTest {
   def shouldReadJsonSuccessfullyWithAllNullValue(): Unit = {
     // given
     val json = """{"code":null, "name":null}"""
+    val gson = createGson
 
     // when
-    val gson = new GsonBuilder().create()
     val bank = gson.fromJson(json, classOf[BankResponse])
 
     // then
@@ -58,9 +59,9 @@ class GsonTest {
   def shouldReadJsonSuccessfullyWithImplicitNullValue(): Unit = {
     // given
     val json = """{"code":"600"}"""
+    val gson = createGson
 
     // when
-    val gson = new GsonBuilder().create()
     val bank = gson.fromJson(json, classOf[BankResponse])
 
     // then
@@ -72,9 +73,9 @@ class GsonTest {
   def shouldReadJsonSuccessfullyWithImplicitAllNullValue(): Unit = {
     // given
     val json = """{}"""
+    val gson = createGson
 
     // when
-    val gson = new GsonBuilder().create()
     val bank = gson.fromJson(json, classOf[BankResponse])
 
     // then
@@ -87,9 +88,9 @@ class GsonTest {
     // given
     val bankResponse = BankResponse("600", "Fake bank")
     val expectedJson = """{"code":"600","name":"Fake bank"}"""
+    val gson = createGson
 
     // when
-    val gson = new GsonBuilder().create()
     val json = gson.toJson(bankResponse)
 
     // then
@@ -101,9 +102,9 @@ class GsonTest {
     // given
     val bankResponse = BankResponse("600", null)
     val expectedJson = """{"code":"600"}"""
+    val gson = createGson
 
     // when
-    val gson = new GsonBuilder().create()
     val json = gson.toJson(bankResponse)
 
     // then
@@ -115,9 +116,9 @@ class GsonTest {
     // given
     val bankResponse = BankResponse()
     val expectedJson = """{}"""
+    val gson = createGson
 
     // when
-    val gson = new GsonBuilder().create()
     val json = gson.toJson(bankResponse)
 
     // then
@@ -139,14 +140,7 @@ class GsonTest {
       wallets = List(walletDTO)
     )
     val expected = """{"id":"6fa5eeee-780d-4afd-9883-68adbcc1575d","banks":[{"id":"5daca863-65fd-4bbf-b5ff-96c4fffd0cef","code":"341","name":"Itau"}],"wallets":[{"id":"e6e93963-676d-4cd0-b324-488812b60d1a","name":"My Wallet","cards":[{"id":"47135027-da84-4bf7-9f4f-84f31c9f9582","institutionName":"NuBank","brand":"MasterCard","number":"5548843996584700","name":"Teste Tester","expirationDate":"2028-05-30","cvv":"939"}]}]}"""
-
-    // when
-    val gson = new GsonBuilder()
-      .registerTypeAdapter(classOf[List[BankDTO]], new ListAdapter[BankDTO])
-      .registerTypeAdapter(classOf[List[WalletDTO]], new ListAdapter[WalletDTO])
-      .registerTypeAdapter(classOf[List[CardDTO]], new ListAdapter[CardDTO])
-      .registerTypeAdapter(classOf[LocalDate], new LocalDateAdapter())
-      .create()
+    val gson = createGson
 
     val json = gson.toJson(userDTO)
 
@@ -156,15 +150,12 @@ class GsonTest {
   @Test
   def shouldParseList(): Unit = {
     val json = """[{"id":"6fa5eeee-780d-4afd-9883-68adbcc1575d", "code":"600", "name":"Fake bank"}]"""
+    val gson = createGson
 
-    val gson = new GsonBuilder()
-      .registerTypeAdapter(classOf[List[BankDTO]], new ListAdapter[BankDTO])
-      .create()
-
-    val banks = gson.fromJson(json, classOf[List[BankDTO]])
+    val banks: Array[BankDTO] = gson.fromJson(json, classOf[Array[BankDTO]])
 
     assertNotNull(banks)
-    assertEquals(1, banks.size)
+    assertEquals(1, banks.length)
     assertEquals("6fa5eeee-780d-4afd-9883-68adbcc1575d", banks.head.id.toString)
     assertEquals("600", banks.head.code)
     assertEquals("Fake bank", banks.head.name)
@@ -173,12 +164,7 @@ class GsonTest {
   @Test
   def shouldParseJsonToNestedObjectSuccessfully(): Unit = {
     val json = """{"id":"6fa5eeee-780d-4afd-9883-68adbcc1575d","banks":[{"id":"5daca863-65fd-4bbf-b5ff-96c4fffd0cef","code":"341","name":"Itau"}],"wallets":[{"id":"e6e93963-676d-4cd0-b324-488812b60d1a","name":"My Wallet","cards":[{"id":"47135027-da84-4bf7-9f4f-84f31c9f9582","institutionName":"NuBank","brand":"MasterCard","number":"5548843996584700","name":"Teste Tester","expirationDate":"2028-05-30","cvv":"939"}]}]}"""
-
-    // when
-    val gson = new GsonBuilder()
-      .registerTypeAdapter(classOf[List[?]], new ListAdapter[Any])
-      .registerTypeAdapter(classOf[LocalDate], new LocalDateAdapter())
-      .create()
+    val gson = createGson
 
     val userDTO = gson.fromJson(json, classOf[UserDTO])
 

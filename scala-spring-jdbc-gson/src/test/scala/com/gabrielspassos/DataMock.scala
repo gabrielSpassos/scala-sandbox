@@ -1,6 +1,8 @@
 package com.gabrielspassos
 
 import com.gabrielspassos.entity.{BankEntity, CardEntity}
+import com.gabrielspassos.gson.{ListAdapter, LocalDateAdapter}
+import com.google.gson.{Gson, GsonBuilder}
 
 import java.time.LocalDate
 import java.util.UUID
@@ -37,5 +39,12 @@ object DataMock {
       code = "341",
       name = "Itau"
     )
+  }
+
+  def createGson: Gson = {
+    new GsonBuilder()
+      .registerTypeAdapter(classOf[List[?]], new ListAdapter[Any])
+      .registerTypeAdapter(classOf[LocalDate], new LocalDateAdapter())
+      .create()
   }
 }
