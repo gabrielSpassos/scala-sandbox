@@ -5,6 +5,37 @@
 ### Usage
 * http://localhost:8080/hello
 * `curl http://localhost:8080/hello`
+* ```
+  curl --request POST \
+  --url http://localhost:8080/orders \
+  --header 'content-type: application/json' \
+  --data '{
+    "items": [{
+      "id": 1,
+      "name": "t-shirt"
+    }]
+  }'
+  ```
+* `curl --request GET --url http://localhost:8080/items/1`
+* `curl --limit-rate 50b http://localhost:8080/numbers`
+* `curl -X PUT "http://localhost:8080/auction?bid=22&user=Martin"`
+* `curl http://localhost:8080/auction`
+* `curl http://localhost:8080/auction`
+* `curl http://localhost:8080`
+* `curl http://localhost:8080/ping`
+* `curl http://localhost:8080/crash`
+* `curl http://localhost:8080/foo`
+* curl --request POST \
+  --url http://localhost:8080/pages/foo
+* curl --request GET \
+  --url http://localhost:8080/pages/foo
+* curl --request PUT \
+  --url http://localhost:8080/pages/foo \
+  --header 'content-type: application/json' \
+  --data '{
+  "content": "12345"
+  }'
+
 
 ### Tips
 
@@ -31,6 +62,8 @@ sbt test
 
 ### Todo
 - [x] https://doc.akka.io/libraries/akka-http/current/introduction.html#routing-dsl-for-http-servers
-- [ ] https://doc.akka.io/libraries/akka-http/current/introduction.html#marshalling
-
+- [x] https://doc.akka.io/libraries/akka-http/current/introduction.html#marshalling
+- [x] https://doc.akka.io/libraries/akka-http/current/introduction.html#streaming
+- [x] https://doc.akka.io/libraries/akka-http/current/introduction.html#low-level-http-server-apis
+- [x] https://doc.akka.io/libraries/akka-http/current/introduction.html#http-client-api
 
