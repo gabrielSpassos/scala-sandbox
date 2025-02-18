@@ -1,3 +1,3 @@
 #!/bin/bash
 
-podman-compose up
+podman-compose up -d
