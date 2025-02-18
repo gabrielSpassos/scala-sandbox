@@ -5,9 +5,8 @@ import com.gabrielspassos.DataMock.{createBankEntity, createGson}
 import com.gabrielspassos.contracts.v1.response.BankResponse
 import com.gabrielspassos.dao.BankDAO
 import com.gabrielspassos.entity.BankEntity
-import com.google.gson.GsonBuilder
 import org.junit.jupiter.api.Assertions.{assertEquals, assertNotNull, assertTrue}
-import org.junit.jupiter.api.{Test, TestInstance}
+import org.junit.jupiter.api.{AfterEach, Test, TestInstance}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
@@ -18,6 +17,7 @@ import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 
 import java.net.URI
 import java.net.http.{HttpClient, HttpRequest, HttpResponse}
+import scala.collection.mutable.ListBuffer
 
 
 @SpringBootTest(
@@ -32,11 +32,22 @@ class BankControllerIntegrationTest @Autowired()(private val bankDAO: BankDAO) {
   @LocalServerPort
   var randomServerPort: Int = 0
 
+  private val bankCodes = ListBuffer[String]()
   private val client = HttpClient.newHttpClient()
   private val objectMapper = createGson
 
+  @AfterEach
+  def cleanUp(): Unit = {
+    bankCodes.foreach(code => {
+      bankDAO.findByCode(code) match
+        case Some(bank) =>
+          bankDAO.delete(bank)
+        case None => ()
+    })
+  }
+
   @Test
-  def shouldGetCardByNumberSuccessfully(): Unit = {
+  def shouldGetBankSuccessfully(): Unit = {
     val bank = createBankEntity().copy(id = null)
     val savedBank = bankDAO.save(bank)
 
@@ -45,6 +56,7 @@ class BankControllerIntegrationTest @Autowired()(private val bankDAO: BankDAO) {
       HttpRequest.newBuilder().uri(URI.create(url)).GET().build(),
       HttpResponse.BodyHandlers.ofString()
     )
+    bankCodes.addOne(bank.code)
 
     assertEquals(200, response.statusCode())
     assertNotNull(response.body())
@@ -71,10 +83,11 @@ class BankControllerIntegrationTest @Autowired()(private val bankDAO: BankDAO) {
 
   @Test
   def shouldCreateBank(): Unit = {
+    val bankCode = "700"
     val request =
-      """
+      s"""
       {
-        "code": "700",
+        "code": "$bankCode",
         "name": "Fake Bank"
       }
       """
@@ -89,6 +102,7 @@ class BankControllerIntegrationTest @Autowired()(private val bankDAO: BankDAO) {
         .build(),
       HttpResponse.BodyHandlers.ofString()
     )
+    bankCodes.addOne(bankCode)
 
     assertEquals(201, response.statusCode())
     assertNotNull(response.body())
@@ -97,10 +111,11 @@ class BankControllerIntegrationTest @Autowired()(private val bankDAO: BankDAO) {
 
   @Test
   def shouldFailToCreateBank(): Unit = {
+    val bankCode = "999"
     val request =
-      """
+      s"""
         {
-          "code": "999",
+          "code": "$bankCode",
           "name": "Fake Bank 2"
         }
         """
@@ -115,6 +130,7 @@ class BankControllerIntegrationTest @Autowired()(private val bankDAO: BankDAO) {
         .build(),
       HttpResponse.BodyHandlers.ofString()
     )
+    bankCodes.addOne(bankCode)
 
     val response2 = client.send(
       HttpRequest.newBuilder()
