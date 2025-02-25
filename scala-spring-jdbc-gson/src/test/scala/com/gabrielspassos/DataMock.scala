@@ -43,7 +43,7 @@ object DataMock {
 
   def createGson: Gson = {
     new GsonBuilder()
-      .registerTypeAdapter(classOf[List[?]], new ListAdapter[Any])
+      .registerTypeAdapter(classOf[List[_]], new ListAdapter[Any])
       .registerTypeAdapter(classOf[LocalDate], new LocalDateAdapter())
       .create()
   }

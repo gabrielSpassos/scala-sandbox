@@ -3,7 +3,8 @@ package com.gabrielspassos.gson
 import com.gabrielspassos.DataMock
 import com.gabrielspassos.DataMock.createGson
 import com.gabrielspassos.contracts.v1.response.BankResponse
-import com.gabrielspassos.dto.{BankDTO, CardDTO, UserDTO, WalletDTO}
+import com.gabrielspassos.dto.*
+import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import org.junit.jupiter.api.Assertions.{assertEquals, assertNotNull, assertNull}
 import org.junit.jupiter.api.Test
@@ -147,6 +148,28 @@ class GsonTest {
   }
 
   @Test
+  def shouldParseNestedObjectToJsonNestedCustomNameSuccessfully(): Unit = {
+    val bankDTO = BankDTO.toDTO(DataMock.createBankEntity(UUID.fromString("5daca863-65fd-4bbf-b5ff-96c4fffd0cef")))
+    val cardDTO = CardDTO.toDTO(DataMock.createCardEntity(UUID.fromString("47135027-da84-4bf7-9f4f-84f31c9f9582"), "5548843996584700", "939"))
+    val otherWalletDTO = OtherWalletDTO(
+      id = UUID.fromString("e6e93963-676d-4cd0-b324-488812b60d1a"),
+      name = "My Wallet",
+      cards = List(cardDTO)
+    )
+    val otherUserDTO = OtherUserDTO(
+      id = UUID.fromString("6fa5eeee-780d-4afd-9883-68adbcc1575d"),
+      banks = List(bankDTO),
+      wallets = List(otherWalletDTO)
+    )
+    val expected = """{"id":"6fa5eeee-780d-4afd-9883-68adbcc1575d","bank_list":[{"id":"5daca863-65fd-4bbf-b5ff-96c4fffd0cef","code":"341","name":"Itau"}],"wallet_list":[{"id":"e6e93963-676d-4cd0-b324-488812b60d1a","name":"My Wallet","card_list":[{"id":"47135027-da84-4bf7-9f4f-84f31c9f9582","institutionName":"NuBank","brand":"MasterCard","number":"5548843996584700","name":"Teste Tester","expirationDate":"2028-05-30","cvv":"939"}]}]}"""
+    val gson = createGson
+
+    val json = gson.toJson(otherUserDTO)
+
+    assertEquals(expected, json)
+  }
+
+  @Test
   def shouldParseList(): Unit = {
     val json = """[{"id":"6fa5eeee-780d-4afd-9883-68adbcc1575d", "code":"600", "name":"Fake bank"}]"""
     val gson = createGson
@@ -175,5 +198,61 @@ class GsonTest {
     assertEquals(1, userDTO.wallets.size)
     assertNotNull(userDTO.wallets.head.cards)
     assertEquals(1, userDTO.wallets.head.cards.size)
+  }
+
+  @Test
+  def should(): Unit = {
+    val jsonString =
+      """
+    {
+      "id": "6fa5eeee-780d-4afd-9883-68adbcc1575d",
+      "bank_list": [
+        {
+          "id": "5daca863-65fd-4bbf-b5ff-96c4fffd0cef",
+          "code": "341",
+          "bank_name": "Itau"
+        }
+      ],
+      "wallet_list": [
+        {
+          "id": "e6e93963-676d-4cd0-b324-488812b60d1a",
+          "name": "My Wallet",
+          "card_list": [
+            {
+              "id": "47135027-da84-4bf7-9f4f-84f31c9f9582",
+              "institutionName": "NuBank",
+              "brand": "MasterCard",
+              "number": "5548843996584700",
+              "name": "Teste Tester",
+              "expirationDate": "2028-05-30",
+              "cvv": "939"
+            }
+          ]
+        }
+      ]
+    }
+    """
+    val gson = createGson
+
+    val otherUserDTO = gson.fromJson(jsonString, classOf[OtherUserDTO])
+
+    assertNotNull(otherUserDTO)
+    assertNotNull(otherUserDTO.banks)
+    assertEquals(1, otherUserDTO.banks.size)
+    assertNotNull(otherUserDTO.wallets)
+    assertEquals(1, otherUserDTO.wallets.size)
+    assertNotNull(otherUserDTO.wallets.head.cards)
+    assertEquals(1, otherUserDTO.wallets.head.cards.size)
+  }
+
+  @Test
+  def shouldHaveDifferentNames(): Unit = {
+    val simpleDTO = SimpleDTO("123", "Test")
+    val expectedJson = """{"primary_key":"123","external_id":"Test"}"""
+    val gson = new GsonBuilder().create()
+
+    val toJson = gson.toJson(simpleDTO)
+
+    assertEquals(expectedJson, toJson)
   }
 }
