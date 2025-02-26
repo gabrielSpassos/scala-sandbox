@@ -4,7 +4,6 @@ import com.gabrielspassos.DataMock
 import com.gabrielspassos.DataMock.createGson
 import com.gabrielspassos.contracts.v1.response.BankResponse
 import com.gabrielspassos.dto.*
-import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import org.junit.jupiter.api.Assertions.{assertEquals, assertNotNull, assertNull}
 import org.junit.jupiter.api.Test
@@ -201,7 +200,7 @@ class GsonTest {
   }
 
   @Test
-  def should(): Unit = {
+  def shouldDeserializeNestedWithCustomName(): Unit = {
     val jsonString =
       """
     {
@@ -246,13 +245,38 @@ class GsonTest {
   }
 
   @Test
-  def shouldHaveDifferentNames(): Unit = {
-    val simpleDTO = SimpleDTO("123", "Test")
+  def shouldSerializeWithDifferentNamesWithCaseClass(): Unit = {
+    val simpleDTO = SimpleCaseClassDTO("123", "Test")
     val expectedJson = """{"primary_key":"123","external_id":"Test"}"""
-    val gson = new GsonBuilder().create()
+    val gson = createGson
 
     val toJson = gson.toJson(simpleDTO)
 
     assertEquals(expectedJson, toJson)
+  }
+
+  @Test
+  def shouldSerializeWithDifferentNamesWithClass(): Unit = {
+    val simpleDTO = SimpleClassDTO()
+    simpleDTO.setId("123")
+    simpleDTO.setFk("Test")
+    val expectedJson = """{"primary_key":"123","external_id":"Test"}"""
+    val gson = createGson
+
+    val toJson = gson.toJson(simpleDTO)
+
+    assertEquals(expectedJson, toJson)
+  }
+
+  @Test
+  def shouldDeserializeWithDifferentNamesWithClass(): Unit = {
+    val json = """{"primary_key":"123","external_id":"Test"}"""
+    val gson = createGson
+
+    val fromJson = gson.fromJson(json, classOf[SimpleClassDTO])
+
+    assertNotNull(fromJson)
+    assertEquals("123", fromJson.getId)
+    assertEquals("Test", fromJson.getFk)
   }
 }
