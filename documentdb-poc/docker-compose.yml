@@ -1,0 +1,10 @@
+version: '3.9'
+services:
+  localstack:
+    image: localstack/localstack-pro:latest
+    ports:
+      - 4566:4566
+#    volumes:
+      # Here you mount your setup file so it will be executed
+      # when the container starts
+      # - ./localstack-setup.sh:/etc/localstack/init/ready.d/script.sh
