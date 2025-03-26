@@ -11,3 +11,4 @@ For more information on the sbt-dotty plugin, see the
 
 - https://docs.localstack.cloud/user-guide/aws/docdb/
 - https://aws.amazon.com/blogs/database/integrate-your-spring-boot-application-with-amazon-documentdb/
+- https://whattodevnow.medium.com/using-localstack-with-docker-compose-to-mock-aws-services-bb25a5b01d4b
