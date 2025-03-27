@@ -1,4 +1,4 @@
 #!/bin/sh
-echo "Initializing localstack"
+echo "Initializing mongodb"
 
 podman-compose up

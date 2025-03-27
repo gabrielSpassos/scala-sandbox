@@ -14,8 +14,14 @@ lazy val root = project
 
     libraryDependencies ++= Seq(
       "org.springframework.boot" % "spring-boot-starter-web" % springBootVersion,
+      "org.springframework.boot" % "spring-boot-starter-data-mongodb" % springBootVersion,
       "org.scalameta" %% "munit" % "1.0.0" % Test
     )
   )
 
-javacOptions ++= Seq("-source", "21", "-target", "21")
+// build.sbt
+javaOptions ++= Seq(
+  "-source", "21", "-target", "21",
+  "--add-opens",
+  "java.base/java.math=ALL-UNNAMED"
+)
