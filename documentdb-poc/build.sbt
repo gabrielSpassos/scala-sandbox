@@ -15,7 +15,7 @@ lazy val root = project
     libraryDependencies ++= Seq(
       "org.springframework.boot" % "spring-boot-starter-web" % springBootVersion,
       "org.springframework.boot" % "spring-boot-starter-data-mongodb" % springBootVersion,
-      "org.scalameta" %% "munit" % "1.0.0" % Test
+      "org.springframework.boot" % "spring-boot-starter-test" % springBootVersion % Test,
     )
   )
 
