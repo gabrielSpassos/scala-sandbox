@@ -19,7 +19,7 @@ class ProductControllerIntegrationTest {
   @Test
   def shouldCreateProduct(): Unit = {
     val httpClient = HttpClient.newHttpClient()
-    val requestBody = Source.fromResource("test-update-card.json")
+    val requestBody = Source.fromResource("create-product.json")
     val request = HttpRequest.newBuilder()
       .uri(URI.create("http://localhost:8080/v1/products"))
       .POST(BodyPublishers.ofString("product"))

@@ -22,6 +22,5 @@ lazy val root = project
 // build.sbt
 javaOptions ++= Seq(
   "-source", "21", "-target", "21",
-  "--add-opens",
-  "java.base/java.math=ALL-UNNAMED"
+  "--add-opens=java.base/java.math=ALL-UNNAMED"
 )
