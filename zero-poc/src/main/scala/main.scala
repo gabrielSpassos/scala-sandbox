@@ -13,9 +13,17 @@ def main(): Unit = {
 
   println("Zeros POC!")
 
-  println(s"$zero1 == $zero2: ${zero1.equals(zero2)}")
-  println(s"$zero1 == $zero3: ${zero1.equals(zero3)}")
-  println(s"$zero1 == $zero4: ${zero1.equals(zero4)}")
-  println(s"$zero1 == $zero5: ${zero1.equals(zero5)}")
-  println(s"$zero1 == $zero6: ${zero1.equals(zero6)}")
+  println(s"$zero1 equals $zero2: ${zero1.equals(zero2)}")
+
+  println(s"$zero1 equals $zero3: ${zero1.equals(zero3)}")
+  println(s"$zero1 compare $zero3: ${zero1.compareTo(zero3) == 0}")
+
+  println(s"$zero1 equals $zero4: ${zero1.equals(zero4)}")
+  println(s"$zero1 compare $zero4: ${zero1.compareTo(zero4) == 0}")
+
+  println(s"$zero1 equals $zero5: ${zero1.equals(zero5)}")
+
+  println(s"$zero1 equals $zero6: ${zero1.equals(zero6)}")
+  println(s"$zero1 compare $zero6: ${zero1.compareTo(zero6) == 0}")
+
 }
