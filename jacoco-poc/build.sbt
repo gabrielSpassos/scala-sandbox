@@ -13,8 +13,12 @@ libraryDependencies ++= Seq(
   "com.github.sbt.junit" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % Test
 )
 
-jacocoExcludes := Seq(
-  "com.gabrielspassos.entity.*"
+//jacocoExcludes := Seq(
+//  "com.gabrielspassos.entity.*"
+//)
+
+jacocoIncludes := Seq(
+  "com.gabrielspassos.service.*", "com.gabrielspassos.repository.*"
 )
 
 jacocoReportSettings := JacocoReportSettings(
