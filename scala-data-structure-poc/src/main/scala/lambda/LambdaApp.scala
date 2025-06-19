@@ -2,7 +2,7 @@ package lambda
 
 object LambdaApp extends App {
 
-  println("Lambda POC")
+  println("Lambda POC\n")
 
   // Example generics HTTP call simulation
   private val httpCall1 = () => HttpRespone(200, "OK")
@@ -19,13 +19,13 @@ object LambdaApp extends App {
 
   // Sending HTTP calls
   private val httpResponse1 = sendHttCall(httpCall1, getHttpStatusCode1, getResponseBody1)
-  println(s"Http Response 1: $httpResponse1")
+  println(s"Http Response 1: $httpResponse1\n")
 
   private val httpResponse2 = sendHttCall(httpCall2, getHttpStatusCode2, getResponseBody2)
-  println(s"Http Response 2: $httpResponse2")
+  println(s"Http Response 2: $httpResponse2\n")
 
   private val httpResponse3 = sendHttCall(httpCall3, getHttpStatusCode3, getResponseBody3)
-  println(s"Http Response 3: $httpResponse3")
+  println(s"Http Response 3: $httpResponse3\n")
 
   private def sendHttCall[Resp](httpCall: () => Resp,
                                 getHttpStatusCode: Resp => Int,
