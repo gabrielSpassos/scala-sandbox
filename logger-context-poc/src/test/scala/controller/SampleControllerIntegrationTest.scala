@@ -2,11 +2,11 @@ package controller
 
 import client.HttpClient
 import org.scalatest.flatspec.AnyFlatSpec
-import controller.Controller
-import service.Service
+import controller.SampleController
+import service.SampleService
 import logger.ContextLogger
 
-class ControllerIntegrationTest extends AnyFlatSpec {
+class SampleControllerIntegrationTest extends AnyFlatSpec {
 
   "getData" should "fetch data" in {
     val controller = createController()
@@ -17,10 +17,10 @@ class ControllerIntegrationTest extends AnyFlatSpec {
     assert(data.nonEmpty)
   }
 
-  private def createController(): Controller = {
+  private def createController(): SampleController = {
     val contextLogger = ContextLogger()
     val httpClient = HttpClient(contextLogger)
-    val service = Service(httpClient, contextLogger)
-    Controller(service, contextLogger)
+    val service = SampleService(httpClient, contextLogger)
+    SampleController(service, contextLogger)
   }
 }

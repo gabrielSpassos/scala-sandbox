@@ -1,9 +1,9 @@
 package controller
 
 import logger.ContextLogger
-import service.Service
+import service.SampleService
 
-class Controller(private val service: Service, private val contextLogger: ContextLogger) {
+class SampleController(private val service: SampleService, private val contextLogger: ContextLogger) {
 
   private val logger = contextLogger.ofClass(getClass)
   

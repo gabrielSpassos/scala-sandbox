@@ -3,7 +3,7 @@ package service
 import client.HttpClient
 import logger.ContextLogger
 
-class Service(private val httpClient: HttpClient, private val contextLogger: ContextLogger) {
+class SampleService(private val httpClient: HttpClient, private val contextLogger: ContextLogger) {
 
   private val logger = contextLogger.ofClass(getClass)
 

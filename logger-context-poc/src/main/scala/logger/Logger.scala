@@ -1,5 +1,7 @@
 package logger
 
+import `type`.LayerType
+
 class ContextLogger {
 
   def ofClass(clazz: Class[?]): Logger = {
@@ -23,7 +25,8 @@ private class Logger(private val clazz: Class[?]) {
 
   private def log(message: String): Unit = {
     val logSource = clazz.getSimpleName
-    println(s"[source=$logSource] $message")
+    val layerType = LayerType.fromString(logSource)
+    println(s"[source=$logSource] [layer=${layerType.typeName}] $message")
   }
 
 }
