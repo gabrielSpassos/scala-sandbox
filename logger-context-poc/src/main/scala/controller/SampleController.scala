@@ -13,5 +13,12 @@ class SampleController(private val service: SampleService, private val contextLo
     logger.info(s"Received data: $data")
     data
   }
+  
+  def getIds: Seq[Int] = {
+    logger.info("Start to get ids")
+    val ids = service.getIds
+    logger.info(s"Received ids: $ids")
+    ids
+  }
 
 }
