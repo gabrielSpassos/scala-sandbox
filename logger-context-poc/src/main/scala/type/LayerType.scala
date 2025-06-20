@@ -22,15 +22,20 @@ case class UnknowLayer() extends LayerType {
 
 object LayerType {
 
-  def fromString(className: String): LayerType = {
-    if (className == null || className.isBlank) {
-      return UnknowLayer()
+  def fromClass(clazz: Class[?]): String = {
+    if (null == clazz) {
+      return UnknowLayer().typeName
     }
     
-    if (className.toLowerCase.endsWith("client")) ClientLayer()
-    else if (className.toLowerCase.endsWith("service")) ServiceLayer()
-    else if (className.toLowerCase.endsWith("controller")) ControllerLayer()
-    else UnknowLayer()
+    val className = clazz.getSimpleName
+    if (null == className || className.isBlank) {
+      return UnknowLayer().typeName
+    }
+    
+    if (className.toLowerCase.endsWith("client")) ClientLayer().typeName
+    else if (className.toLowerCase.endsWith("service")) ServiceLayer().typeName
+    else if (className.toLowerCase.endsWith("controller")) ControllerLayer().typeName
+    else UnknowLayer().typeName
   }
   
 }

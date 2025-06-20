@@ -25,8 +25,8 @@ private class Logger(private val clazz: Class[?]) {
 
   private def log(message: String): Unit = {
     val logSource = clazz.getSimpleName
-    val layerType = LayerType.fromString(logSource)
-    println(s"[source=$logSource] [layer=${layerType.typeName}] $message")
+    val layer = LayerType.fromClass(clazz)
+    println(s"[source=$logSource] [layer=$layer] $message")
   }
 
 }
