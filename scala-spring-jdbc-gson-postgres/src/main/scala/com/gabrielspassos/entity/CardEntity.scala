@@ -29,4 +29,7 @@ case class CardEntity(
 
   @(Column @field)
   cvv: String
+
+  @(Column @field)(value = "soft_deleted")
+  softDeleted: Boolean = false,
 )
