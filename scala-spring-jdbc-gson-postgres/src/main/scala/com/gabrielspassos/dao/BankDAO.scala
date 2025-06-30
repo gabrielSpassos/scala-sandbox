@@ -23,7 +23,7 @@ class BankDAO @Autowired()(private val jdbcTemplate: JdbcTemplate,
       save(bank)
       println("Inserted basic bank data via repository")
 
-      val softDeleted = BankEntity(code = "003", name = "Fake Bank 002", softDeleted = true)
+      val softDeleted = BankEntity(code = "003", name = "Fake Bank 003", softDeleted = true)
       save(softDeleted)
       println("Inserted soft deleted bank data via repository")
     } catch {
