@@ -34,7 +34,7 @@ class BankDAO @Autowired()(private val jdbcTemplate: JdbcTemplate,
   }
 
   def findByCode(code: String): Option[BankEntity] = {
-    bankRepository.findByCode(code) match
+    bankRepository.findByCodeAndSoftDeletedFalse(code) match
       case null => None
       case bank => Option(bank)
   }

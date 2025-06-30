@@ -57,7 +57,7 @@ class CardDAO @Autowired()(private val jdbcTemplate: JdbcTemplate,
   }
 
   def findByNumber(number: String): Option[CardEntity] = {
-    cardRepository.findByNumber(number) match {
+    cardRepository.findByNumberAndSoftDeletedFalse(number) match {
       case null => None
       case card => Some(card)
     }
@@ -65,6 +65,11 @@ class CardDAO @Autowired()(private val jdbcTemplate: JdbcTemplate,
 
   def save(cardEntity: CardEntity): CardEntity = {
     cardRepository.save(cardEntity)
+  }
+
+  def delete(cardEntity: CardEntity): CardEntity = {
+    cardRepository.delete(cardEntity)
+    cardEntity
   }
 
 }
