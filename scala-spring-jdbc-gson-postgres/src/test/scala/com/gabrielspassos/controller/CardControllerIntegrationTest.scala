@@ -47,6 +47,7 @@ class CardControllerIntegrationTest @Autowired()(private val cardDAO: CardDAO) {
     val responseBody = objectMapper.fromJson(response.body(), new TypeToken[java.util.List[CardResponse]]() {})
     assertNotNull(responseBody)
     assertFalse(responseBody.isEmpty)
+    assertEquals(3, responseBody.size())
   }
 
   @Test

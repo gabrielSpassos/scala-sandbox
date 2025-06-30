@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.{HttpStatus, ResponseEntity}
 import org.springframework.web.bind.annotation.*
 
+import java.util
+import java.util.List
+
 @RestController
 @RequestMapping(Array("/v1/banks"))
 class BankController @Autowired()(private val bankContract: BankContractImpl) {
@@ -15,6 +18,12 @@ class BankController @Autowired()(private val bankContract: BankContractImpl) {
   def createBank(@RequestBody bankRequest: BankRequest): ResponseEntity[BankResponse] = {
     val bankResponse = bankContract.createBank(bankRequest)
     ResponseEntity.status(HttpStatus.CREATED).body(bankResponse)
+  }
+
+  @GetMapping()
+  def findAll(): ResponseEntity[util.List[BankResponse]] = {
+    val banks = bankContract.findAll()
+    ResponseEntity.ok(banks)
   }
   
   @GetMapping(Array("/{code}"))

@@ -13,6 +13,11 @@ class BankService @Autowired()(private val bankDAO: BankDAO) {
     BankDTO.toDTO(bankEntity)
   }
 
+  def findAll(): List[BankDTO] = {
+    bankDAO.findAll()
+      .map(entity => BankDTO.toDTO(entity))
+  }
+
   def findByCode(code: String): Option[BankDTO] = {
     bankDAO.findByCode(code)
       .map(entity => BankDTO.toDTO(entity))
