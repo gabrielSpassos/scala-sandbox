@@ -28,8 +28,11 @@ class CountryClient @Autowired()(val httpClient: HttpClient, val gson: Gson) {
   }
 
   def getAllCountries: List[CountryResponse] = {
+    val fields = "name,cca2,ccn3,cca3,cioc,independent,status,unMember,capital"
+    val uri = URI.create(s"$rootUrl/v3.1/all?fields=$fields")
+
     val request = HttpRequest.newBuilder()
-      .uri(URI.create(s"$rootUrl/v3.1/all"))
+      .uri(uri)
       .header("Content-Type", "application/json")
       .header("Accept", "application/json")
       .GET()

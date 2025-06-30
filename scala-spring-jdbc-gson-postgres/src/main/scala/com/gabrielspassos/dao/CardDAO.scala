@@ -19,6 +19,8 @@ class CardDAO @Autowired()(private val jdbcTemplate: JdbcTemplate,
         "VALUES ('NuBank', 'MasterCard', '5162305254037431', 'John Smith', '2030-12-30', '123')")
       jdbcTemplate.execute("INSERT INTO card (id, institution_name, brand, number, name, expiration_date, cvv) " +
         "VALUES (gen_random_uuid(), 'NuBank', 'MasterCard', '5162306263962296', 'Mary Book', '2027-08-30', '456')")
+      jdbcTemplate.execute("INSERT INTO card (id, institution_name, brand, number, name, expiration_date, cvv, soft_deleted) " +
+        "VALUES (gen_random_uuid(), 'Fake Bank 002', 'MasterCard', '5162306263962638', 'Mary Book', '2027-08-30', '987', true)")
       println("Inserted basic card data via jdbcTemplate")
 
       val card = CardEntity(
@@ -31,6 +33,18 @@ class CardDAO @Autowired()(private val jdbcTemplate: JdbcTemplate,
       )
       save(card)
       println("Inserted basic card data via repository")
+
+      val softDeletedCard = CardEntity(
+        institutionName = "Fake Bank 002",
+        brand = "MasterCard",
+        number = "5548652238574367",
+        name = "Jack Doo",
+        expirationDate = LocalDate.parse("2028-05-30"),
+        cvv = "999",
+        softDeleted = true
+      )
+      save(softDeletedCard)
+      println("Inserted soft deleted card data via repository")
     } catch {
       case e: Exception =>
         println("Error inserting basic card data")
@@ -43,7 +57,7 @@ class CardDAO @Autowired()(private val jdbcTemplate: JdbcTemplate,
   }
 
   def findByNumber(number: String): Option[CardEntity] = {
-    cardRepository.findByNumber(number) match {
+    cardRepository.findByNumberAndSoftDeletedFalse(number) match {
       case null => None
       case card => Some(card)
     }
@@ -51,6 +65,11 @@ class CardDAO @Autowired()(private val jdbcTemplate: JdbcTemplate,
 
   def save(cardEntity: CardEntity): CardEntity = {
     cardRepository.save(cardEntity)
+  }
+
+  def delete(cardEntity: CardEntity): CardEntity = {
+    cardRepository.delete(cardEntity)
+    cardEntity
   }
 
 }

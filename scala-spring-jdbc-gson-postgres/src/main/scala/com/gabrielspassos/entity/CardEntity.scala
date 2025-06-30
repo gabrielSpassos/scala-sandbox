@@ -28,5 +28,8 @@ case class CardEntity(
   expirationDate: LocalDate,
 
   @(Column @field)
-  cvv: String
+  cvv: String,
+
+  @(Column @field)(value = "soft_deleted")
+  softDeleted: Boolean = false,
 )

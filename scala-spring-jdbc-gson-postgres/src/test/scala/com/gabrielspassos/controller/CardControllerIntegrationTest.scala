@@ -7,7 +7,7 @@ import com.gabrielspassos.dao.CardDAO
 import com.gabrielspassos.entity.CardEntity
 import com.google.gson.reflect.TypeToken
 import org.junit.jupiter.api.Assertions.{assertEquals, assertFalse, assertNotNull, assertTrue}
-import org.junit.jupiter.api.{Test, TestInstance}
+import org.junit.jupiter.api.{AfterEach, Test, TestInstance}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
@@ -16,6 +16,7 @@ import org.springframework.context.annotation.ComponentScan
 
 import java.net.URI
 import java.net.http.{HttpClient, HttpRequest, HttpResponse}
+import scala.collection.mutable.ListBuffer
 
 @SpringBootTest(
   webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
@@ -29,8 +30,14 @@ class CardControllerIntegrationTest @Autowired()(private val cardDAO: CardDAO) {
   @LocalServerPort
   var randomServerPort: Int = 0
 
+  private val cardEntities = ListBuffer[CardEntity]()
   private val client = HttpClient.newHttpClient()
   private val objectMapper = createGson
+
+  @AfterEach
+  def cleanUp(): Unit = {
+    cardEntities.foreach(card => cardDAO.delete(card))
+  }
 
   @Test
   def shouldGetCardsSuccessfully(): Unit = {
@@ -47,12 +54,14 @@ class CardControllerIntegrationTest @Autowired()(private val cardDAO: CardDAO) {
     val responseBody = objectMapper.fromJson(response.body(), new TypeToken[java.util.List[CardResponse]]() {})
     assertNotNull(responseBody)
     assertFalse(responseBody.isEmpty)
+    assertEquals(3, responseBody.size())
   }
 
   @Test
   def shouldGetCardByNumberSuccessfully(): Unit = {
     val card = createCardEntity().copy(id = null)
     val savedCard = cardDAO.save(card)
+    cardEntities.addOne(savedCard)
 
     val url = s"http://localhost:$randomServerPort/v1/cards/${card.number}"
     val response = client.send(

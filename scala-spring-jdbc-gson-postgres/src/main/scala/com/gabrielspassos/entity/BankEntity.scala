@@ -16,5 +16,8 @@ case class BankEntity(
   
   @(Column @field)
   name: String,
+
+  @(Column @field)(value = "soft_deleted")
+  softDeleted: Boolean = false,
                      
 )
