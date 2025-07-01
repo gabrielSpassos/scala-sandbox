@@ -7,8 +7,6 @@ import com.gabrielspassos.dto.BankDTO
 import com.gabrielspassos.service.BankService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
-import java.util
-import scala.jdk.CollectionConverters.*
 
 import java.util
 import scala.jdk.CollectionConverters.*

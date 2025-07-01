@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository
 
 import java.util
 import java.util.UUID
-import java.util
 
 @Repository
 trait BankRepository extends CrudRepository[BankEntity, UUID] {
