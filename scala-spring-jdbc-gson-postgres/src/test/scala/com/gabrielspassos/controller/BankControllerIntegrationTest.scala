@@ -5,6 +5,7 @@ import com.gabrielspassos.DataMock.{createBankEntity, createGson}
 import com.gabrielspassos.contracts.v1.response.BankResponse
 import com.gabrielspassos.dao.BankDAO
 import com.gabrielspassos.entity.BankEntity
+import com.google.gson.reflect.TypeToken
 import org.junit.jupiter.api.Assertions.{assertEquals, assertNotNull, assertTrue}
 import org.junit.jupiter.api.{AfterEach, Test, TestInstance}
 import org.springframework.beans.factory.annotation.Autowired
@@ -47,7 +48,26 @@ class BankControllerIntegrationTest @Autowired()(private val bankDAO: BankDAO) {
   }
 
   @Test
-  def shouldGetBankSuccessfully(): Unit = {
+  def shouldGetBanksSuccessfully(): Unit = {
+    val url = s"http://localhost:$randomServerPort/v1/banks"
+    val response = client.send(
+      HttpRequest.newBuilder().uri(URI.create(url)).GET().build(),
+      HttpResponse.BodyHandlers.ofString()
+    )
+
+    assertEquals(200, response.statusCode())
+    assertNotNull(response.body())
+
+    val listType = new TypeToken[List[BankResponse]](){}.getType
+    val responseBody: List[BankResponse] = objectMapper.fromJson(response.body(), listType)
+
+    assertNotNull(responseBody)
+    assertTrue(responseBody.nonEmpty)
+    assertEquals(3, responseBody.size)
+  }
+
+  @Test
+  def shouldGetBankByCodeSuccessfully(): Unit = {
     val bank = createBankEntity().copy(id = null)
     val savedBank = bankDAO.save(bank)
 

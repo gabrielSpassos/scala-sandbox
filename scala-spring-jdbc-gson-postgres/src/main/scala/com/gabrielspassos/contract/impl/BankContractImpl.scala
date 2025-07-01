@@ -7,6 +7,11 @@ import com.gabrielspassos.dto.BankDTO
 import com.gabrielspassos.service.BankService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
+import java.util
+import scala.jdk.CollectionConverters.*
+
+import java.util
+import scala.jdk.CollectionConverters.*
 
 @Component
 class BankContractImpl @Autowired(private val bankService: BankService) extends v1.BankContract {
@@ -15,6 +20,11 @@ class BankContractImpl @Autowired(private val bankService: BankService) extends 
     val bankDTO = BankDTO.toDTO(bankRequest)
     bankService.save(bankDTO) match
       case bank => BankDTO.fromDTOToResponse(bank)
+  }
+
+  override def findAll(): util.List[BankResponse] = {
+    val responses: List[BankResponse] = bankService.findAll().map { dto => BankDTO.fromDTOToResponse(dto) }
+    responses.asJava
   }
   
   override def findByCode(code: String): BankResponse = {

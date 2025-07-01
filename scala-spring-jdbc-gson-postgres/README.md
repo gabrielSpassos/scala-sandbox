@@ -157,3 +157,11 @@ addSbtPlugin("com.github.sbt.junit" % "sbt-jupiter-interface" % "0.13.3")
 [info] Passed: Total 5, Failed 0, Errors 0, Passed 5
 [success] Total time: 4 s, completed Jan 24, 2025, 4:43:05AM
 ```
+
+5. Custom queries by jdbc naming convention or using `@Query` annotation
+```scala
+def findByNumberAndSoftDeletedFalse(number: String): CardEntity
+
+@Query("SELECT * FROM card WHERE soft_deleted = false")
+def findAll(): util.List[CardEntity]
+```
