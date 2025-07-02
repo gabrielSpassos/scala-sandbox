@@ -3,6 +3,8 @@ package com.gabrielspassos
 import org.jsoup.*
 
 @main def getGoogle(): Unit = {
-  val googlePage = Jsoup.connect("https://www.google.com").get()
-  println(googlePage)
+  val googlePageDoc = Jsoup.connect("https://www.google.com").get()
+  println(googlePageDoc.title())
+  println(googlePageDoc.location())
+  println(googlePageDoc.head())
 }
