@@ -1,8 +1,8 @@
 package com.gabrielspassos
 
-import org.jsonp.*
+import org.jsoup.*
 
 @main def getGoogle(): Unit = {
-  val googlePage = Jsonp.connect("https://www.google.com").get()
+  val googlePage = Jsoup.connect("https://www.google.com").get()
   println(googlePage)
 }
