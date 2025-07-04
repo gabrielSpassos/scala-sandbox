@@ -24,7 +24,7 @@ class CardDAO @Autowired()(private val jdbcTemplate: JdbcTemplate,
       println("Inserted basic card data via jdbcTemplate")
 
       val card = CardEntity(
-        institutionName = "NuBank",
+        institutionName = "Banco do Brasil",
         brand = "MasterCard",
         number = "5548652238579391",
         name = "Jack Doo",
@@ -61,6 +61,10 @@ class CardDAO @Autowired()(private val jdbcTemplate: JdbcTemplate,
       case null => None
       case card => Some(card)
     }
+  }
+  
+  def findByInstitutionNameIn(institutionNames: List[String]): List[CardEntity] = {
+    cardRepository.findByInstitutionNameIn(institutionNames.asJava).asScala.toList
   }
 
   def save(cardEntity: CardEntity): CardEntity = {

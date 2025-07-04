@@ -17,5 +17,10 @@ class CardService @Autowired()(private val cardDAO: CardDAO) {
     cardDAO.findByNumber(number)
       .map(entity => CardDTO.toDTO(entity))
   }
+  
+  def findByInstitutionNameIn(institutionNames: List[String]): List[CardDTO] = {
+    cardDAO.findByInstitutionNameIn(institutionNames)
+      .map(entity => CardDTO.toDTO(entity))
+  }
 
 }

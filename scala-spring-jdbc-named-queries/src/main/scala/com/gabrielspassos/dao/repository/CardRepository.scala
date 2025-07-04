@@ -13,6 +13,9 @@ trait CardRepository extends CrudRepository[CardEntity, UUID] {
   
   def findByNumberAndSoftDeletedFalse(number: String): CardEntity
 
+  @Query("SELECT * FROM card WHERE institution_name in (:institutionNames) AND soft_deleted = false")
+  def findByInstitutionNameIn(institutionNames: util.List[String]): util.List[CardEntity]
+
   @Query("SELECT * FROM card WHERE soft_deleted = false")
   def findAll(): util.List[CardEntity]
   
