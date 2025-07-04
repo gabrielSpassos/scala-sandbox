@@ -3,7 +3,7 @@ package com.gabrielspassos.service
 import com.gabrielspassos.Application
 import com.gabrielspassos.dao.CardDAO
 import com.gabrielspassos.entity.CardEntity
-import org.junit.jupiter.api.Assertions.{assertFalse, assertNotNull}
+import org.junit.jupiter.api.Assertions.{assertFalse, assertNotNull, assertTrue}
 import org.junit.jupiter.api.{AfterEach, Test, TestInstance}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -37,6 +37,26 @@ class CardServiceIntegrationTest @Autowired()(private val cardService: CardServi
 
     assertNotNull(cards)
     assertFalse(cards.isEmpty)
+  }
+
+  @Test
+  def shouldNotFindCardsByInstitutionName(): Unit = {
+    def institutionNames = List("Fake Bank 002", "Foo")
+
+    val cards = cardService.findByInstitutionNameIn(institutionNames)
+
+    assertNotNull(cards)
+    assertTrue(cards.isEmpty)
+  }
+
+  @Test
+  def shouldNotFindCardsByInstitutionNameWithEmptyInput(): Unit = {
+    def institutionNames = List.empty[String]
+
+    val cards = cardService.findByInstitutionNameIn(institutionNames)
+
+    assertNotNull(cards)
+    assertTrue(cards.isEmpty)
   }
 }
 
