@@ -58,5 +58,33 @@ class CardServiceIntegrationTest @Autowired()(private val cardService: CardServi
     assertNotNull(cards)
     assertTrue(cards.isEmpty)
   }
+
+  @Test
+  def shouldFindCardsByBrandsSuccessfully(): Unit = {
+    def brands = List("MasterCard", "Visa")
+
+    val cards = cardService.findByBrandIn(brands)
+
+    assertNotNull(cards)
+    assertFalse(cards.isEmpty)
+  }
+
+  @Test
+  def shouldNotFindCardsByBrands(): Unit = {
+    def brands = List("Foo", "Bar")
+
+    val cards = cardService.findByBrandIn(brands)
+
+    assertNotNull(cards)
+    assertTrue(cards.isEmpty)
+  }
+
+  @Test
+  def shouldNotFindCardsByBrandsWithEmptyInput(): Unit = {
+    val cards = cardService.findByBrandIn(List())
+
+    assertNotNull(cards)
+    assertTrue(cards.isEmpty)
+  }
 }
 

@@ -23,4 +23,9 @@ class CardService @Autowired()(private val cardDAO: CardDAO) {
       .map(entity => CardDTO.toDTO(entity))
   }
 
+  def findByBrandIn(brands: List[String]): List[CardDTO] = {
+    cardDAO.findByBrandIn(brands)
+      .map(entity => CardDTO.toDTO(entity))
+  }
+
 }
