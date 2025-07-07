@@ -26,3 +26,9 @@
 
   def findByBrandInAndSoftDeletedFalse(brands: util.List[String]): util.List[CardEntity]
 ```
+
+## Tests
+```
+[info] Passed: Total 28, Failed 0, Errors 0, Passed 28
+[success] Total time: 53 s, completed 7 de jul. de 2025 19:33:22
+```
