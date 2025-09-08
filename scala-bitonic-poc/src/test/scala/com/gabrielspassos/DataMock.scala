@@ -1,6 +1,6 @@
 package com.gabrielspassos
 
-import com.gabrielspassos.entity.{BankEntity, CardEntity}
+import com.gabrielspassos.entity.BitonicSequenceEntity
 import com.gabrielspassos.gson.{ListAdapter, LocalDateAdapter}
 import com.google.gson.{Gson, GsonBuilder}
 
@@ -33,8 +33,8 @@ object DataMock {
     )
   }
   
-  def createBankEntity(id: UUID = UUID.randomUUID()): BankEntity = {
-    BankEntity(
+  def createBankEntity(id: UUID = UUID.randomUUID()): BitonicSequenceEntity = {
+    BitonicSequenceEntity(
       id = id,
       code = "341",
       name = "Itau"

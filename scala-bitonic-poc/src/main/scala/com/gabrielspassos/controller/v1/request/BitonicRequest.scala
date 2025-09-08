@@ -1,8 +1,8 @@
-package com.gabrielspassos.controller.v1.response
+package com.gabrielspassos.controller.v1.request
 
 import com.gabrielspassos.entity.BitonicSequenceEntity
 
-class BitonicResponse(
+class BitonicRequest(
   var id: String,
   var size: Int,
   var lowerBoundary: Int,
@@ -11,14 +11,6 @@ class BitonicResponse(
 ) {
   
   def this() = this(null, 0, 0, 0, null)
-
-  def this(bitonicSequenceEntity: BitonicSequenceEntity) = this(
-    if (bitonicSequenceEntity.id != null) bitonicSequenceEntity.id.toString else null,
-    bitonicSequenceEntity.size,
-    bitonicSequenceEntity.lowerBoundary,
-    bitonicSequenceEntity.upperBoundary,
-    bitonicSequenceEntity.sequence,
-  )
 
   def getId: String = id
 
@@ -50,10 +42,10 @@ class BitonicResponse(
     this.sequence = sequence
   }
   
-  private def canEqual(other: Any): Boolean = other.isInstanceOf[BitonicResponse]
+  private def canEqual(other: Any): Boolean = other.isInstanceOf[BitonicRequest]
   
   override def equals(other: Any): Boolean = other match {
-    case that: BitonicResponse =>
+    case that: BitonicRequest =>
       that.canEqual(this) &&
         id == that.id &&
         size == that.size &&
@@ -68,5 +60,5 @@ class BitonicResponse(
     state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
   }
   
-  override def toString: String = s"BitonicResponse($id, $size, $lowerBoundary, $upperBoundary, $sequence)"
+  override def toString: String = s"BitonicRequest($id, $size, $lowerBoundary, $upperBoundary, $sequence)"
 }

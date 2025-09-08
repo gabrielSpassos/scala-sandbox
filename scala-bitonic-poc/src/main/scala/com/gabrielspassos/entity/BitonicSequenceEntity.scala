@@ -7,17 +7,19 @@ import java.util.UUID
 import scala.annotation.meta.field
 
 @Table(name = "bank")
-case class BankEntity(
+case class BitonicSequenceEntity(
   @(Id @field)
   id: UUID = null,
 
   @(Column @field)
-  code: String,
-  
-  @(Column @field)
-  name: String,
+  size: Int,
 
-  @(Column @field)(value = "soft_deleted")
-  softDeleted: Boolean = false,
-                     
+  @(Column @field)(value = "lower_boundary")
+  lowerBoundary: Int,
+
+  @(Column @field)(value = "upper_boundary")
+  upperBoundary: Int,
+
+  @(Column @field)
+  sequence: Seq[Int],                          
 )

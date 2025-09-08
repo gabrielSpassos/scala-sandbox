@@ -3,8 +3,8 @@ package com.gabrielspassos.controller
 import com.gabrielspassos.Application
 import com.gabrielspassos.DataMock.{createBankEntity, createGson}
 import com.gabrielspassos.contracts.v1.response.BankResponse
-import com.gabrielspassos.dao.BankDAO
-import com.gabrielspassos.entity.BankEntity
+import com.gabrielspassos.dao.BitonicSequenceDAO
+import com.gabrielspassos.entity.BitonicSequenceEntity
 import com.google.gson.reflect.TypeToken
 import org.junit.jupiter.api.Assertions.{assertEquals, assertNotNull, assertTrue}
 import org.junit.jupiter.api.{AfterEach, Test, TestInstance}
@@ -28,7 +28,7 @@ import scala.collection.mutable.ListBuffer
 @EnableAutoConfiguration
 @ComponentScan(Array("com.*"))
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class BankControllerIntegrationTest @Autowired()(private val bankDAO: BankDAO) {
+class BankControllerIntegrationTest @Autowired()(private val bankDAO: BitonicSequenceDAO) {
 
   @LocalServerPort
   var randomServerPort: Int = 0
@@ -172,7 +172,7 @@ class BankControllerIntegrationTest @Autowired()(private val bankDAO: BankDAO) {
 
   @Test
   def shouldDeleteBankByCodeSuccessfully(): Unit = {
-    val bank = BankEntity(
+    val bank = BitonicSequenceEntity(
       id = null,
       code = "888",
       name = "Test Delete Bank"

@@ -2,9 +2,6 @@ package com.gabrielspassos.controller
 
 import com.gabrielspassos.Application
 import com.gabrielspassos.DataMock.{createCardEntity, createGson}
-import com.gabrielspassos.controller.v1.response.CardResponse
-import com.gabrielspassos.dao.CardDAO
-import com.gabrielspassos.entity.CardEntity
 import com.google.gson.reflect.TypeToken
 import org.junit.jupiter.api.Assertions.{assertEquals, assertFalse, assertNotNull, assertTrue}
 import org.junit.jupiter.api.{AfterEach, Test, TestInstance}
