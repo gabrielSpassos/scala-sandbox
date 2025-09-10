@@ -13,7 +13,7 @@ class BitonicService @Autowired(private val bitonicSequenceDAO: BitonicSequenceD
 
   def createBitonicSequence(bitonicRequest: BitonicRequest): BitonicSequenceEntity = {
     val sequence = bitonicSequence(bitonicRequest.size, bitonicRequest.lowerBoundary, bitonicRequest.upperBoundary)
-    val entity = BitonicSequenceEntity(
+    val entity = BitonicSequenceEntity.fromSeq(
       id = null,
       size = bitonicRequest.size,
       lowerBoundary = bitonicRequest.lowerBoundary,
@@ -25,8 +25,7 @@ class BitonicService @Autowired(private val bitonicSequenceDAO: BitonicSequenceD
   private def bitonicSequence(num: Int, lower: Int, upper: Int): Seq[Int] =
     // If sequence is not possible
     if num > (upper - lower) * 2 + 1 then
-      println(-1)
-      return Seq.empty
+      return Seq(-1)
 
     // Store the resultant list
     val ans = mutable.ArrayDeque[Int]()

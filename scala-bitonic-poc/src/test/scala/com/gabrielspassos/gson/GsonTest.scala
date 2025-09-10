@@ -2,8 +2,7 @@ package com.gabrielspassos.gson
 
 import com.gabrielspassos.DataMock
 import com.gabrielspassos.DataMock.createGson
-import com.gabrielspassos.contracts.v1.response.BankResponse
-import com.gabrielspassos.dto.{BankDTO, CardDTO, UserDTO, WalletDTO}
+import com.gabrielspassos.controller.v1.response.BitonicResponse
 import com.google.gson.reflect.TypeToken
 import org.junit.jupiter.api.Assertions.{assertEquals, assertNotNull, assertNull}
 import org.junit.jupiter.api.Test
@@ -15,57 +14,72 @@ class GsonTest {
   @Test
   def shouldReadJsonSuccessfully(): Unit = {
     // given
-    val json = """{"code":"600", "name":"Fake bank"}"""
+    val id = UUID.randomUUID().toString
+    val json = s"""{"id":"$id", "size":5, "lowerBoundary":3, "upperBoundary":10, "sequence":[9,10,9,8,7]}"""
     val gson = createGson
 
     // when
-    val bank = gson.fromJson(json, classOf[BankResponse])
+    val response = gson.fromJson(json, classOf[BitonicResponse])
 
     // then
-    assertEquals("600", bank.getCode)
-    assertEquals("Fake bank", bank.getName)
+    assertEquals(id, response.getId)
+    assertEquals(5, response.getSize)
+    assertEquals(3, response.getLowerBoundary)
+    assertEquals(10, response.getUpperBoundary)
+    assertEquals(Seq(9, 10, 9, 8, 7), response.getSequence)
   }
 
   @Test
   def shouldReadJsonSuccessfullyWithNullValue(): Unit = {
     // given
-    val json = """{"code":"600", "name":null}"""
+    val id = UUID.randomUUID().toString
+    val json = s"""{"id":"$id", "size":null, "lowerBoundary":3, "upperBoundary":10, "sequence":[9,10,9,8,7]}"""
     val gson = createGson
 
     // when
-    val bank = gson.fromJson(json, classOf[BankResponse])
+    val response = gson.fromJson(json, classOf[BitonicResponse])
 
     // then
-    assertEquals("600", bank.getCode)
-    assertNull(bank.getName)
+    assertEquals(id, response.getId)
+    assertNull(response.getSize)
+    assertEquals(3, response.getLowerBoundary)
+    assertEquals(10, response.getUpperBoundary)
+    assertEquals(Seq(9, 10, 9, 8, 7), response.getSequence)
   }
 
   @Test
   def shouldReadJsonSuccessfullyWithAllNullValue(): Unit = {
     // given
-    val json = """{"code":null, "name":null}"""
+    val json = s"""{"id":null, "size":null, "lowerBoundary":null, "upperBoundary":null, "sequence":null}"""
     val gson = createGson
 
     // when
-    val bank = gson.fromJson(json, classOf[BankResponse])
+    val response = gson.fromJson(json, classOf[BitonicResponse])
 
     // then
-    assertNull(bank.getCode)
-    assertNull(bank.getName)
+    assertNull(response.getId)
+    assertNull(response.getSize)
+    assertNull(response.getLowerBoundary)
+    assertNull(response.getUpperBoundary)
+    assertNull(response.getSequence)
   }
 
   @Test
   def shouldReadJsonSuccessfullyWithImplicitNullValue(): Unit = {
     // given
-    val json = """{"code":"600"}"""
+    val id = UUID.randomUUID().toString
+    val json = s"""{"id":"$id", "size":5, "upperBoundary":10, "sequence":[9,10,9,8,7]}"""
     val gson = createGson
 
     // when
-    val bank = gson.fromJson(json, classOf[BankResponse])
+    val response = gson.fromJson(json, classOf[BitonicResponse])
 
     // then
-    assertEquals("600", bank.getCode)
-    assertNull(bank.getName)
+    assertEquals(id, response.getId)
+    assertEquals(5, response.getSize)
+    assertNull(response.getLowerBoundary)
+    assertEquals(10, response.getUpperBoundary)
+    assertEquals(Seq(9, 10, 9, 8, 7), response.getSequence)
   }
 
   @Test
@@ -75,18 +89,22 @@ class GsonTest {
     val gson = createGson
 
     // when
-    val bank = gson.fromJson(json, classOf[BankResponse])
+    val response = gson.fromJson(json, classOf[BitonicResponse])
 
     // then
-    assertNull(bank.getCode)
-    assertNull(bank.getName)
+    assertNull(response.getId)
+    assertNull(response.getSize)
+    assertNull(response.getLowerBoundary)
+    assertNull(response.getUpperBoundary)
+    assertNull(response.getSequence)
   }
 
   @Test
   def shouldParseToJsonSuccessfully(): Unit = {
     // given
-    val bankResponse = BankResponse("600", "Fake bank")
-    val expectedJson = """{"code":"600","name":"Fake bank"}"""
+    val id = UUID.randomUUID().toString
+    val bankResponse = BitonicResponse(id, 5, 3, 10, Seq(9, 10, 9, 8, 7))
+    val expectedJson = s"""{"id":"$id", "size":5, "lowerBoundary":3, "upperBoundary":10, "sequence":[9,10,9,8,7]}"""
     val gson = createGson
 
     // when
@@ -99,8 +117,9 @@ class GsonTest {
   @Test
   def shouldParseToJsonSuccessfullyWithNullValue(): Unit = {
     // given
-    val bankResponse = BankResponse("600", null)
-    val expectedJson = """{"code":"600"}"""
+    val id = UUID.randomUUID().toString
+    val bankResponse = BitonicResponse(id, 5, 3, 0, Seq(9, 10, 9, 8, 7))
+    val expectedJson = s"""{"id":"$id", "size":5, "lowerBoundary":3, "upperBoundary":10, "sequence":null}"""
     val gson = createGson
 
     // when
@@ -113,7 +132,7 @@ class GsonTest {
   @Test
   def shouldParseToJsonSuccessfullyWithAllNullValue(): Unit = {
     // given
-    val bankResponse = BankResponse()
+    val bankResponse = BitonicResponse()
     val expectedJson = """{}"""
     val gson = createGson
 
@@ -125,55 +144,21 @@ class GsonTest {
   }
 
   @Test
-  def shouldParseNestedObjectToJsonNestedSuccessfully(): Unit = {
-    val bankDTO = BankDTO.toDTO(DataMock.createBankEntity(UUID.fromString("5daca863-65fd-4bbf-b5ff-96c4fffd0cef")))
-    val cardDTO = CardDTO.toDTO(DataMock.createCardEntity(UUID.fromString("47135027-da84-4bf7-9f4f-84f31c9f9582"), "5548843996584700", "939"))
-    val walletDTO = WalletDTO(
-      id = UUID.fromString("e6e93963-676d-4cd0-b324-488812b60d1a"),
-      name = "My Wallet",
-      cards = List(cardDTO)
-    )
-    val userDTO = UserDTO(
-      id = UUID.fromString("6fa5eeee-780d-4afd-9883-68adbcc1575d"),
-      banks = List(bankDTO),
-      wallets = List(walletDTO)
-    )
-    val expected = """{"id":"6fa5eeee-780d-4afd-9883-68adbcc1575d","banks":[{"id":"5daca863-65fd-4bbf-b5ff-96c4fffd0cef","code":"341","name":"Itau"}],"wallets":[{"id":"e6e93963-676d-4cd0-b324-488812b60d1a","name":"My Wallet","cards":[{"id":"47135027-da84-4bf7-9f4f-84f31c9f9582","institutionName":"NuBank","brand":"MasterCard","number":"5548843996584700","name":"Teste Tester","expirationDate":"2028-05-30","cvv":"939"}]}]}"""
-    val gson = createGson
-
-    val json = gson.toJson(userDTO)
-
-    assertEquals(expected, json)
-  }
-
-  @Test
   def shouldParseList(): Unit = {
-    val json = """[{"id":"6fa5eeee-780d-4afd-9883-68adbcc1575d", "code":"600", "name":"Fake bank"}]"""
+    val id = UUID.randomUUID().toString
+    val json = s"""[{"id":"$id", "size":5, "lowerBoundary":3, "upperBoundary":10, "sequence":[9,10,9,8,7]}]"""
     val gson = createGson
 
-    val collectionType = new TypeToken[List[BankDTO]]() {}.getType
-    val banks: List[BankDTO] = gson.fromJson(json, collectionType)
+    val collectionType = new TypeToken[List[BitonicResponse]]() {}.getType
+    val responses: List[BitonicResponse] = gson.fromJson(json, collectionType)
 
-    assertNotNull(banks)
-    assertEquals(1, banks.length)
-    assertEquals("6fa5eeee-780d-4afd-9883-68adbcc1575d", banks.head.id.toString)
-    assertEquals("600", banks.head.code)
-    assertEquals("Fake bank", banks.head.name)
+    assertNotNull(responses)
+    assertEquals(1, responses.size)
+    assertEquals(id, responses.head.getId)
+    assertEquals(5, responses.head.getSize)
+    assertEquals(3, responses.head.getLowerBoundary)
+    assertEquals(10, responses.head.getUpperBoundary)
+    assertEquals(Seq(9, 10, 9, 8, 7), responses.head.getSequence)
   }
 
-  @Test
-  def shouldParseJsonToNestedObjectSuccessfully(): Unit = {
-    val json = """{"id":"6fa5eeee-780d-4afd-9883-68adbcc1575d","banks":[{"id":"5daca863-65fd-4bbf-b5ff-96c4fffd0cef","code":"341","name":"Itau"}],"wallets":[{"id":"e6e93963-676d-4cd0-b324-488812b60d1a","name":"My Wallet","cards":[{"id":"47135027-da84-4bf7-9f4f-84f31c9f9582","institutionName":"NuBank","brand":"MasterCard","number":"5548843996584700","name":"Teste Tester","expirationDate":"2028-05-30","cvv":"939"}]}]}"""
-    val gson = createGson
-
-    val userDTO = gson.fromJson(json, classOf[UserDTO])
-
-    assertNotNull(userDTO)
-    assertNotNull(userDTO.banks)
-    assertEquals(1, userDTO.banks.size)
-    assertNotNull(userDTO.wallets)
-    assertEquals(1, userDTO.wallets.size)
-    assertNotNull(userDTO.wallets.head.cards)
-    assertEquals(1, userDTO.wallets.head.cards.size)
-  }
 }

@@ -17,7 +17,7 @@ class BitonicResponse(
     bitonicSequenceEntity.size,
     bitonicSequenceEntity.lowerBoundary,
     bitonicSequenceEntity.upperBoundary,
-    bitonicSequenceEntity.sequence,
+    bitonicSequenceEntity.getSequence,
   )
 
   def getId: String = id

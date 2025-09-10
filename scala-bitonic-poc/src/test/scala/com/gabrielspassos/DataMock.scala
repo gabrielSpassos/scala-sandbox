@@ -15,32 +15,6 @@ object DataMock {
     "5548" + randomValue
   }
   
-  def createRandomCVV(): String = {
-    Random().between(111, 999).toString
-  }
-  
-  def createCardEntity(id: UUID = UUID.randomUUID(),
-                       number: String = createRandomCardNumber(),
-                       cvv: String = createRandomCVV()): CardEntity = {
-    CardEntity(
-      id = id,
-      institutionName = "NuBank",
-      brand = "MasterCard",
-      number = number,
-      name = "Teste Tester",
-      expirationDate = LocalDate.parse("2028-05-30"),
-      cvv = cvv
-    )
-  }
-  
-  def createBankEntity(id: UUID = UUID.randomUUID()): BitonicSequenceEntity = {
-    BitonicSequenceEntity(
-      id = id,
-      code = "341",
-      name = "Itau"
-    )
-  }
-
   def createGson: Gson = {
     new GsonBuilder()
       .registerTypeAdapter(classOf[List[?]], new ListAdapter[Any])

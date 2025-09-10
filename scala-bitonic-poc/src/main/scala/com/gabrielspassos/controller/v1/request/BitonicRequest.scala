@@ -1,22 +1,12 @@
 package com.gabrielspassos.controller.v1.request
 
-import com.gabrielspassos.entity.BitonicSequenceEntity
-
 class BitonicRequest(
-  var id: String,
   var size: Int,
   var lowerBoundary: Int,
   var upperBoundary: Int,
-  var sequence: Seq[Int]
 ) {
   
-  def this() = this(null, 0, 0, 0, null)
-
-  def getId: String = id
-
-  def setId(id: String): Unit = {
-    this.id = id
-  }
+  def this() = this(0, 0, 0)
 
   def getSize: Int = size
   
@@ -36,29 +26,21 @@ class BitonicRequest(
     this.upperBoundary = upperBoundary
   }
   
-  def getSequence: Seq[Int] = sequence
-  
-  def setSequence(sequence: Seq[Int]): Unit = {
-    this.sequence = sequence
-  }
-  
   private def canEqual(other: Any): Boolean = other.isInstanceOf[BitonicRequest]
   
   override def equals(other: Any): Boolean = other match {
     case that: BitonicRequest =>
       that.canEqual(this) &&
-        id == that.id &&
         size == that.size &&
         lowerBoundary == that.lowerBoundary &&
-        upperBoundary == that.upperBoundary &&
-        sequence == that.sequence
+        upperBoundary == that.upperBoundary
     case _ => false
   }
   
   override def hashCode(): Int = {
-    val state = Seq(id, size, lowerBoundary, upperBoundary, sequence)
+    val state = Seq(size, lowerBoundary, upperBoundary)
     state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
   }
   
-  override def toString: String = s"BitonicRequest($id, $size, $lowerBoundary, $upperBoundary, $sequence)"
+  override def toString: String = s"BitonicRequest($size, $lowerBoundary, $upperBoundary)"
 }
