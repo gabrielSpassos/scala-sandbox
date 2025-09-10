@@ -1,9 +1,9 @@
 package com.gabrielspassos.controller.v1.request
 
 class BitonicRequest(
-  var size: Int,
-  var lowerBoundary: Int,
-  var upperBoundary: Int,
+  var size: Int = 0,
+  var lowerBoundary: Int = 0,
+  var upperBoundary: Int = 0,
 ) {
   
   def this() = this(0, 0, 0)

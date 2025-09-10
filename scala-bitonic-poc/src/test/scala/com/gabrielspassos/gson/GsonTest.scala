@@ -41,7 +41,7 @@ class GsonTest {
 
     // then
     assertEquals(id, response.getId)
-    assertNull(response.getSize)
+    assertEquals(0, response.getSize)
     assertEquals(3, response.getLowerBoundary)
     assertEquals(10, response.getUpperBoundary)
     assertEquals(Seq(9, 10, 9, 8, 7), response.getSequence)
@@ -58,9 +58,9 @@ class GsonTest {
 
     // then
     assertNull(response.getId)
-    assertNull(response.getSize)
-    assertNull(response.getLowerBoundary)
-    assertNull(response.getUpperBoundary)
+    assertEquals(0, response.getSize)
+    assertEquals(0, response.getLowerBoundary)
+    assertEquals(0, response.getUpperBoundary)
     assertNull(response.getSequence)
   }
 
@@ -77,7 +77,7 @@ class GsonTest {
     // then
     assertEquals(id, response.getId)
     assertEquals(5, response.getSize)
-    assertNull(response.getLowerBoundary)
+    assertEquals(0, response.getLowerBoundary)
     assertEquals(10, response.getUpperBoundary)
     assertEquals(Seq(9, 10, 9, 8, 7), response.getSequence)
   }
@@ -93,9 +93,9 @@ class GsonTest {
 
     // then
     assertNull(response.getId)
-    assertNull(response.getSize)
-    assertNull(response.getLowerBoundary)
-    assertNull(response.getUpperBoundary)
+    assertEquals(0, response.getSize)
+    assertEquals(0, response.getLowerBoundary)
+    assertEquals(0, response.getUpperBoundary)
     assertNull(response.getSequence)
   }
 
@@ -118,8 +118,8 @@ class GsonTest {
   def shouldParseToJsonSuccessfullyWithNullValue(): Unit = {
     // given
     val id = UUID.randomUUID().toString
-    val bankResponse = BitonicResponse(id, 5, 3, 0, Seq(9, 10, 9, 8, 7))
-    val expectedJson = s"""{"id":"$id","size":5,"lowerBoundary":3,"upperBoundary":10,"sequence":null}"""
+    val bankResponse = BitonicResponse(id, 5, 3, 0, null)
+    val expectedJson = s"""{"id":"$id","size":5,"lowerBoundary":3,"upperBoundary":0}"""
     val gson = createGson
 
     // when
@@ -133,7 +133,7 @@ class GsonTest {
   def shouldParseToJsonSuccessfullyWithAllNullValue(): Unit = {
     // given
     val bankResponse = BitonicResponse()
-    val expectedJson = """{}"""
+    val expectedJson = """{"size":0,"lowerBoundary":0,"upperBoundary":0}"""
     val gson = createGson
 
     // when
