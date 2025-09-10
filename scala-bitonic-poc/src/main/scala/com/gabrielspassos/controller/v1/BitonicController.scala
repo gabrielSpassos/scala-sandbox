@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.{PostMapping, RequestBody, Reques
 @RequestMapping(Array("/v1/bitonic"))
 class BitonicController @Autowired()(private val bitonicContract: BitonicContractImpl) {
 
-  @PostMapping
+  @PostMapping(Array("/sequences"))
   def createBank(@RequestBody bitonicRequest: BitonicRequest): ResponseEntity[BitonicResponse] = {
     val response = bitonicContract.createBitonicSequence(bitonicRequest)
     ResponseEntity.status(HttpStatus.OK).body(response)
