@@ -6,7 +6,7 @@ import com.gabrielspassos.dao.BitonicSequenceDAO
 import com.gabrielspassos.entity.BitonicSequenceEntity
 import org.json.JSONObject
 import org.junit.jupiter.api.Assertions.{assertEquals, assertNotNull, assertTrue}
-import org.junit.jupiter.api.{AfterAll, AfterEach, BeforeAll, Test, TestInstance}
+import org.junit.jupiter.api.{AfterEach, Test, TestInstance}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
@@ -16,13 +16,14 @@ import org.springframework.http.HttpHeaders.{ACCEPT, CONTENT_TYPE}
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.test.context.{DynamicPropertyRegistry, DynamicPropertySource}
 import org.testcontainers.containers.PostgreSQLContainer
+import org.testcontainers.junit.jupiter.Testcontainers
 
 import java.net.URI
 import java.net.http.{HttpClient, HttpRequest, HttpResponse}
 import java.util.UUID
 import scala.collection.mutable.ListBuffer
 
-
+@Testcontainers
 @SpringBootTest(
   webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
   classes = Array(classOf[Application])
@@ -35,22 +36,9 @@ class BitonicSequenceControllerIntegrationTest @Autowired()(private val bitonicS
   @LocalServerPort
   var randomServerPort: Int = 0
 
-  private val postgresContainer: PostgreSQLContainer[?] = PostgreSQLContainer("postgres:latest").withUsername("sa")
-    .withPassword("test")
-    .withExposedPorts(5432)
-    .withInitScript("schema.sql")
-
   private val ids = ListBuffer[UUID]()
   private val client = HttpClient.newHttpClient()
   private val objectMapper = createGson
-
-  @BeforeAll def beforeAll(): Unit = {
-    postgresContainer.start()
-  }
-
-  @AfterAll def afterAll(): Unit = {
-    postgresContainer.stop()
-  }
 
   @AfterEach
   def cleanUp(): Unit = {
@@ -60,12 +48,6 @@ class BitonicSequenceControllerIntegrationTest @Autowired()(private val bitonicS
           bitonicSequenceDAO.delete(entity)
         case None => ()
     })
-  }
-
-  @DynamicPropertySource def configureProperties(registry: DynamicPropertyRegistry): Unit = {
-    registry.add("spring.datasource.url", postgresContainer.getJdbcUrl())
-    registry.add("spring.datasource.username", postgresContainer.getUsername())
-    registry.add("spring.datasource.password", postgresContainer.getPassword())
   }
 
   @Test
@@ -126,4 +108,23 @@ class BitonicSequenceControllerIntegrationTest @Autowired()(private val bitonicS
     assertEquals(3, jsonBody.getInt("upperBoundary"))
   }
   
+}
+
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+object BitonicSequenceControllerIntegrationTest {
+
+  val postgresContainer: PostgreSQLContainer[?] = PostgreSQLContainer("postgres:latest")
+  postgresContainer.withUsername("sa")
+  postgresContainer.withPassword("test")
+  postgresContainer.withDatabaseName("it-test-db")
+  postgresContainer.withExposedPorts(5432)
+  postgresContainer.withInitScripts("schema.sql")
+
+  @DynamicPropertySource
+  def configureProperties(registry: DynamicPropertyRegistry): Unit = {
+    postgresContainer.start()
+    registry.add("spring.datasource.url", () => postgresContainer.getJdbcUrl)
+    registry.add("spring.datasource.username", () => postgresContainer.getUsername)
+    registry.add("spring.datasource.password", () => postgresContainer.getPassword)
+  }
 }

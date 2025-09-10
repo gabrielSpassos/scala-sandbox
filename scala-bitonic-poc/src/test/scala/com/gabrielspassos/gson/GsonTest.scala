@@ -15,7 +15,7 @@ class GsonTest {
   def shouldReadJsonSuccessfully(): Unit = {
     // given
     val id = UUID.randomUUID().toString
-    val json = s"""{"id":"$id", "size":5, "lowerBoundary":3, "upperBoundary":10, "sequence":[9,10,9,8,7]}"""
+    val json = s"""{"id":"$id","size":5,"lowerBoundary":3,"upperBoundary":10,"sequence":[9,10,9,8,7]}"""
     val gson = createGson
 
     // when
@@ -33,7 +33,7 @@ class GsonTest {
   def shouldReadJsonSuccessfullyWithNullValue(): Unit = {
     // given
     val id = UUID.randomUUID().toString
-    val json = s"""{"id":"$id", "size":null, "lowerBoundary":3, "upperBoundary":10, "sequence":[9,10,9,8,7]}"""
+    val json = s"""{"id":"$id","size":null,"lowerBoundary":3,"upperBoundary":10,"sequence":[9,10,9,8,7]}"""
     val gson = createGson
 
     // when
@@ -50,7 +50,7 @@ class GsonTest {
   @Test
   def shouldReadJsonSuccessfullyWithAllNullValue(): Unit = {
     // given
-    val json = s"""{"id":null, "size":null, "lowerBoundary":null, "upperBoundary":null, "sequence":null}"""
+    val json = s"""{"id":null,"size":null,"lowerBoundary":null,"upperBoundary":null,"sequence":null}"""
     val gson = createGson
 
     // when
@@ -68,7 +68,7 @@ class GsonTest {
   def shouldReadJsonSuccessfullyWithImplicitNullValue(): Unit = {
     // given
     val id = UUID.randomUUID().toString
-    val json = s"""{"id":"$id", "size":5, "upperBoundary":10, "sequence":[9,10,9,8,7]}"""
+    val json = s"""{"id":"$id","size":5,"upperBoundary":10,"sequence":[9,10,9,8,7]}"""
     val gson = createGson
 
     // when
@@ -104,7 +104,7 @@ class GsonTest {
     // given
     val id = UUID.randomUUID().toString
     val bankResponse = BitonicResponse(id, 5, 3, 10, Seq(9, 10, 9, 8, 7))
-    val expectedJson = s"""{"id":"$id", "size":5, "lowerBoundary":3, "upperBoundary":10, "sequence":[9,10,9,8,7]}"""
+    val expectedJson = s"""{"id":"$id","size":5,"lowerBoundary":3,"upperBoundary":10,"sequence":[9,10,9,8,7]}"""
     val gson = createGson
 
     // when
@@ -119,7 +119,7 @@ class GsonTest {
     // given
     val id = UUID.randomUUID().toString
     val bankResponse = BitonicResponse(id, 5, 3, 0, Seq(9, 10, 9, 8, 7))
-    val expectedJson = s"""{"id":"$id", "size":5, "lowerBoundary":3, "upperBoundary":10, "sequence":null}"""
+    val expectedJson = s"""{"id":"$id","size":5,"lowerBoundary":3,"upperBoundary":10,"sequence":null}"""
     val gson = createGson
 
     // when
@@ -146,7 +146,7 @@ class GsonTest {
   @Test
   def shouldParseList(): Unit = {
     val id = UUID.randomUUID().toString
-    val json = s"""[{"id":"$id", "size":5, "lowerBoundary":3, "upperBoundary":10, "sequence":[9,10,9,8,7]}]"""
+    val json = s"""[{"id":"$id","size":5,"lowerBoundary":3,"upperBoundary":10,"sequence":[9,10,9,8,7]}]"""
     val gson = createGson
 
     val collectionType = new TypeToken[List[BitonicResponse]]() {}.getType
