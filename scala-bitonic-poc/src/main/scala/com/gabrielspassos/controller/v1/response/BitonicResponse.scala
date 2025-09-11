@@ -1,6 +1,6 @@
 package com.gabrielspassos.controller.v1.response
 
-import com.gabrielspassos.entity.BitonicSequenceEntity
+import com.gabrielspassos.entity.{BitonicSequenceCacheEntity, BitonicSequenceEntity}
 
 class BitonicResponse(
   var id: String,
@@ -12,6 +12,14 @@ class BitonicResponse(
   
   def this() = this(null, 0, 0, 0, null)
 
+  def this(bitonicSequenceCacheEntity: BitonicSequenceCacheEntity) = this(
+    if (bitonicSequenceCacheEntity.id != null) bitonicSequenceCacheEntity.id.toString else null,
+    bitonicSequenceCacheEntity.size,
+    bitonicSequenceCacheEntity.lowerBoundary,
+    bitonicSequenceCacheEntity.upperBoundary,
+    bitonicSequenceCacheEntity.getSequence,
+  )
+  
   def this(bitonicSequenceEntity: BitonicSequenceEntity) = this(
     if (bitonicSequenceEntity.id != null) bitonicSequenceEntity.id.toString else null,
     bitonicSequenceEntity.size,

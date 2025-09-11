@@ -1,9 +1,10 @@
 package com.gabrielspassos.gson
 
-import com.google.gson._
-import scala.collection.immutable.Seq
-import scala.jdk.CollectionConverters._
+import com.google.gson.*
+
 import java.lang.reflect.Type
+import scala.collection.immutable.Seq
+import scala.jdk.CollectionConverters.*
 
 class SeqAdapter[T](implicit m: Manifest[T]) extends JsonSerializer[Seq[T]] with JsonDeserializer[Seq[T]] {
   override def serialize(src: Seq[T], t: Type, ctx: JsonSerializationContext): JsonElement = {

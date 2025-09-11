@@ -16,10 +16,13 @@ libraryDependencies ++= Seq(
   "org.springframework.boot" % "spring-boot-starter-web" % springBootVersion exclude("com.fasterxml.jackson.core", "jackson-databind"),
   "org.springframework.boot" % "spring-boot-starter-jdbc" % springBootVersion exclude("com.fasterxml.jackson.core", "jackson-databind"),
   "org.springframework.boot" % "spring-boot-starter-data-jdbc" % springBootVersion exclude("com.fasterxml.jackson.core", "jackson-databind"),
+  "org.springframework.boot" % "spring-boot-starter-data-redis" % springBootVersion exclude("com.fasterxml.jackson.core", "jackson-databind"),
+  "io.lettuce" % "lettuce-core" % "6.8.1.RELEASE",
   "org.springframework.boot" % "spring-boot-starter-test" % springBootVersion % Test exclude("com.fasterxml.jackson.core", "jackson-databind"),
   "com.github.sbt.junit" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % Test,
   "org.testcontainers" % "testcontainers" % testContainersVersion % Test,
   "org.testcontainers" % "postgresql" % testContainersVersion % Test,
+  "org.testcontainers" % "redis" % testContainersVersion % Test,
   "org.testcontainers" % "junit-jupiter" % testContainersVersion % Test
 )
 

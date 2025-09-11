@@ -1,17 +1,27 @@
 package com.gabrielspassos.service
 
 import com.gabrielspassos.controller.v1.request.BitonicRequest
-import com.gabrielspassos.dao.BitonicSequenceDAO
-import com.gabrielspassos.entity.BitonicSequenceEntity
+import com.gabrielspassos.controller.v1.response.BitonicResponse
+import com.gabrielspassos.dao.{BitonicSequenceCacheDAO, BitonicSequenceDAO}
+import com.gabrielspassos.entity.{BitonicSequenceCacheEntity, BitonicSequenceEntity}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 import scala.collection.mutable
 
 @Service
-class BitonicService @Autowired(private val bitonicSequenceDAO: BitonicSequenceDAO) {
+class BitonicService @Autowired(private val bitonicSequenceDAO: BitonicSequenceDAO,
+                                private val bitonicSequenceCacheDAO: BitonicSequenceCacheDAO) {
 
-  def createBitonicSequence(bitonicRequest: BitonicRequest): BitonicSequenceEntity = {
+  def createBitonicSequence(bitonicRequest: BitonicRequest): BitonicResponse = {
+    val cachedValue = bitonicSequenceCacheDAO.findBySizeAndLowerBoundaryAndUpperBoundary(
+      bitonicRequest.size, bitonicRequest.lowerBoundary, bitonicRequest.upperBoundary)
+    if (cachedValue.isDefined) {
+      println("Fetch bitonic sequence from cache")
+      return BitonicResponse(cachedValue.get)
+    }
+
+    println("Creating bitonic sequence")
     val sequence = bitonicSequence(bitonicRequest.size, bitonicRequest.lowerBoundary, bitonicRequest.upperBoundary)
     val entity = BitonicSequenceEntity.fromSeq(
       id = null,
@@ -19,7 +29,19 @@ class BitonicService @Autowired(private val bitonicSequenceDAO: BitonicSequenceD
       lowerBoundary = bitonicRequest.lowerBoundary,
       upperBoundary = bitonicRequest.upperBoundary,
       sequence = sequence)
-    bitonicSequenceDAO.save(entity)
+    val savedEntity = bitonicSequenceDAO.save(entity)
+    println("Saved bitonic sequence on persist db")
+
+    val cacheEntity = BitonicSequenceCacheEntity.fromSeq(
+      id = null,
+      size = bitonicRequest.size,
+      lowerBoundary = bitonicRequest.lowerBoundary,
+      upperBoundary = bitonicRequest.upperBoundary,
+      sequence = sequence)
+    bitonicSequenceCacheDAO.save(cacheEntity)
+    println("Saved bitonic sequence on cache db")
+
+    BitonicResponse(savedEntity)
   }
   
   private def bitonicSequence(num: Int, lower: Int, upper: Int): Seq[Int] =

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component
 class BitonicContractImpl @Autowired(private val bitonicService: BitonicService) extends BitonicContract {
 
   override def createBitonicSequence(bitonicRequest: BitonicRequest): BitonicResponse = {
-    val entity = bitonicService.createBitonicSequence(bitonicRequest)
-    BitonicResponse(entity)
+    bitonicService.createBitonicSequence(bitonicRequest)
   }
 }

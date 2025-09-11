@@ -2,10 +2,10 @@ package com.gabrielspassos.controller
 
 import com.gabrielspassos.Application
 import com.gabrielspassos.DataMock.createGson
-import com.gabrielspassos.dao.BitonicSequenceDAO
+import com.gabrielspassos.dao.{BitonicSequenceCacheDAO, BitonicSequenceDAO}
 import com.gabrielspassos.entity.BitonicSequenceEntity
 import org.json.JSONObject
-import org.junit.jupiter.api.Assertions.{assertEquals, assertNotNull, assertTrue}
+import org.junit.jupiter.api.Assertions.{assertEquals, assertNotEquals, assertNotNull, assertTrue}
 import org.junit.jupiter.api.{AfterEach, Test, TestInstance}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -15,7 +15,7 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.http.HttpHeaders.{ACCEPT, CONTENT_TYPE}
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.test.context.{DynamicPropertyRegistry, DynamicPropertySource}
-import org.testcontainers.containers.PostgreSQLContainer
+import org.testcontainers.containers.{GenericContainer, PostgreSQLContainer}
 import org.testcontainers.junit.jupiter.Testcontainers
 
 import java.net.URI
@@ -31,7 +31,8 @@ import scala.collection.mutable.ListBuffer
 @EnableAutoConfiguration
 @ComponentScan(Array("com.*"))
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class BitonicSequenceControllerIntegrationTest @Autowired()(private val bitonicSequenceDAO: BitonicSequenceDAO) {
+class BitonicSequenceControllerIntegrationTest @Autowired()(private val bitonicSequenceDAO: BitonicSequenceDAO,
+                                                            private val bitonicSequenceCacheDAO: BitonicSequenceCacheDAO) {
 
   @LocalServerPort
   var randomServerPort: Int = 0
@@ -45,6 +46,11 @@ class BitonicSequenceControllerIntegrationTest @Autowired()(private val bitonicS
     ids.foreach(id => {
       bitonicSequenceDAO.findById(id) match
         case Some(entity) =>
+          bitonicSequenceCacheDAO
+            .findBySizeAndLowerBoundaryAndUpperBoundary(entity.size, entity.lowerBoundary, entity.upperBoundary) match
+            case Some(cacheEntity) => bitonicSequenceCacheDAO.delete(cacheEntity)
+            case None => ()
+
           bitonicSequenceDAO.delete(entity)
         case None => ()
     })
@@ -77,6 +83,58 @@ class BitonicSequenceControllerIntegrationTest @Autowired()(private val bitonicS
     assertEquals(5, jsonBody.getInt("size"))
     assertEquals(3, jsonBody.getInt("lowerBoundary"))
     assertEquals(10, jsonBody.getInt("upperBoundary"))
+  }
+
+  @Test
+  def shouldFetchSequenceFromCacheSuccessfully(): Unit = {
+    val request = s"""{"size":5, "lowerBoundary":3, "upperBoundary":10}"""
+    val url = s"http://localhost:$randomServerPort/v1/bitonic/sequences"
+
+    val response1 = client.send(
+      HttpRequest.newBuilder()
+        .uri(URI(url))
+        .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+        .header(ACCEPT, APPLICATION_JSON_VALUE)
+        .POST(HttpRequest.BodyPublishers.ofString(request))
+        .build(),
+      HttpResponse.BodyHandlers.ofString()
+    )
+
+    assertEquals(200, response1.statusCode())
+    assertNotNull(response1.body())
+
+    val jsonBody1 = JSONObject(response1.body())
+    assertTrue(jsonBody1.has("id"))
+    val id1 = UUID.fromString(jsonBody1.getString("id"))
+    ids.addOne(id1)
+
+    assertEquals("[9,10,9,8,7]", jsonBody1.getString("sequence"))
+    assertEquals(5, jsonBody1.getInt("size"))
+    assertEquals(3, jsonBody1.getInt("lowerBoundary"))
+    assertEquals(10, jsonBody1.getInt("upperBoundary"))
+
+    val response2 = client.send(
+      HttpRequest.newBuilder()
+        .uri(URI(url))
+        .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+        .header(ACCEPT, APPLICATION_JSON_VALUE)
+        .POST(HttpRequest.BodyPublishers.ofString(request))
+        .build(),
+      HttpResponse.BodyHandlers.ofString()
+    )
+
+    assertEquals(200, response2.statusCode())
+    assertNotNull(response2.body())
+
+    val jsonBody2 = JSONObject(response2.body())
+    assertTrue(jsonBody2.has("id"))
+    val id2 = UUID.fromString(jsonBody2.getString("id"))
+
+    assertNotEquals(id1, id2)
+    assertEquals("[9,10,9,8,7]", jsonBody2.getString("sequence"))
+    assertEquals(5, jsonBody2.getInt("size"))
+    assertEquals(3, jsonBody2.getInt("lowerBoundary"))
+    assertEquals(10, jsonBody2.getInt("upperBoundary"))
   }
 
   @Test
@@ -120,9 +178,16 @@ object BitonicSequenceControllerIntegrationTest {
   postgresContainer.withExposedPorts(5432)
   postgresContainer.withInitScripts("schema.sql")
 
+  val redisContainer: GenericContainer[?] = new GenericContainer("redis:latest").withExposedPorts(6379)
+
   @DynamicPropertySource
   def configureProperties(registry: DynamicPropertyRegistry): Unit = {
     postgresContainer.start()
+    redisContainer.start()
+
+    registry.add("spring.data.redis.host", () => redisContainer.getHost)
+    registry.add("spring.data.redis.port", () => redisContainer.getFirstMappedPort)
+
     registry.add("spring.datasource.url", () => postgresContainer.getJdbcUrl)
     registry.add("spring.datasource.username", () => postgresContainer.getUsername)
     registry.add("spring.datasource.password", () => postgresContainer.getPassword)

@@ -3,12 +3,12 @@
 - Implement: https://www.geeksforgeeks.org/generate-bitonic-sequence-of-length-n-from-integers-in-a-given-range/
 - Red Team: Scala 3x
 - Do:
-    - Implementation
-    - Unit tests
-    - Performance Test / Benchmarks
-    - Proper Documentation
-    - Expose Solution via REST API
-    - Store Results into a Database (Redis with Docker)
+    - [x] Implementation
+    - [x] Unit tests
+    - [ ] Performance Test / Benchmarks
+    - [ ] Proper Documentation
+    - [x] Expose Solution via REST API
+    - [x] Store Results into a Database (Redis with Docker)
 
 ## Requirements
 

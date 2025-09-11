@@ -13,7 +13,7 @@ import scala.jdk.OptionConverters.*
 class BitonicSequenceDAO @Autowired()(private val bitonicSequenceRepository: BitonicSequenceRepository) {
 
   def findById(id: UUID): Option[BitonicSequenceEntity] = {
-    bitonicSequenceRepository.findById(id).asScala
+    bitonicSequenceRepository.findById(id).toScala
   }
 
   def save(bitonicSequence: BitonicSequenceEntity): BitonicSequenceEntity = {
