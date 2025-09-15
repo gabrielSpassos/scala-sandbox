@@ -26,6 +26,20 @@ services:
     networks:
       - scala-bitonic-poc
 
+  k6:
+    image: grafana/k6:latest
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./src/test/stress/load.js:/scripts/load.js
+    entrypoint: [ "k6" ]
+    command:
+      [
+        "run",
+        "/scripts/load.js",
+      ]
+
 volumes:
   scala_bitonic_postgres_data:
   scala_bitonic_redis_data:
