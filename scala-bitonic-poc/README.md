@@ -17,3 +17,15 @@
 of length n from the integers in the range [l, r] such that the first element is the maximum.
 If it is not possible to create such a sequence, then return [-1].
 - Note: n > 2.
+
+## Sample 
+
+```
+curl --location 'http://localhost:8080/v1/bitonic/sequences' \
+--header 'Content-Type: application/json' \
+--data '{
+    "size": 5,
+    "lowerBoundary": 3,
+    "upperBoundary": 10
+}'
+```

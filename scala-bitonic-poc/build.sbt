@@ -20,15 +20,17 @@ libraryDependencies ++= Seq(
   "org.springframework.boot" % "spring-boot-starter-jdbc" % springBootVersion exclude("com.fasterxml.jackson.core", "jackson-databind"),
   "org.springframework.boot" % "spring-boot-starter-data-jdbc" % springBootVersion exclude("com.fasterxml.jackson.core", "jackson-databind"),
   "org.springframework.boot" % "spring-boot-starter-data-redis" % springBootVersion exclude("com.fasterxml.jackson.core", "jackson-databind"),
+  "org.springframework.boot" % "spring-boot-starter-logging" % springBootVersion % Runtime,
   "io.lettuce" % "lettuce-core" % "6.8.1.RELEASE",
   "org.springframework.boot" % "spring-boot-starter-test" % springBootVersion % Test exclude("com.fasterxml.jackson.core", "jackson-databind"),
   "com.github.sbt.junit" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % Test,
   "org.testcontainers" % "testcontainers" % testContainersVersion % Test,
   "org.testcontainers" % "postgresql" % testContainersVersion % Test,
-  //"org.testcontainers" % "redis" % testContainersVersion % Test,
   "com.redis" % "testcontainers-redis" % "2.2.4" % Test,
   "org.testcontainers" % "junit-jupiter" % testContainersVersion % Test
 )
+
+dependencyOverrides += "ch.qos.logback" % "logback-classic" % "1.5.18"
 
 javacOptions ++= Seq(
   "--release", javaVersion
@@ -36,27 +38,14 @@ javacOptions ++= Seq(
 
 Compile / mainClass := Some("com.gabrielspassos.Application")
 
+enablePlugins(AssemblyPlugin)
+assembly / mainClass := Some("com.gabrielspassos.Application")
 assembly / assemblyMergeStrategy := {
+  case PathList("META-INF", "spring", "org.springframework.boot.autoconfigure.AutoConfiguration.imports") =>
+    MergeStrategy.concat
+  case PathList("META-INF", "spring", xs @ _*) =>
+    MergeStrategy.first
   case PathList("META-INF", xs @ _*) =>
-    xs match {
-      case ("MANIFEST.MF" :: Nil)                          => MergeStrategy.discard
-      case ("spring.factories" :: Nil)                     => MergeStrategy.concat
-      case ("spring" :: "aot.factories" :: Nil)            => MergeStrategy.concat
-      case ("spring-configuration-metadata.json" :: Nil)   => MergeStrategy.concat
-      case ("additional-spring-configuration-metadata.json" :: Nil) =>
-        MergeStrategy.concat
-      case ("io.netty.versions.properties" :: Nil)         => MergeStrategy.first
-      case ("web-fragment.xml" :: Nil)                     => MergeStrategy.discard
-      case _                                               => MergeStrategy.discard
-    }
-
-  // Java module descriptors — just drop them
-  case "module-info.class" => MergeStrategy.discard
-
-  // Avoid duplicate reference.conf / application.conf files
-  case x if x.endsWith("reference.conf")   => MergeStrategy.concat
-  case x if x.endsWith("application.conf") => MergeStrategy.concat
-
-  // In general, prefer the first one
+    MergeStrategy.discard
   case _ => MergeStrategy.first
 }

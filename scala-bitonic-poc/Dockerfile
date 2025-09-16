@@ -1,5 +1,5 @@
 # Stage 1: Build the Scala application
-FROM openjdk:21-jdk-slim AS builder
+FROM sbtscala/scala-sbt:eclipse-temurin-21.0.8_9_1.11.6_3.7.3 AS builder
 WORKDIR /app
 
 # Copy sbt build files and project source
@@ -17,7 +17,7 @@ FROM openjdk:21-jdk-slim
 WORKDIR /app
 
 # Copy the built assembly JAR from the builder stage
-COPY --from=builder /app/target/scala-*/scala-bitonic-poc.jar .
+COPY --from=builder /app/target/scala-*/scala-bitonic-poc*.jar scala-bitonic-poc.jar
 
 # Expose any ports your application listens on (e.g., for a web server)
 EXPOSE 8080
