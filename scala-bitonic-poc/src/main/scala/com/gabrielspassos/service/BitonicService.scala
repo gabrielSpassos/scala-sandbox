@@ -2,7 +2,8 @@ package com.gabrielspassos.service
 
 import com.gabrielspassos.controller.v1.request.BitonicRequest
 import com.gabrielspassos.controller.v1.response.BitonicResponse
-import com.gabrielspassos.dao.{BitonicSequenceCacheDAO, BitonicSequenceDAO}
+import com.gabrielspassos.dao.BitonicSequenceDAO
+import com.gabrielspassos.dao.cache.BitonicSequenceCacheDAO
 import com.gabrielspassos.entity.{BitonicSequenceCacheEntity, BitonicSequenceEntity}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service

@@ -1,6 +1,6 @@
-package com.gabrielspassos.dao
+package com.gabrielspassos.dao.cache
 
-import com.gabrielspassos.dao.repository.BitonicSequenceCacheRepository
+import com.gabrielspassos.dao.cache.repository.BitonicSequenceCacheRepository
 import com.gabrielspassos.entity.BitonicSequenceCacheEntity
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component

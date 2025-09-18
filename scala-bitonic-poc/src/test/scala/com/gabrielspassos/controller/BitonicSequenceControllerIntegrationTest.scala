@@ -2,7 +2,8 @@ package com.gabrielspassos.controller
 
 import com.gabrielspassos.Application
 import com.gabrielspassos.DataMock.createGson
-import com.gabrielspassos.dao.{BitonicSequenceCacheDAO, BitonicSequenceDAO}
+import com.gabrielspassos.dao.BitonicSequenceDAO
+import com.gabrielspassos.dao.cache.BitonicSequenceCacheDAO
 import com.gabrielspassos.entity.BitonicSequenceEntity
 import org.json.JSONObject
 import org.junit.jupiter.api.Assertions.{assertEquals, assertNotEquals, assertNotNull, assertTrue}

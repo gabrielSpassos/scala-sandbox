@@ -1,4 +1,4 @@
-package com.gabrielspassos.dao.repository
+package com.gabrielspassos.dao.cache.repository
 
 import com.gabrielspassos.entity.BitonicSequenceCacheEntity
 import org.springframework.data.repository.CrudRepository

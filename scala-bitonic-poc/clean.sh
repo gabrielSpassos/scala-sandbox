@@ -9,6 +9,6 @@ docker volume rm -f scala-bitonic-poc_scala_bitonic_postgres_data || true
 docker volume rm -f scala-bitonic-poc_scala_bitonic_redis_data || true
 
 echo "🧹 Removing custom network..."
-docker network rm scala-bitonic-poc_scala-bitonic-poc || true
+docker network rm scala-bitonic-poc_default || true
 
 echo "✅ Cleanup complete."
