@@ -9,12 +9,12 @@ ThisBuild / scalaVersion := "3.6.2"
 
 ThisBuild / organization := "com.gabrielspassos"
 
-val springBootVersion = "3.5.5"
+val springBootVersion = "3.5.6"
 val javaVersion = "21"
 val testContainersVersion = "1.21.3"
 
 libraryDependencies ++= Seq(
-  "org.postgresql" % "postgresql" % "42.7.7",
+  "org.postgresql" % "postgresql" % "42.7.8",
   "com.google.code.gson" % "gson" % "2.13.2",
   "org.springframework.boot" % "spring-boot-starter-web" % springBootVersion exclude("com.fasterxml.jackson.core", "jackson-databind"),
   "org.springframework.boot" % "spring-boot-starter-jdbc" % springBootVersion exclude("com.fasterxml.jackson.core", "jackson-databind"),
@@ -30,8 +30,6 @@ libraryDependencies ++= Seq(
   "org.testcontainers" % "junit-jupiter" % testContainersVersion % Test
 )
 
-dependencyOverrides += "ch.qos.logback" % "logback-classic" % "1.5.18"
-
 javacOptions ++= Seq(
   "--release", javaVersion
 )
@@ -40,12 +38,19 @@ Compile / mainClass := Some("com.gabrielspassos.Application")
 
 enablePlugins(AssemblyPlugin)
 assembly / mainClass := Some("com.gabrielspassos.Application")
+assembly / assemblyJarName := "scala-bitonic-poc.jar"
 assembly / assemblyMergeStrategy := {
-  case PathList("META-INF", "spring", "org.springframework.boot.autoconfigure.AutoConfiguration.imports") =>
-    MergeStrategy.concat
-  case PathList("META-INF", "spring", xs @ _*) =>
-    MergeStrategy.first
-  case PathList("META-INF", xs @ _*) =>
-    MergeStrategy.discard
-  case _ => MergeStrategy.first
+  case PathList(ps@_*) if ps.contains("module-info.class") => MergeStrategy.concat
+  case PathList("META-INF", "spring-configuration-metadata.json") => MergeStrategy.concat
+  case PathList("META-INF", "additional-spring-configuration-metadata.json") => MergeStrategy.concat
+  case PathList("META-INF", "spring.handlers") => MergeStrategy.concat
+  case PathList("META-INF", "spring.schemas") => MergeStrategy.concat
+  case PathList("META-INF", "spring.factories") => MergeStrategy.concat
+  case PathList("META-INF", "web-fragment.xml") => MergeStrategy.concat
+  case PathList("META-INF", "spring-autoconfigure-metadata.properties") => MergeStrategy.concat
+  case PathList("META-INF", "spring", "aot.factories") => MergeStrategy.concat
+  case PathList("META-INF", "spring", "org.springframework.boot.autoconfigure.AutoConfiguration.imports") => MergeStrategy.concat
+  case PathList("META-INF", xs @ _*) if xs.contains("io.netty.versions.properties") => MergeStrategy.first
+  case PathList("META-INF", xs @ _*) => MergeStrategy.discard
+  case x => MergeStrategy.defaultMergeStrategy(x)
 }

@@ -29,3 +29,12 @@ curl --location 'http://localhost:8080/v1/bitonic/sequences' \
     "upperBoundary": 10
 }'
 ```
+
+## Tests Output
+
+```
+./test.sh
+
+[info] Passed: Total 16, Failed 0, Errors 0, Passed 16
+[success] Total time: 113 s (01:53), completed Sep 24, 2025, 11:31:02 AM
+```
