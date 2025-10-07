@@ -26,20 +26,20 @@ services:
     networks:
       - scala-bitonic-poc
 
-  scala-bitonic-service:
-    container_name: scala-bitonic-service
-    depends_on:
-      - postgres
-      - redis
-    build:
-      context: .
-    ports:
-      - "8080:8080"
-    environment:
-      POSTGRES_URL: postgres
-      REDIS_URL: redis
-    networks:
-      - scala-bitonic-poc
+#  scala-bitonic-service:
+#    container_name: scala-bitonic-service
+#    depends_on:
+#      - postgres
+#      - redis
+#    build:
+#      context: .
+#    ports:
+#      - "8080:8080"
+#    environment:
+#      POSTGRES_URL: postgres
+#      REDIS_URL: redis
+#    networks:
+#      - scala-bitonic-poc
 
 #  k6:
 #    image: grafana/k6:latest
