@@ -38,3 +38,15 @@ curl --location 'http://localhost:8080/v1/bitonic/sequences' \
 [info] Passed: Total 16, Failed 0, Errors 0, Passed 16
 [success] Total time: 113 s (01:53), completed Sep 24, 2025, 11:31:02 AM
 ```
+
+### Utility Functions
+
+* Build docker container
+```
+docker build -t scala-bitonic-poc .
+```
+
+* Run docker container
+```
+docker run -p 8080:8080 scala-bitonic-poc
+```

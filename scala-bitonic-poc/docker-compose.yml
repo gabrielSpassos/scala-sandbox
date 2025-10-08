@@ -1,4 +1,4 @@
-version: '1'
+version: '3.8'
 
 services:
   postgres:
@@ -15,6 +15,11 @@ services:
       - ./src/main/resources/schema.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - scala-bitonic-poc
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U sa" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   redis:
     image: redis:latest
@@ -25,21 +30,28 @@ services:
       - scala_bitonic_redis_data:/data
     networks:
       - scala-bitonic-poc
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
-#  scala-bitonic-service:
-#    container_name: scala-bitonic-service
-#    depends_on:
-#      - postgres
-#      - redis
-#    build:
-#      context: .
-#    ports:
-#      - "8080:8080"
-#    environment:
-#      POSTGRES_URL: postgres
-#      REDIS_URL: redis
-#    networks:
-#      - scala-bitonic-poc
+  scala-bitonic-service:
+    container_name: scala-bitonic-service
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+    environment:
+      POSTGRES_URL: postgres
+      REDIS_URL: redis
+    networks:
+      - scala-bitonic-poc
 
 #  k6:
 #    image: grafana/k6:latest

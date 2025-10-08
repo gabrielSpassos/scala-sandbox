@@ -2,8 +2,8 @@ FROM sbtscala/scala-sbt:eclipse-temurin-21.0.8_9_1.11.6_3.7.3 AS builder
 WORKDIR /app
 
 # Copy build config separately to cache dependencies
-COPY build.sbt .
-COPY project/ ./project/
+COPY build.sbt /app/
+COPY project /app/project
 
 # Now copy the source code
 COPY . .
