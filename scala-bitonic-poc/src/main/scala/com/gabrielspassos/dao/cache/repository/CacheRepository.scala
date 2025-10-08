@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository
 import java.util.{Optional, UUID}
 
 @Repository
-trait BitonicSequenceCacheRepository extends CrudRepository[BitonicSequenceCacheEntity, UUID] {
+trait CacheRepository extends CrudRepository[BitonicSequenceCacheEntity, UUID] {
 
   def findBySizeAndLowerBoundaryAndUpperBoundary(size: Int, lowerBoundary: Int, upperBoundary: Int): Optional[BitonicSequenceCacheEntity]
 

@@ -2,7 +2,7 @@ package com.gabrielspassos.service
 
 import com.gabrielspassos.controller.v1.request.BitonicRequest
 import com.gabrielspassos.dao.BitonicSequenceDAO
-import com.gabrielspassos.dao.cache.BitonicSequenceCacheDAO
+import com.gabrielspassos.dao.cache.CacheDAO
 import com.gabrielspassos.entity.{BitonicSequenceCacheEntity, BitonicSequenceEntity}
 import org.junit.jupiter.api.Assertions.{assertEquals, assertNotNull}
 import org.junit.jupiter.api.Test
@@ -21,7 +21,7 @@ class BitonicServiceTest {
   private var bitonicSequenceDAO: BitonicSequenceDAO = uninitialized
 
   @Mock
-  private var bitonicSequenceCacheDAO: BitonicSequenceCacheDAO = uninitialized
+  private var bitonicSequenceCacheDAO: CacheDAO = uninitialized
 
   @Test
   def shouldCreateBitonicSequence(): Unit = {

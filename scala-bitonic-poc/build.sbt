@@ -39,7 +39,8 @@ Compile / mainClass := Some("com.gabrielspassos.Application")
 enablePlugins(AssemblyPlugin)
 assembly / mainClass := Some("com.gabrielspassos.Application")
 assembly / assemblyJarName := "scala-bitonic-poc.jar"
-assembly / assemblyMergeStrategy := {
+ThisBuild / assemblyMergeStrategy := {
+  case PathList("META-INF", "io.netty.versions.properties") => MergeStrategy.concat
   case PathList(ps@_*) if ps.contains("module-info.class") => MergeStrategy.concat
   case PathList("META-INF", "spring-configuration-metadata.json") => MergeStrategy.concat
   case PathList("META-INF", "additional-spring-configuration-metadata.json") => MergeStrategy.concat
@@ -50,7 +51,5 @@ assembly / assemblyMergeStrategy := {
   case PathList("META-INF", "spring-autoconfigure-metadata.properties") => MergeStrategy.concat
   case PathList("META-INF", "spring", "aot.factories") => MergeStrategy.concat
   case PathList("META-INF", "spring", "org.springframework.boot.autoconfigure.AutoConfiguration.imports") => MergeStrategy.concat
-  case PathList("META-INF", xs @ _*) if xs.contains("io.netty.versions.properties") => MergeStrategy.first
-  case PathList("META-INF", xs @ _*) => MergeStrategy.discard
   case x => MergeStrategy.defaultMergeStrategy(x)
 }

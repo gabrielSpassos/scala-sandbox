@@ -3,7 +3,7 @@ package com.gabrielspassos.service
 import com.gabrielspassos.controller.v1.request.BitonicRequest
 import com.gabrielspassos.controller.v1.response.BitonicResponse
 import com.gabrielspassos.dao.BitonicSequenceDAO
-import com.gabrielspassos.dao.cache.BitonicSequenceCacheDAO
+import com.gabrielspassos.dao.cache.CacheDAO
 import com.gabrielspassos.entity.{BitonicSequenceCacheEntity, BitonicSequenceEntity}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -12,7 +12,7 @@ import scala.collection.mutable
 
 @Service
 class BitonicService @Autowired(private val bitonicSequenceDAO: BitonicSequenceDAO,
-                                private val bitonicSequenceCacheDAO: BitonicSequenceCacheDAO) {
+                                private val bitonicSequenceCacheDAO: CacheDAO) {
 
   def createBitonicSequence(bitonicRequest: BitonicRequest): BitonicResponse = {
     val cachedValue = bitonicSequenceCacheDAO.findBySizeAndLowerBoundaryAndUpperBoundary(

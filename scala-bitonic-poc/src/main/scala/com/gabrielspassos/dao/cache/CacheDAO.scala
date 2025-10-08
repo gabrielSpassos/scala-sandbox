@@ -1,6 +1,6 @@
 package com.gabrielspassos.dao.cache
 
-import com.gabrielspassos.dao.cache.repository.BitonicSequenceCacheRepository
+import com.gabrielspassos.dao.cache.repository.CacheRepository
 import com.gabrielspassos.entity.BitonicSequenceCacheEntity
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -8,20 +8,20 @@ import org.springframework.stereotype.Component
 import scala.jdk.OptionConverters.*
 
 @Component
-class BitonicSequenceCacheDAO @Autowired()(private val bitonicSequenceCacheRepository: BitonicSequenceCacheRepository) {
+class CacheDAO @Autowired()(private val cacheRepository: CacheRepository) {
 
   def findBySizeAndLowerBoundaryAndUpperBoundary(size: Int,
                                                  lowerBoundary: Int,
                                                  upperBoundary: Int): Option[BitonicSequenceCacheEntity] ={
-    bitonicSequenceCacheRepository.findBySizeAndLowerBoundaryAndUpperBoundary(size, lowerBoundary, upperBoundary).toScala
+    cacheRepository.findBySizeAndLowerBoundaryAndUpperBoundary(size, lowerBoundary, upperBoundary).toScala
   }
 
   def save(bitonicSequenceCacheEntity: BitonicSequenceCacheEntity): BitonicSequenceCacheEntity = {
-    bitonicSequenceCacheRepository.save(bitonicSequenceCacheEntity)
+    cacheRepository.save(bitonicSequenceCacheEntity)
   }
 
   def delete(bitonicSequenceCacheEntity: BitonicSequenceCacheEntity): BitonicSequenceCacheEntity = {
-    bitonicSequenceCacheRepository.delete(bitonicSequenceCacheEntity)
+    cacheRepository.delete(bitonicSequenceCacheEntity)
     bitonicSequenceCacheEntity
   }
 }
