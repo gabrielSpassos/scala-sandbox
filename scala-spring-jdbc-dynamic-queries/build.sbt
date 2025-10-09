@@ -17,6 +17,8 @@ libraryDependencies ++= Seq(
   "org.springframework.boot" % "spring-boot-starter-data-jdbc" % springBootVersion exclude("com.fasterxml.jackson.core", "jackson-databind"),
   "org.springframework.boot" % "spring-boot-starter-test" % springBootVersion % Test exclude("com.fasterxml.jackson.core", "jackson-databind"),
   "com.github.sbt.junit" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % Test,
+  "org.mockito" % "mockito-core" % "5.20.0" % Test,
+  "net.bytebuddy" % "byte-buddy" % "1.17.8" % Test
 )
 
 javacOptions ++= Seq(
