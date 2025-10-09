@@ -1,0 +1,24 @@
+version: '1'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: scala_dynamic_queries_poc
+    environment:
+      POSTGRES_USER: sa
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: poc
+    ports:
+      - "5436:5432"
+    volumes:
+      - poc_dynamic_queries_data:/var/lib/postgresql/data
+      - ./src/main/resources/schema.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - scala-dynamic-queries-poc
+
+volumes:
+  poc_dynamic_queries_data:
+
+networks:
+  scala-dynamic-queries-poc:
+    driver: bridge
