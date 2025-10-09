@@ -1,6 +1,6 @@
 package com.gabrielspassos.controller
 
-import com.gabrielspassos.Application
+import com.gabrielspassos.{Application, BaseIntegrationTest}
 import com.gabrielspassos.DataMock.{createCardEntity, createGson}
 import com.gabrielspassos.controller.v1.response.CardResponse
 import com.gabrielspassos.dao.CardDAO
@@ -25,7 +25,7 @@ import scala.collection.mutable.ListBuffer
 @EnableAutoConfiguration
 @ComponentScan(Array("com.*"))
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class CardControllerIntegrationTest @Autowired()(private val cardDAO: CardDAO) {
+class CardControllerIntegrationTest @Autowired()(private val cardDAO: CardDAO) extends BaseIntegrationTest {
 
   @LocalServerPort
   var randomServerPort: Int = 0

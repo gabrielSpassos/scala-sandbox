@@ -8,6 +8,7 @@ ThisBuild / organization := "com.gabrielspassos"
 
 val springBootVersion = "3.5.6"
 val javaVersion = "25"
+val testContainersVersion = "1.21.3"
 
 libraryDependencies ++= Seq(
   "org.postgresql" % "postgresql" % "42.7.8",
@@ -18,7 +19,10 @@ libraryDependencies ++= Seq(
   "org.springframework.boot" % "spring-boot-starter-test" % springBootVersion % Test exclude("com.fasterxml.jackson.core", "jackson-databind"),
   "com.github.sbt.junit" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % Test,
   "org.mockito" % "mockito-core" % "5.20.0" % Test,
-  "net.bytebuddy" % "byte-buddy" % "1.17.8" % Test
+  "net.bytebuddy" % "byte-buddy" % "1.17.8" % Test,
+  "org.testcontainers" % "testcontainers" % testContainersVersion % Test,
+  "org.testcontainers" % "postgresql" % testContainersVersion % Test,
+  "org.testcontainers" % "junit-jupiter" % testContainersVersion % Test
 )
 
 javacOptions ++= Seq(

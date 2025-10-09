@@ -1,6 +1,6 @@
 package com.gabrielspassos.service
 
-import com.gabrielspassos.Application
+import com.gabrielspassos.{Application, BaseIntegrationTest}
 import com.gabrielspassos.dao.CardDAO
 import com.gabrielspassos.entity.CardEntity
 import org.junit.jupiter.api.Assertions.{assertFalse, assertNotNull, assertTrue}
@@ -20,7 +20,7 @@ import scala.collection.mutable.ListBuffer
 @ComponentScan(Array("com.*"))
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CardServiceIntegrationTest @Autowired()(private val cardService: CardService,
-                                              private val cardDAO: CardDAO) {
+                                              private val cardDAO: CardDAO) extends BaseIntegrationTest {
 
   private val cardEntities = ListBuffer[CardEntity]()
 

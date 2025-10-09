@@ -1,6 +1,6 @@
 package com.gabrielspassos.controller
 
-import com.gabrielspassos.Application
+import com.gabrielspassos.{Application, BaseIntegrationTest}
 import com.gabrielspassos.DataMock.{createBankEntity, createGson}
 import com.gabrielspassos.contracts.v1.response.BankResponse
 import com.gabrielspassos.dao.BankDAO
@@ -28,7 +28,7 @@ import scala.collection.mutable.ListBuffer
 @EnableAutoConfiguration
 @ComponentScan(Array("com.*"))
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class BankControllerIntegrationTest @Autowired()(private val bankDAO: BankDAO) {
+class BankControllerIntegrationTest @Autowired()(private val bankDAO: BankDAO) extends BaseIntegrationTest {
 
   @LocalServerPort
   var randomServerPort: Int = 0
