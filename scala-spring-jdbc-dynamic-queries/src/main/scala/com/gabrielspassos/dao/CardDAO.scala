@@ -1,12 +1,15 @@
 package com.gabrielspassos.dao
 
 import com.gabrielspassos.dao.repository.CardRepository
+import com.gabrielspassos.dao.row.mapper.CardRowMapper
 import com.gabrielspassos.entity.CardEntity
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Component
 
 import java.time.LocalDate
+import java.util.UUID
+import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
 
 @Component
@@ -69,6 +72,30 @@ class CardDAO @Autowired()(private val jdbcTemplate: JdbcTemplate,
 
   def findByBrandIn(brands: List[String]): List[CardEntity] = {
     cardRepository.findByBrandInAndSoftDeletedFalse(brands.asJava).asScala.toList
+  }
+
+  def findByDynamicParams(institutionName: String, brand: String, expirationDate: LocalDate): List[CardEntity] = {
+    val sql = new StringBuilder("SELECT * FROM card WHERE 1=1")
+    val params = ListBuffer[AnyRef]()
+    
+    if (null != institutionName && !institutionName.isBlank) {
+      sql.append(" AND institution_name = ?")
+      params.addOne(institutionName)
+    }
+    
+    if (null != brand && !brand.isBlank) {
+      sql.append(" AND brand = ?")
+      params.addOne(brand)
+    }
+    
+    if (null != expirationDate) {
+      sql.append(" AND expiration_date = ?")
+      params.addOne(expirationDate)
+    }
+    
+    val args = params.toArray
+    val users = jdbcTemplate.query(sql.toString(), new CardRowMapper(), args)
+    users.asScala.toList
   }
 
   def save(cardEntity: CardEntity): CardEntity = {
