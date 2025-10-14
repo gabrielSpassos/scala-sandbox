@@ -74,26 +74,26 @@ class CardDAO @Autowired()(private val jdbcTemplate: JdbcTemplate,
   }
 
   def findByDynamicParams(institutionName: String, brand: String, expirationDate: LocalDate): List[CardEntity] = {
-    val sql = new StringBuilder("SELECT * FROM card WHERE 1=1")
+    val sql = new StringBuilder("SELECT * FROM card WHERE soft_deleted=false")
     val params = ListBuffer[AnyRef]()
-    
+
     if (null != institutionName && !institutionName.isBlank) {
       sql.append(" AND institution_name = ?")
       params.addOne(institutionName)
     }
-    
+
     if (null != brand && !brand.isBlank) {
       sql.append(" AND brand = ?")
       params.addOne(brand)
     }
-    
+
     if (null != expirationDate) {
       sql.append(" AND expiration_date = ?")
       params.addOne(expirationDate)
     }
-    
-    val args = params.toArray
-    val users = jdbcTemplate.query(sql.toString(), new CardRowMapper(), args)
+
+    val args: Array[Object] = params.toArray
+    val users = jdbcTemplate.query(sql.toString(), new CardRowMapper(), args*)
     users.asScala.toList
   }
 
