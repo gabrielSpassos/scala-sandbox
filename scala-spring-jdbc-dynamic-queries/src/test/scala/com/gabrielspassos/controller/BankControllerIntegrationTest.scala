@@ -1,10 +1,10 @@
 package com.gabrielspassos.controller
 
-import com.gabrielspassos.{Application, BaseIntegrationTest}
 import com.gabrielspassos.DataMock.{createBankEntity, createGson}
 import com.gabrielspassos.contracts.v1.response.BankResponse
 import com.gabrielspassos.dao.BankDAO
 import com.gabrielspassos.entity.BankEntity
+import com.gabrielspassos.{Application, BaseIntegrationTest}
 import com.google.gson.reflect.TypeToken
 import org.junit.jupiter.api.Assertions.{assertEquals, assertNotNull, assertTrue}
 import org.junit.jupiter.api.{AfterEach, Test, TestInstance}

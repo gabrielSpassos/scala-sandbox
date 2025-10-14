@@ -1,14 +1,12 @@
 package com.gabrielspassos.dao
 
-import com.gabrielspassos.{Application, BaseIntegrationTest}
 import com.gabrielspassos.DataMock.createCardEntity
 import com.gabrielspassos.entity.CardEntity
+import com.gabrielspassos.{Application, BaseIntegrationTest}
 import org.junit.jupiter.api.Assertions.{assertEquals, assertNotNull}
 import org.junit.jupiter.api.{AfterEach, Test, TestInstance}
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.context.annotation.ComponentScan
 
 import java.time.LocalDate
 import scala.collection.mutable.ListBuffer

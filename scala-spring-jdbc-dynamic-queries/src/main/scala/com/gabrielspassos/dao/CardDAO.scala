@@ -8,7 +8,6 @@ import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Component
 
 import java.time.LocalDate
-import java.util.UUID
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
 

@@ -1,8 +1,8 @@
 package com.gabrielspassos.service
 
-import com.gabrielspassos.{Application, BaseIntegrationTest}
 import com.gabrielspassos.dao.CardDAO
 import com.gabrielspassos.entity.CardEntity
+import com.gabrielspassos.{Application, BaseIntegrationTest}
 import org.junit.jupiter.api.Assertions.{assertFalse, assertNotNull, assertTrue}
 import org.junit.jupiter.api.{AfterEach, Test, TestInstance}
 import org.springframework.beans.factory.annotation.Autowired
