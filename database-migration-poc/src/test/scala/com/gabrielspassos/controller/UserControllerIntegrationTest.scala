@@ -2,9 +2,7 @@ package com.gabrielspassos.controller
 
 import com.gabrielspassos.Application
 import com.gabrielspassos.DataMock.{createCardEntity, createGson}
-import com.gabrielspassos.controller.v1.response.CardResponse
-import com.gabrielspassos.dao.CardDAO
-import com.gabrielspassos.entity.CardEntity
+import com.gabrielspassos.entity.UserEntity
 import com.google.gson.reflect.TypeToken
 import org.junit.jupiter.api.Assertions.{assertEquals, assertFalse, assertNotNull, assertTrue}
 import org.junit.jupiter.api.{AfterEach, Test, TestInstance}
@@ -25,12 +23,12 @@ import scala.collection.mutable.ListBuffer
 @EnableAutoConfiguration
 @ComponentScan(Array("com.*"))
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class CardControllerIntegrationTest @Autowired()(private val cardDAO: CardDAO) {
+class UserControllerIntegrationTest @Autowired()(private val cardDAO: CardDAO) {
 
   @LocalServerPort
   var randomServerPort: Int = 0
 
-  private val cardEntities = ListBuffer[CardEntity]()
+  private val cardEntities = ListBuffer[UserEntity]()
   private val client = HttpClient.newHttpClient()
   private val objectMapper = createGson
 

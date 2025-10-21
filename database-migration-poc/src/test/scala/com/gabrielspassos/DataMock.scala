@@ -1,6 +1,6 @@
 package com.gabrielspassos
 
-import com.gabrielspassos.entity.{BankEntity, CardEntity}
+import com.gabrielspassos.entity.UserEntity
 import com.gabrielspassos.gson.{ListAdapter, LocalDateAdapter}
 import com.google.gson.{Gson, GsonBuilder}
 
@@ -21,8 +21,8 @@ object DataMock {
   
   def createCardEntity(id: UUID = UUID.randomUUID(),
                        number: String = createRandomCardNumber(),
-                       cvv: String = createRandomCVV()): CardEntity = {
-    CardEntity(
+                       cvv: String = createRandomCVV()): UserEntity = {
+    UserEntity(
       id = id,
       institutionName = "NuBank",
       brand = "MasterCard",

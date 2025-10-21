@@ -1,8 +1,7 @@
 package com.gabrielspassos.service
 
 import com.gabrielspassos.Application
-import com.gabrielspassos.dao.CardDAO
-import com.gabrielspassos.entity.CardEntity
+import com.gabrielspassos.entity.UserEntity
 import org.junit.jupiter.api.Assertions.{assertFalse, assertNotNull, assertTrue}
 import org.junit.jupiter.api.{AfterEach, Test, TestInstance}
 import org.springframework.beans.factory.annotation.Autowired
@@ -22,7 +21,7 @@ import scala.collection.mutable.ListBuffer
 class CardServiceIntegrationTest @Autowired()(private val cardService: CardService,
                                               private val cardDAO: CardDAO) {
 
-  private val cardEntities = ListBuffer[CardEntity]()
+  private val cardEntities = ListBuffer[UserEntity]()
 
   @AfterEach
   def cleanUp(): Unit = {
