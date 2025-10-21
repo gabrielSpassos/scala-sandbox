@@ -8,7 +8,7 @@ import org.springframework.http.{HttpStatus, ResponseEntity}
 import org.springframework.web.bind.annotation.{PostMapping, RequestBody, RequestMapping, RestController}
 
 @RestController
-@RequestMapping(Array("/v1/cards"))
+@RequestMapping(Array("/v1/users"))
 class UserController @Autowired()(private val userContract: UserContractImpl) {
 
   @PostMapping

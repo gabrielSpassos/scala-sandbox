@@ -1,20 +1,23 @@
 package com.gabrielspassos.controller
 
-import com.gabrielspassos.Application
-import com.gabrielspassos.DataMock.{createCardEntity, createGson}
-import com.gabrielspassos.entity.UserEntity
-import com.google.gson.reflect.TypeToken
-import org.junit.jupiter.api.Assertions.{assertEquals, assertFalse, assertNotNull, assertTrue}
+import com.gabrielspassos.repository.UserRepository
+import com.gabrielspassos.{Application, BaseIntegrationTest}
+import org.json.JSONObject
+import org.junit.jupiter.api.Assertions.{assertEquals, assertNotNull}
 import org.junit.jupiter.api.{AfterEach, Test, TestInstance}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.context.annotation.ComponentScan
+import org.springframework.http.HttpHeaders.{ACCEPT, CONTENT_TYPE}
+import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 
 import java.net.URI
 import java.net.http.{HttpClient, HttpRequest, HttpResponse}
 import scala.collection.mutable.ListBuffer
+import scala.jdk.OptionConverters.*
+import scala.util.Random
 
 @SpringBootTest(
   webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
@@ -23,75 +26,95 @@ import scala.collection.mutable.ListBuffer
 @EnableAutoConfiguration
 @ComponentScan(Array("com.*"))
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class UserControllerIntegrationTest @Autowired()(private val cardDAO: CardDAO) {
+class UserControllerIntegrationTest @Autowired()(private val userRepository: UserRepository) extends BaseIntegrationTest {
 
   @LocalServerPort
   var randomServerPort: Int = 0
 
-  private val cardEntities = ListBuffer[UserEntity]()
+  private val externalIds = ListBuffer[(String, String)]()
   private val client = HttpClient.newHttpClient()
-  private val objectMapper = createGson
 
   @AfterEach
   def cleanUp(): Unit = {
-    cardEntities.foreach(card => cardDAO.delete(card))
+    externalIds.foreach((externalId1, externalId2) => {
+      userRepository.findByExternalId1AndExternalId2(externalId1, externalId2).toScala match
+        case Some(user) =>
+          userRepository.delete(user)
+        case None => ()
+    })
   }
 
   @Test
-  def shouldGetCardsSuccessfully(): Unit = {
-    val url = s"http://localhost:$randomServerPort/v1/cards"
+  def shouldCreateUser(): Unit = {
+    val externalId1 = Random().between(1L, Long.MaxValue)
+    val externalId2 = Random().between(1L, Long.MaxValue)
+    val request =
+      s"""
+      {
+        "externalId1": "$externalId1",
+        "externalId2": "$externalId2"
+      }
+      """
+    val url = s"http://localhost:$randomServerPort/v1/users"
+
     val response = client.send(
-      HttpRequest.newBuilder().uri(URI.create(url)).GET().build(),
+      HttpRequest.newBuilder()
+        .uri(URI(url))
+        .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+        .header(ACCEPT, APPLICATION_JSON_VALUE)
+        .POST(HttpRequest.BodyPublishers.ofString(request))
+        .build(),
       HttpResponse.BodyHandlers.ofString()
     )
 
-    assertEquals(200, response.statusCode())
+    assertEquals(201, response.statusCode())
     assertNotNull(response.body())
 
-
-    val responseBody = objectMapper.fromJson(response.body(), new TypeToken[java.util.List[CardResponse]]() {})
-    assertNotNull(responseBody)
-    assertFalse(responseBody.isEmpty)
-    assertEquals(3, responseBody.size())
+    val responseBody = JSONObject(response.body())
+    assertEquals(externalId1.toString, responseBody.getString("externalId1"))
+    assertEquals(externalId2.toString, responseBody.getString("externalId2"))
+    externalIds.addOne((externalId1.toString, externalId2.toString))
   }
 
   @Test
-  def shouldGetCardByNumberSuccessfully(): Unit = {
-    val card = createCardEntity().copy(id = null)
-    val savedCard = cardDAO.save(card)
-    cardEntities.addOne(savedCard)
+  def shouldFailToCreateSameUserAgain(): Unit = {
+    val externalId1 = Random().between(1L, Long.MaxValue)
+    val externalId2 = Random().between(1L, Long.MaxValue)
+    val request =
+      s"""
+      {
+        "externalId1": "$externalId1",
+        "externalId2": "$externalId2"
+      }
+      """
+    val url = s"http://localhost:$randomServerPort/v1/users"
 
-    val url = s"http://localhost:$randomServerPort/v1/cards/${card.number}"
-    val response = client.send(
-      HttpRequest.newBuilder().uri(URI.create(url)).GET().build(),
+    val response1 = client.send(
+      HttpRequest.newBuilder()
+        .uri(URI(url))
+        .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+        .header(ACCEPT, APPLICATION_JSON_VALUE)
+        .POST(HttpRequest.BodyPublishers.ofString(request))
+        .build(),
       HttpResponse.BodyHandlers.ofString()
     )
 
-    assertEquals(200, response.statusCode())
-    assertNotNull(response.body())
+    assertEquals(201, response1.statusCode())
+    assertNotNull(response1.body())
+    externalIds.addOne((externalId1.toString, externalId2.toString))
 
-    val responseBody = objectMapper.fromJson(response.body(), classOf[CardResponse])
-    assertNotNull(responseBody)
-    assertEquals(savedCard.id.toString, responseBody.id)
-    assertEquals(savedCard.number, responseBody.number)
-    assertEquals(savedCard.institutionName, responseBody.institutionName)
-    assertEquals(savedCard.brand, responseBody.brand)
-    assertEquals(savedCard.name, responseBody.name)
-    assertEquals(savedCard.expirationDate.toString, responseBody.expirationDate)
-    assertEquals(savedCard.cvv, responseBody.cvv)
-  }
-
-  @Test
-  def shouldNotFoundCardByNumber(): Unit = {
-    val url = s"http://localhost:$randomServerPort/v1/cards/1234567890"
-    val response = client.send(
-      HttpRequest.newBuilder().uri(URI.create(url)).GET().build(),
+    val response2 = client.send(
+      HttpRequest.newBuilder()
+        .uri(URI(url))
+        .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+        .header(ACCEPT, APPLICATION_JSON_VALUE)
+        .POST(HttpRequest.BodyPublishers.ofString(request))
+        .build(),
       HttpResponse.BodyHandlers.ofString()
     )
 
-    assertEquals(404, response.statusCode())
-    assertNotNull(response.body())
-    assertTrue(response.body().isEmpty)
+    assertEquals(400, response2.statusCode())
+    assertNotNull(response2.body())
   }
 
 }

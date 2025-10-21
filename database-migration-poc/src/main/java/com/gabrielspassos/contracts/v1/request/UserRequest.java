@@ -10,6 +10,11 @@ public class UserRequest {
     public UserRequest() {
     }
 
+    public UserRequest(String externalId1, String externalId2) {
+        this.externalId1 = externalId1;
+        this.externalId2 = externalId2;
+    }
+
     public String getExternalId1() {
         return externalId1;
     }

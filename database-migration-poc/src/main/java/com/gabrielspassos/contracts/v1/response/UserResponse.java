@@ -4,24 +4,12 @@ import java.util.Objects;
 
 public class UserResponse {
 
-    private String id;
     private String userId;
-    private String cpf;
     private String externalId1;
     private String externalId2;
     private String status;
-    private String createdAt;
-    private String updatedAt;
 
     public UserResponse() {
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getUserId() {
@@ -30,14 +18,6 @@ public class UserResponse {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
     }
 
     public String getExternalId1() {
@@ -64,52 +44,28 @@ public class UserResponse {
         this.status = status;
     }
 
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public String getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(String updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         UserResponse that = (UserResponse) o;
-        return Objects.equals(id, that.id)
-                && Objects.equals(userId, that.userId)
-                && Objects.equals(cpf, that.cpf)
+        return Objects.equals(userId, that.userId)
                 && Objects.equals(externalId1, that.externalId1)
                 && Objects.equals(externalId2, that.externalId2)
-                && Objects.equals(status, that.status)
-                && Objects.equals(createdAt, that.createdAt)
-                && Objects.equals(updatedAt, that.updatedAt);
+                && Objects.equals(status, that.status);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userId, cpf, externalId1, externalId2, status, createdAt, updatedAt);
+        return Objects.hash(userId, externalId1, externalId2, status);
     }
 
     @Override
     public String toString() {
         return "UserResponse{" +
-                "id='" + id + '\'' +
-                ", userId='" + userId + '\'' +
-                ", cpf='" + cpf + '\'' +
+                "userId='" + userId + '\'' +
                 ", externalId1='" + externalId1 + '\'' +
                 ", externalId2='" + externalId2 + '\'' +
                 ", status='" + status + '\'' +
-                ", createdAt='" + createdAt + '\'' +
-                ", updatedAt='" + updatedAt + '\'' +
                 '}';
     }
 }
