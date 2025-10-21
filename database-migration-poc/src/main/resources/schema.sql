@@ -1,6 +1,7 @@
 create table if not exists user (
     id uuid not null primary key default gen_random_uuid(),
     user_id text null,
+    cpf text null,
     external_id1 text unique,
     external_id2 text,
     status text not null,

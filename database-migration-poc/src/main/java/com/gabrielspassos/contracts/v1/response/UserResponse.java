@@ -6,6 +6,7 @@ public class UserResponse {
 
     private String id;
     private String userId;
+    private String cpf;
     private String externalId1;
     private String externalId2;
     private String status;
@@ -29,6 +30,14 @@ public class UserResponse {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 
     public String getExternalId1() {
@@ -77,6 +86,7 @@ public class UserResponse {
         UserResponse that = (UserResponse) o;
         return Objects.equals(id, that.id)
                 && Objects.equals(userId, that.userId)
+                && Objects.equals(cpf, that.cpf)
                 && Objects.equals(externalId1, that.externalId1)
                 && Objects.equals(externalId2, that.externalId2)
                 && Objects.equals(status, that.status)
@@ -86,7 +96,7 @@ public class UserResponse {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userId, externalId1, externalId2, status, createdAt, updatedAt);
+        return Objects.hash(id, userId, cpf, externalId1, externalId2, status, createdAt, updatedAt);
     }
 
     @Override
@@ -94,6 +104,7 @@ public class UserResponse {
         return "UserResponse{" +
                 "id='" + id + '\'' +
                 ", userId='" + userId + '\'' +
+                ", cpf='" + cpf + '\'' +
                 ", externalId1='" + externalId1 + '\'' +
                 ", externalId2='" + externalId2 + '\'' +
                 ", status='" + status + '\'' +
