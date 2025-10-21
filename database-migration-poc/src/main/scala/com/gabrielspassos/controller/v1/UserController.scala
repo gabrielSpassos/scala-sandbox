@@ -1,6 +1,6 @@
 package com.gabrielspassos.controller.v1
 
-import com.gabrielspassos.contract.impl.UserContractImpl
+import com.gabrielspassos.contract.impl.v1.UserContractImpl
 import com.gabrielspassos.contracts.v1.request.UserRequest
 import com.gabrielspassos.contracts.v1.response.UserResponse
 import org.springframework.beans.factory.annotation.Autowired

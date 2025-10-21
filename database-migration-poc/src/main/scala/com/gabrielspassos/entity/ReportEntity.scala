@@ -8,36 +8,23 @@ import java.time.OffsetDateTime
 import java.util.UUID
 import scala.annotation.meta.field
 
-@Table(name = "user")
-case class UserEntity(
+@Table(name = "report")
+case class ReportEntity(
   @(Id @field)
   id: Long = null,
 
   @(Column @field)(value = "user_id")
   userId: UUID = null,
 
-  @(Column @field)
-  cpf: String = null,
-
   @(Column @field)(value = "external_id1")
   externalId1: String,
 
-  @(Column @field)(value = "external_id2")
-  externalId2: String,
-
   @(Column @field)
-  status: String,
+  content: String,
 
   @(Column @field)(value = "created_at")
   createdAt: OffsetDateTime = OffsetDateTime.now(),
 
   @(Column @field)(value = "updated_at")
   updatedAt: OffsetDateTime = OffsetDateTime.now(),
-) {
-  def isActive: Boolean = UserEntity.activeStatus == status
-}
-
-object UserEntity {
-  def activeStatus = "ACTIVE"
-  def inactiveStatus = "INACTIVE"
-}
+)

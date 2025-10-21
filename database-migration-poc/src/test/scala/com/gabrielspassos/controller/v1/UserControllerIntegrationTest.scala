@@ -1,4 +1,4 @@
-package com.gabrielspassos.controller
+package com.gabrielspassos.controller.v1
 
 import com.gabrielspassos.repository.UserRepository
 import com.gabrielspassos.{Application, BaseIntegrationTest}
