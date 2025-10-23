@@ -12,7 +12,7 @@ import java.util.UUID
 import scala.jdk.OptionConverters.*
 
 @Service
-class UserService @Autowired()(private val userRepository: UserRepository) {
+class UserServiceV2 @Autowired()(private val userRepository: UserRepository) {
   
   def createUser(userRequest: UserRequest): UserEntity = {
     val encryptedCpf = encryptString(userRequest.getCpf)
