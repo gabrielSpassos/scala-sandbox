@@ -1,4 +1,4 @@
-package com.gabrielspassos.contracts.v2;
+package com.gabrielspassos.contracts.v2.request;
 
 import java.util.Objects;
 
