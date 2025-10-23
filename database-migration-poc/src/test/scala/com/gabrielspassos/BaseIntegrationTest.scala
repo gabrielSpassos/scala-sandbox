@@ -18,7 +18,6 @@ object BaseIntegrationTest {
   postgresContainer.withPassword("test")
   postgresContainer.withDatabaseName("it-test-db")
   postgresContainer.withExposedPorts(5432)
-  postgresContainer.withInitScripts("schema.sql")
   
   @DynamicPropertySource
   def configureProperties(registry: DynamicPropertyRegistry): Unit = {

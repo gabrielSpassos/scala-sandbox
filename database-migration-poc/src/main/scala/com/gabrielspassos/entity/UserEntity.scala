@@ -8,16 +8,10 @@ import java.time.OffsetDateTime
 import java.util.UUID
 import scala.annotation.meta.field
 
-@Table(name = "user")
+@Table(name = "users")
 case class UserEntity(
   @(Id @field)
   id: Long = null,
-
-  @(Column @field)(value = "user_id")
-  userId: UUID = null,
-
-  @(Column @field)
-  cpf: String = null,
 
   @(Column @field)(value = "external_id1")
   externalId1: String,

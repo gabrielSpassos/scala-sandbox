@@ -3,21 +3,12 @@ package com.gabrielspassos.contracts.v1.response;
 import java.util.Objects;
 
 public class UserResponse {
-
-    private String userId;
+    
     private String externalId1;
     private String externalId2;
     private String status;
 
     public UserResponse() {
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
     public String getExternalId1() {
@@ -48,21 +39,19 @@ public class UserResponse {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         UserResponse that = (UserResponse) o;
-        return Objects.equals(userId, that.userId)
-                && Objects.equals(externalId1, that.externalId1)
+        return Objects.equals(externalId1, that.externalId1)
                 && Objects.equals(externalId2, that.externalId2)
                 && Objects.equals(status, that.status);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, externalId1, externalId2, status);
+        return Objects.hash(externalId1, externalId2, status);
     }
 
     @Override
     public String toString() {
         return "UserResponse{" +
-                "userId='" + userId + '\'' +
                 ", externalId1='" + externalId1 + '\'' +
                 ", externalId2='" + externalId2 + '\'' +
                 ", status='" + status + '\'' +

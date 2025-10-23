@@ -14,7 +14,6 @@ class UserContractImpl @Autowired(private val userService: UserService) extends 
     val entity = userService.createUser(userRequest)
 
     val response = UserResponse()
-    response.setUserId(Option(entity.userId).map(_.toString).orNull)
     response.setExternalId1(entity.externalId1)
     response.setExternalId2(entity.externalId2)
     response.setStatus(entity.status)
