@@ -12,4 +12,6 @@ trait ReportRepository extends CrudRepository[ReportEntity, Long] {
 
   def findByExternalId1(externalId1: String): Optional[ReportEntity]
 
+  def findByUserId(userId: String): Optional[ReportEntity]
+
 }

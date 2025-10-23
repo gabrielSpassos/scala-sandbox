@@ -4,6 +4,7 @@ import com.gabrielspassos.contracts.v2.request.UserRequest
 import com.gabrielspassos.entity.UserEntity
 import com.gabrielspassos.exception.BadRequestException
 import com.gabrielspassos.repository.UserRepository
+import com.gabrielspassos.validator.UUIDValidator
 import org.springframework.beans.factory.annotation.{Autowired, Value}
 import org.springframework.stereotype.Service
 
@@ -35,9 +36,13 @@ class UserServiceV2 @Autowired()(private val userRepository: UserRepository) {
   }
   
   def findUserByUserId(userId: String): Option[UserEntity] = {
-    Option(userId)
-      .map(id => UUID.fromString(id))
-      .flatMap(id => userRepository.findByUserId(id).toScala)
+    val (isValid, userIdOption) = UUIDValidator.isValidUUID(userId)
+
+    if (!isValid) {
+      throw new BadRequestException("Invalid userId")
+    }
+    
+    userRepository.findByUserId(userIdOption.get).toScala
   }
 
   private def encryptString(value: String): String = {
