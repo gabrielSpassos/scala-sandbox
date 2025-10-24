@@ -3,7 +3,7 @@
 -- changeset gpassos:0001-create-tables
 create table if not exists "users" (
     id           bigint generated always as identity primary key,
-    external_id1 text unique,
+    external_id1 text unique not null,
     external_id2 text,
     status       text not null,
     created_at   timestamp not null default now(),
