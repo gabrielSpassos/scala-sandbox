@@ -12,7 +12,6 @@ services:
       - "5433:5432"
     volumes:
       - postgres_15_data:/var/lib/postgresql/data
-      - ./src/main/resources/schema.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - database-migration-poc
 
@@ -27,7 +26,6 @@ services:
       - "5434:5432"
     volumes:
       - postgres_18_data:/var/lib/postgresql/data
-      - ./src/main/resources/schema.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - database-migration-poc
 
