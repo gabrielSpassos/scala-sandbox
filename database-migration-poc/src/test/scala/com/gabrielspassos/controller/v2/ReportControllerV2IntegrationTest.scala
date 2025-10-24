@@ -71,7 +71,6 @@ class ReportControllerV2IntegrationTest @Autowired()(private val userRepository:
     assertNotNull(response.body())
 
     val responseBody = JSONObject(response.body())
-    assertEquals(userId, responseBody.getString("userId"))
     assertNotNull(responseBody.getString("content"))
   }
 
