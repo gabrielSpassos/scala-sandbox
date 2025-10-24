@@ -32,6 +32,7 @@ class ReportService @Autowired()(private val userService: UserService,
       case None =>
         ReportEntity(
           id = null,
+          userId = null,
           externalId1 = externalId1,
           content = content
         )

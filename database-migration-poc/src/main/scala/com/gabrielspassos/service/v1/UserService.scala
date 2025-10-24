@@ -20,6 +20,8 @@ class UserService @Autowired()(private val userRepository: UserRepository) {
     
     val entity = UserEntity(
       id = null,
+      userId = null,
+      cpf = null,
       externalId1 = userRequest.getExternalId1,
       externalId2 = userRequest.getExternalId2,
       status = UserEntity.activeStatus

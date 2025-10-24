@@ -13,8 +13,11 @@ case class ReportEntity(
   @(Id @field)
   id: Long = null,
 
+  @(Column @field)(value = "user_id")
+  userId: UUID = null,
+
   @(Column @field)(value = "external_id1")
-  externalId1: String,
+  externalId1: String = null,
 
   @(Column @field)
   content: String,
