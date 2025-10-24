@@ -9,7 +9,7 @@ create table if not exists "users" (
     created_at   timestamp not null default now(),
     updated_at   timestamp not null default now()
 );
--- rollback drop table users;
+--rollback drop table users;
 
 create table if not exists reports (
     id           bigint generated always as identity primary key,
@@ -18,4 +18,4 @@ create table if not exists reports (
     created_at   timestamp not null default now(),
     updated_at   timestamp not null default now()
 );
--- rollback drop table reports;
+--rollback drop table reports;
