@@ -5,6 +5,7 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 import java.lang.Long
+import java.util
 import java.util.{Optional, UUID}
 
 @Repository
@@ -17,5 +18,7 @@ trait UserRepository extends CrudRepository[UserEntity, Long] {
   def findByUserId(userId: UUID): Optional[UserEntity]
 
   def findByCpf(cpf: String): Optional[UserEntity]
+
+  def findByCpfIsNull(): util.List[UserEntity]
 
 }

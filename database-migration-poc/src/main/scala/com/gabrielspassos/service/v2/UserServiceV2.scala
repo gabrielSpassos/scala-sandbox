@@ -11,12 +11,13 @@ import org.springframework.stereotype.Service
 import java.security.MessageDigest
 import java.util.UUID
 import scala.jdk.OptionConverters.*
+import scala.jdk.CollectionConverters.*
 
 @Service
 class UserServiceV2 @Autowired()(private val userRepository: UserRepository) {
   
   def createUser(userRequest: UserRequest): UserEntity = {
-    val encryptedCpf = encryptString(userRequest.getCpf)
+    val encryptedCpf = encryptCpf(userRequest.getCpf)
     
     userRepository.findByCpf(encryptedCpf).toScala match {
       case Some(existingUser) => throw new BadRequestException("User already exists")
@@ -44,9 +45,13 @@ class UserServiceV2 @Autowired()(private val userRepository: UserRepository) {
     
     userRepository.findByUserId(userIdOption.get).toScala
   }
+  
+  def findUsersWithoutCpf(): List[UserEntity] = {
+    userRepository.findByCpfIsNull().asScala.toList
+  }
 
-  private def encryptString(value: String): String = {
-    val digest = MessageDigest.getInstance("SHA-256").digest(value.getBytes("UTF-8"))
+  def encryptCpf(cpfAsString: String): String = {
+    val digest = MessageDigest.getInstance("SHA-256").digest(cpfAsString.getBytes("UTF-8"))
     digest.map("%02x".format(_)).mkString
   }
 

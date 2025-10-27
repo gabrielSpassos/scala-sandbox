@@ -1,5 +1,6 @@
 package com.gabrielspassos.controller.v2
 
+import com.gabrielspassos.client.CpfGenerator
 import com.gabrielspassos.entity.UserEntity
 import com.gabrielspassos.repository.{ReportRepository, UserRepository}
 import com.gabrielspassos.{Application, BaseIntegrationTest}
