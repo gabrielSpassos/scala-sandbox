@@ -1,7 +1,6 @@
 package com.gabrielspassos.controller.v2
 
-import com.gabrielspassos.contract.impl.v2.{ReportContractImplV2, SimulatorContractImpl}
-import com.gabrielspassos.contracts.v2.response.ReportResponse
+import com.gabrielspassos.contract.impl.v2.SimulatorContractImpl
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.{HttpStatus, ResponseEntity}
 import org.springframework.web.bind.annotation.*
