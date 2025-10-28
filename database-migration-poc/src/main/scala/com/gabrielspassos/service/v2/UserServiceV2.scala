@@ -49,6 +49,10 @@ class UserServiceV2 @Autowired()(private val userRepository: UserRepository) {
   def findUsersWithoutCpf(): List[UserEntity] = {
     userRepository.findByCpfIsNull().asScala.toList
   }
+  
+  def saveAll(users: List[UserEntity]): List[UserEntity] = {
+    userRepository.saveAll(users.asJava).asScala.toList
+  }
 
   def encryptCpf(cpfAsString: String): String = {
     val digest = MessageDigest.getInstance("SHA-256").digest(cpfAsString.getBytes("UTF-8"))

@@ -13,7 +13,7 @@ class MigrationSimulatorService @Autowired()(private val userService: UserServic
 
   def simulateMigration(isDryRun: Boolean = true): List[SimulationDTO] = {
     val userNotMigrated = userService.findUsersWithoutCpf()
-    userNotMigrated.map { user =>
+    val simulations = userNotMigrated.map { user =>
       val errors = ListBuffer[String]()
       var encryptedCpf: String = null
       
@@ -31,5 +31,40 @@ class MigrationSimulatorService @Autowired()(private val userService: UserServic
       
       SimulationDTO(user.externalId1, encryptedCpf, errors.toList)
     }
+
+    val simulationsGroupedByCPF = simulations.groupBy(_.cpf)
+    simulationsGroupedByCPF.foreach { case (cpf, simulationsWithSameCPF) =>
+      if (simulationsWithSameCPF.length > 1) {
+        simulationsWithSameCPF.foreach { simulation =>
+          val index = simulations.indexOf(simulation)
+          val updatedSimulation = simulation.copy(errors = simulation.errors :+ "Duplicate CPF in migration batch")
+          simulations.updated(index, updatedSimulation)
+        }
+      }
+    }
+
+    if (!isDryRun) {
+      println("Executing migration...")
+      val usersToMigrate = simulations.filter(_.isSuccessful).map { simulation =>
+        userNotMigrated.find(user => user.externalId1 == simulation.externalId1) match {
+          case Some(user) =>
+            Option(user.copy(cpf = simulation.cpf))
+          case None =>
+            None
+        }
+      }.filter(_.isDefined).map(_.get)
+
+      userService.saveAll(usersToMigrate)
+      println(s"Executed migration for count=${usersToMigrate.length} " +
+        s"for users externalId1=${usersToMigrate.map(_.externalId1).mkString(", ")}")
+    }
+    
+    println("SIMULATOR RESULTS:")
+    simulations.foreach { simulation =>
+      println("---------------------------------")
+      println(s"externalId1=${simulation.externalId1} isSuccessful=${simulation.isSuccessful} errors=${simulation.errors.mkString(", ")}")
+    }
+
+    simulations
   }
 }
