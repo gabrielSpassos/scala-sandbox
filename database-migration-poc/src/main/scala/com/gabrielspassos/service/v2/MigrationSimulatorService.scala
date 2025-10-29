@@ -66,7 +66,6 @@ class MigrationSimulatorService @Autowired()(private val userService: UserServic
       |failureCount=${simulations.count(!_.isSuccessful)}
       |""".stripMargin)
     simulations.foreach { simulation =>
-      println("---------------------------------")
       println(s"[DETAIL] externalId1=${simulation.externalId1} isSuccessful=${simulation.isSuccessful} errors=${simulation.errors.mkString(", ")}")
     }
     println()

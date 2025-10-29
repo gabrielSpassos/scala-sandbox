@@ -5,7 +5,7 @@ import scala.util.Random
 object Feeder {
 
   def main(args: Array[String]): Unit = {
-    val N = if (args.nonEmpty) args(0).toInt else 5 // Default 5 runs
+    val N = if (args.nonEmpty) args(0).toInt else 1000 // Default 1000 runs
     val baseUrl = "http://localhost:8080"
     val client = HttpClient.newHttpClient()
 
