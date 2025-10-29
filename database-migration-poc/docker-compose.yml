@@ -1,20 +1,6 @@
 version: '1'
 
 services:
-  postgres_15:
-    image: postgres:15.14-alpine3.22
-    container_name: database_migration_poc_postgres_15
-    environment:
-      POSTGRES_USER: sa
-      POSTGRES_PASSWORD: test
-      POSTGRES_DB: poc
-    ports:
-      - "5433:5432"
-    volumes:
-      - postgres_15_data:/var/lib/postgresql/data
-    networks:
-      - database-migration-poc
-
   postgres_18:
     image: postgres:18.0-alpine3.22
     container_name: database_migration_poc_postgres_18
@@ -23,14 +9,13 @@ services:
       POSTGRES_PASSWORD: test
       POSTGRES_DB: poc
     ports:
-      - "5434:5432"
+      - "5432:5432"
     volumes:
       - postgres_18_data:/var/lib/postgresql/data
     networks:
       - database-migration-poc
 
 volumes:
-  postgres_15_data:
   postgres_18_data:
 
 networks:
