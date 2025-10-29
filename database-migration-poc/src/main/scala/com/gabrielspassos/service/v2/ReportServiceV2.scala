@@ -1,4 +1,4 @@
-package com.gabrielspassos.service.v1
+package com.gabrielspassos.service.v2
 
 import com.gabrielspassos.client.ReportClient
 import com.gabrielspassos.entity.ReportEntity
@@ -11,12 +11,12 @@ import scala.jdk.OptionConverters.*
 
 
 @Service
-class ReportService @Autowired()(private val userService: UserService,
-                                 private val reportClient: ReportClient,
-                                 private val reportRepository: ReportRepository) {
+class ReportServiceV2 @Autowired()(private val userService: UserServiceV2,
+                                   private val reportClient: ReportClient,
+                                   private val reportRepository: ReportRepository) {
   
-  def createReport(externalId1: String): ReportEntity = {
-    val user = userService.findUserByExternalId1(externalId1) match {
+  def createReport(userId: String): ReportEntity = {
+    val user = userService.findUserByUserId(userId) match {
       case None => throw new NotFoundException("Not found user")
       case Some(user) => user
     }
@@ -24,16 +24,16 @@ class ReportService @Autowired()(private val userService: UserService,
     if (!user.isActive) {
       throw new BadRequestException("User not active to create report")
     }
-
+    
     val content = reportClient.generateReport()
-    val report = reportRepository.findByExternalId1(externalId1).toScala match {
+    val report = reportRepository.findByUserId(userId).toScala match {
       case Some(report) =>
         report.copy(content = content)
       case None =>
         ReportEntity(
           id = null,
-          userId = null,
-          externalId1 = externalId1,
+          userId = user.userId,
+          externalId1 = null,
           content = content
         )
     }
