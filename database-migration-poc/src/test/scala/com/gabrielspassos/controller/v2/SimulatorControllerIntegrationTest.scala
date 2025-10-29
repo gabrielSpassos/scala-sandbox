@@ -73,6 +73,49 @@ class SimulatorControllerIntegrationTest @Autowired()(private val userRepository
     assertEquals(204, response.statusCode())
   }
 
+  @Test
+  def shouldSimulateAnMigrateUserSuccessfully(): Unit = {
+    val externalId1 = createV1User()
+    val url = s"http://localhost:$randomServerPort/v2/simulators?isDryRunMode=false"
+
+    val response = client.send(
+      HttpRequest.newBuilder()
+        .uri(URI(url))
+        .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+        .header(ACCEPT, APPLICATION_JSON_VALUE)
+        .POST(HttpRequest.BodyPublishers.noBody())
+        .build(),
+      HttpResponse.BodyHandlers.ofString()
+    )
+
+    assertEquals(204, response.statusCode())
+  }
+
+  @Test
+  def shouldSimulateFailureUser(): Unit = {
+    val externalId1 = createV1User()
+    userRepository.findByExternalId1(externalId1).toScala match {
+      case None => fail("User not found")
+      case Some(user) =>
+        val userWithCpf = user.copy(externalId1 = null)
+        userRepository.save(userWithCpf)
+    }
+
+    val url = s"http://localhost:$randomServerPort/v2/simulators"
+
+    val response = client.send(
+      HttpRequest.newBuilder()
+        .uri(URI(url))
+        .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+        .header(ACCEPT, APPLICATION_JSON_VALUE)
+        .POST(HttpRequest.BodyPublishers.noBody())
+        .build(),
+      HttpResponse.BodyHandlers.ofString()
+    )
+
+    assertEquals(204, response.statusCode())
+  }
+
   private def createV1User(): String = {
     val externalId1 = Random().between(1L, Long.MaxValue)
     val externalId2 = Random().between(1L, Long.MaxValue)
