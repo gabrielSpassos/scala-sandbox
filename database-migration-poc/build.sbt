@@ -31,3 +31,5 @@ javacOptions ++= Seq(
 )
 
 Compile / mainClass := Some("com.gabrielspassos.Application")
+
+Test / parallelExecution := false
