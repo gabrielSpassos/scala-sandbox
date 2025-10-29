@@ -59,10 +59,15 @@ class MigrationSimulatorService @Autowired()(private val userService: UserServic
         s"for users externalId1s=${usersToMigrate.map(_.externalId1).mkString(", ")}")
     }
 
-    println("\nSIMULATOR RESULTS:")
+    println("\nSIMULATOR RESULTS")
+    println(
+      s"""[SUMMARY]
+      |successCount=${simulations.count(_.isSuccessful)}
+      |failureCount=${simulations.count(!_.isSuccessful)}
+      |""".stripMargin)
     simulations.foreach { simulation =>
       println("---------------------------------")
-      println(s"externalId1=${simulation.externalId1} isSuccessful=${simulation.isSuccessful} errors=${simulation.errors.mkString(", ")}")
+      println(s"[DETAIL] externalId1=${simulation.externalId1} isSuccessful=${simulation.isSuccessful} errors=${simulation.errors.mkString(", ")}")
     }
     println()
 
