@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_URL:localhost}:${POSTGRES_PORT:5432}/poc
+    username: sa
+    password: test
+    driver-class-name: org.postgresql.Driver
+
+liquibase:
+  change-log: classpath:db/changelog/db.changelog-master.yaml
+  enabled: true
