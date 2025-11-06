@@ -8,6 +8,11 @@
 - POSTGRES 18
 
 ## Output
+```
+[SUMMARY]
+successCount=1000
+failureCount=0
+```
 
 ## Tests
 
