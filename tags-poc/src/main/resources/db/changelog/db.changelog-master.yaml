@@ -2,15 +2,3 @@ databaseChangeLog:
   - include:
       file: db/changelog/sql/0001-create-tables.sql
       relativeToChangelogFile: false
-
-  - include:
-      file: db/changelog/sql/0002-alter-tables-for-migration.sql
-      relativeToChangelogFile: false
-
-  - include:
-      file: db/changelog/sql/0003-data-migration.sql
-      relativeToChangelogFile: false
-
-  - include:
-      file: db/changelog/sql/0004-constraints-migration.sql
-      relativeToChangelogFile: false

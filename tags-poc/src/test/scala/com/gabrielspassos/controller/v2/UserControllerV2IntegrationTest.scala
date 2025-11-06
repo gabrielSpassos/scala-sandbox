@@ -1,7 +1,6 @@
 package com.gabrielspassos.controller.v2
 
 import com.gabrielspassos.client.CpfGenerator
-import com.gabrielspassos.repository.UserRepository
 import com.gabrielspassos.{Application, BaseIntegrationTest}
 import org.json.JSONObject
 import org.junit.jupiter.api.Assertions.{assertEquals, assertFalse, assertNotNull}

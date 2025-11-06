@@ -1,6 +1,5 @@
 package com.gabrielspassos.controller.v1
 
-import com.gabrielspassos.repository.UserRepository
 import com.gabrielspassos.{Application, BaseIntegrationTest}
 import org.json.JSONObject
 import org.junit.jupiter.api.Assertions.{assertEquals, assertNotNull}
