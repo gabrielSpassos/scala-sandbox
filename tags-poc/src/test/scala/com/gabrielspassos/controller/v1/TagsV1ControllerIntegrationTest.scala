@@ -25,7 +25,7 @@ import scala.util.Random
 @EnableAutoConfiguration
 @ComponentScan(Array("com.*"))
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class UserControllerIntegrationTest @Autowired()(private val userRepository: UserRepository) extends BaseIntegrationTest {
+class TagsV1ControllerIntegrationTest @Autowired()(private val userRepository: UserRepository) extends BaseIntegrationTest {
 
   @LocalServerPort
   var randomServerPort: Int = 0

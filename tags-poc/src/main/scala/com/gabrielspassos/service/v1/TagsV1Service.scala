@@ -1,6 +1,5 @@
 package com.gabrielspassos.service.v1
 
-import com.gabrielspassos.contracts.v1.request.UserRequest
 import com.gabrielspassos.entity.v1.TagsV1Entity
 import com.gabrielspassos.exception.BadRequestException
 import com.gabrielspassos.repository.v1.TagsV1Repository
