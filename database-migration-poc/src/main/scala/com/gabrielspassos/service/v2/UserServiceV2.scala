@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service
 
 import java.security.MessageDigest
 import java.util.UUID
-import scala.jdk.OptionConverters.*
 import scala.jdk.CollectionConverters.*
+import scala.jdk.OptionConverters.*
 
 @Service
 class UserServiceV2 @Autowired()(private val userRepository: UserRepository) {
