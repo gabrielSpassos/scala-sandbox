@@ -3,7 +3,7 @@ package com.gabrielspassos.gson
 import com.gabrielspassos.contracts.v1.request.TagsRequest
 import com.google.gson.reflect.TypeToken
 import com.google.gson.{Gson, GsonBuilder}
-import org.junit.jupiter.api.Assertions.{assertEquals, assertFalse, assertNotNull, assertNull, assertTrue}
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
 import java.time.LocalDate
