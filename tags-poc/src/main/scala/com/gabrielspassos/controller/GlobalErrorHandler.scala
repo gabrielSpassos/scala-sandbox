@@ -11,6 +11,7 @@ class GlobalErrorHandler {
   @ResponseBody
   @ExceptionHandler(Array(classOf[HttpException]))
   def handleAllExceptions(ex: HttpException): ResponseEntity[ErrorResponse] = {
+    println(s"Http exception: $ex")
     val code = ex.getHttpStatus
     val errorResponse = ErrorResponse()
     errorResponse.setCode(code.toString)
@@ -21,6 +22,7 @@ class GlobalErrorHandler {
   @ResponseBody
   @ExceptionHandler(Array(classOf[Exception]))
   def handleAllExceptions(ex: Exception): ResponseEntity[ErrorResponse] = {
+    println(s"Unhandled exception: $ex")
     val code = HttpStatus.INTERNAL_SERVER_ERROR.value()
     val errorResponse = ErrorResponse()
     errorResponse.setCode(code.toString)

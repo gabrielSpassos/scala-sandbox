@@ -6,6 +6,13 @@ public class TagsRequest {
 
     private Boolean isEnabled;
 
+    public TagsRequest() {
+    }
+
+    public TagsRequest(Boolean isEnabled) {
+        this.isEnabled = isEnabled;
+    }
+
     public Boolean getIsEnabled() {
         return isEnabled;
     }

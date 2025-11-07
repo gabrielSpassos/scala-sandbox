@@ -5,7 +5,7 @@ import com.gabrielspassos.contracts.v1.request.TagsRequest
 import com.gabrielspassos.contracts.v1.response.TagsResponse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.{HttpStatus, ResponseEntity}
-import org.springframework.web.bind.annotation.{PathVariable, PostMapping, PutMapping, RequestBody, RequestMapping, RestController}
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping(Array("/v1/tags"))
@@ -17,6 +17,12 @@ class TagsV1Controller @Autowired()(private val tagsContract: TagsV1ContractImpl
                ): ResponseEntity[TagsResponse] = {
     val isEnabled: Boolean = Option(tagsRequest).flatMap(r => Option(r.getIsEnabled)).exists(_.booleanValue())
     val tagsResponse = tagsContract.upsertTag(id, isEnabled)
+    ResponseEntity.status(HttpStatus.OK).body(tagsResponse)
+  }
+
+  @GetMapping(Array("/{id}"))
+  def getTag(@PathVariable(name = "id", required = true) id: String): ResponseEntity[TagsResponse] = {
+    val tagsResponse = tagsContract.getTag(id)
     ResponseEntity.status(HttpStatus.OK).body(tagsResponse)
   }
 

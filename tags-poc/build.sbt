@@ -21,6 +21,7 @@ libraryDependencies ++= Seq(
   "com.github.sbt.junit" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % Test,
   "org.mockito" % "mockito-core" % "5.20.0" % Test,
   "net.bytebuddy" % "byte-buddy" % "1.17.8" % Test,
+  "net.bytebuddy" % "byte-buddy-agent" % "1.17.8" % Test,
   "org.testcontainers" % "testcontainers" % testContainersVersion % Test,
   "org.testcontainers" % "postgresql" % testContainersVersion % Test,
   "org.testcontainers" % "junit-jupiter" % testContainersVersion % Test
@@ -33,3 +34,13 @@ javacOptions ++= Seq(
 Compile / mainClass := Some("com.gabrielspassos.Application")
 
 Test / parallelExecution := false
+
+Test / fork := true
+
+Test / javaOptions ++= {
+  val byteBuddyAgent = (Test / dependencyClasspath).value
+    .find(_.data.getName.contains("byte-buddy-agent"))
+    .map(_.data.getAbsolutePath)
+    .map(path => s"-javaagent:$path")
+  byteBuddyAgent.toSeq ++ Seq("-XX:+EnableDynamicAgentLoading")
+}
