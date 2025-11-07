@@ -26,4 +26,10 @@ class TagsV1Controller @Autowired()(private val tagsContract: TagsV1ContractImpl
     ResponseEntity.status(HttpStatus.OK).body(tagsResponse)
   }
 
+  @DeleteMapping(Array("/{id}"))
+  def deleteTag(@PathVariable(name = "id", required = true) id: String): ResponseEntity[TagsResponse] = {
+    val tagsResponse = tagsContract.deleteTag(id)
+    ResponseEntity.status(HttpStatus.OK).body(tagsResponse)
+  }
+
 }

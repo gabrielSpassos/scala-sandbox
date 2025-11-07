@@ -140,7 +140,7 @@ class TagsV1ControllerIntegrationTest @Autowired()(private val tagsV1Repository:
   }
 
   @Test
-  def shouldNotFoundTag(): Unit = {
+  def shouldNotFoundTagOnFindOperation(): Unit = {
     val id = UUID.randomUUID().toString
 
     val url = s"http://localhost:$randomServerPort/v1/tags/$id"
@@ -160,6 +160,51 @@ class TagsV1ControllerIntegrationTest @Autowired()(private val tagsV1Repository:
     assertNotNull(responseBody.getString("code"))
     assertNotNull(responseBody.getString("message"))
   }
+
+  @Test
+  def shouldDeleteTag(): Unit = {
+    val id = createTag(isEnabled = true)
+
+    val url = s"http://localhost:$randomServerPort/v1/tags/$id"
+    val response = client.send(
+      HttpRequest.newBuilder()
+        .uri(URI(url))
+        .header(ACCEPT, APPLICATION_JSON_VALUE)
+        .DELETE()
+        .build(),
+      HttpResponse.BodyHandlers.ofString()
+    )
+
+    assertEquals(200, response.statusCode())
+    assertNotNull(response.body())
+
+    val responseBody = JSONObject(response.body())
+    assertEquals(id, responseBody.getString("id"))
+    assertTrue(responseBody.getBoolean("isEnabled"))
+  }
+
+  @Test
+  def shouldNotFoundTagOnDeleteperation(): Unit = {
+    val id = UUID.randomUUID().toString
+
+    val url = s"http://localhost:$randomServerPort/v1/tags/$id"
+    val response = client.send(
+      HttpRequest.newBuilder()
+        .uri(URI(url))
+        .header(ACCEPT, APPLICATION_JSON_VALUE)
+        .DELETE()
+        .build(),
+      HttpResponse.BodyHandlers.ofString()
+    )
+
+    assertEquals(404, response.statusCode())
+    assertNotNull(response.body())
+
+    val responseBody = JSONObject(response.body())
+    assertNotNull(responseBody.getString("code"))
+    assertNotNull(responseBody.getString("message"))
+  }
+
 
   private def createTag(isEnabled: Boolean = true): String = {
     val id = UUID.randomUUID().toString

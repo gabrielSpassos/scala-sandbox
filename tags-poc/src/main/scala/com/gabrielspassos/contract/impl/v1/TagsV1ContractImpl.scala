@@ -30,4 +30,13 @@ class TagsV1ContractImpl @Autowired(private val tagsV1Service: TagsV1Service) ex
         throw NotFoundException("Tag not found")
     }
   }
+
+  override def deleteTag(id: String): TagsResponse = {
+    val tagEntity = tagsV1Service.deleteTag(id)
+
+    val response = TagsResponse()
+    response.setId(tagEntity.id)
+    response.setIsEnabled(tagEntity.enabled)
+    response
+  }
 }

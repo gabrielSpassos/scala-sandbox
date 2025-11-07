@@ -7,5 +7,7 @@ public interface TagsContract {
     TagsResponse upsertTag(String id, boolean isEnabled);
 
     TagsResponse getTag(String id);
+
+    TagsResponse deleteTag(String id);
     
 }

@@ -1,7 +1,7 @@
 package com.gabrielspassos.service.v1
 
 import com.gabrielspassos.entity.v1.TagsV1Entity
-import com.gabrielspassos.exception.BadRequestException
+import com.gabrielspassos.exception.{BadRequestException, NotFoundException}
 import com.gabrielspassos.repository.v1.TagsV1Repository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.jdbc.core.JdbcAggregateTemplate
@@ -29,6 +29,16 @@ class TagsV1Service @Autowired()(private val tagsV1Repository: TagsV1Repository,
   
   def findById(id: String): Option[TagsV1Entity] = {
     tagsV1Repository.findById(id).toScala
+  }
+  
+  def deleteTag(id: String): TagsV1Entity = {
+    findById(id) match {
+      case Some(existingTag) =>
+        tagsV1Repository.delete(existingTag)
+        existingTag
+      case None =>
+        throw NotFoundException("Tag not found")
+    }
   }
 
 }
