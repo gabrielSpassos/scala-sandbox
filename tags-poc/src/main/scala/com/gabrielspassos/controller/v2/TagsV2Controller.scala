@@ -1,15 +1,15 @@
 package com.gabrielspassos.controller.v2
 
-import com.gabrielspassos.contract.impl.v1.TagsV1ContractImpl
-import com.gabrielspassos.contracts.v1.request.TagsRequest
-import com.gabrielspassos.contracts.v1.response.TagsResponse
+import com.gabrielspassos.contract.impl.v2.TagsV2ContractImpl
+import com.gabrielspassos.contracts.v2.request.TagsRequest
+import com.gabrielspassos.contracts.v2.response.TagsResponse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.{HttpStatus, ResponseEntity}
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping(Array("/v2/tags"))
-class TagsV2Controller @Autowired()(private val tagsContract: TagsV1ContractImpl) {
+class TagsV2Controller @Autowired()(private val tagsContract: TagsV2ContractImpl) {
   
   @PutMapping(Array("/{id}"))
   def upsertTag(@PathVariable(name = "id", required = true) id: String,
