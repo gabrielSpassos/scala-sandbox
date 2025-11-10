@@ -10,6 +10,6 @@
 ## Tests
 
 ```bash
-[info] Passed: Total 14, Failed 0, Errors 0, Passed 14
-[success] Total time: 14 s, completed 7 de nov. de 2025 00:23:48
+[info] Passed: Total 21, Failed 0, Errors 0, Passed 21
+[success] Total time: 19 s, completed 10 de nov. de 2025 10:27:18
 ```
