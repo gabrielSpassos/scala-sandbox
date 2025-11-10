@@ -1,6 +1,6 @@
-package com.gabrielspassos.controller.v1
+package com.gabrielspassos.controller.v2
 
-import com.gabrielspassos.repository.v1.TagsV1Repository
+import com.gabrielspassos.repository.v2.TagsV2Repository
 import com.gabrielspassos.{Application, BaseIntegrationTest}
 import org.json.JSONObject
 import org.junit.jupiter.api.Assertions.{assertEquals, assertFalse, assertNotNull, assertTrue}
@@ -26,7 +26,7 @@ import scala.jdk.OptionConverters.*
 @EnableAutoConfiguration
 @ComponentScan(Array("com.*"))
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class TagsV1ControllerIntegrationTest @Autowired()(private val tagsV1Repository: TagsV1Repository) extends BaseIntegrationTest {
+class TagsV2ControllerIntegrationTest @Autowired()(private val tagsV2Repository: TagsV2Repository) extends BaseIntegrationTest {
 
   @LocalServerPort
   var randomServerPort: Int = 0
@@ -37,8 +37,8 @@ class TagsV1ControllerIntegrationTest @Autowired()(private val tagsV1Repository:
   @AfterEach
   def cleanUp(): Unit = {
     ids.foreach { id =>
-      tagsV1Repository.findById(id).toScala.foreach { entity =>
-        tagsV1Repository.delete(entity)
+      tagsV2Repository.findById(id).toScala.foreach { entity =>
+        tagsV2Repository.delete(entity)
       }
     }
   }
@@ -47,7 +47,7 @@ class TagsV1ControllerIntegrationTest @Autowired()(private val tagsV1Repository:
   def shouldCreateEnabledTag(): Unit = {
     val id = UUID.randomUUID().toString
     val request =s"""{"isEnabled": true}"""
-    val url = s"http://localhost:$randomServerPort/v1/tags/$id"
+    val url = s"http://localhost:$randomServerPort/v2/tags/$id"
     ids.addOne(id)
 
     val response = client.send(
@@ -65,14 +65,15 @@ class TagsV1ControllerIntegrationTest @Autowired()(private val tagsV1Repository:
 
     val responseBody = JSONObject(response.body())
     assertEquals(id, responseBody.getString("id"))
-    assertTrue(responseBody.getBoolean("isEnabled"))
+    assertFalse(responseBody.isNull("enabledAt"))
+    assertTrue(responseBody.isNull("disabledAt"))
   }
 
   @Test
   def shouldCreateDisabledTag(): Unit = {
     val id = UUID.randomUUID().toString
     val request = s"""{"isEnabled": false}"""
-    val url = s"http://localhost:$randomServerPort/v1/tags/$id"
+    val url = s"http://localhost:$randomServerPort/v2/tags/$id"
     ids.addOne(id)
 
     val response = client.send(
@@ -90,14 +91,15 @@ class TagsV1ControllerIntegrationTest @Autowired()(private val tagsV1Repository:
 
     val responseBody = JSONObject(response.body())
     assertEquals(id, responseBody.getString("id"))
-    assertFalse(responseBody.getBoolean("isEnabled"))
+    assertTrue(responseBody.isNull("enabledAt"))
+    assertFalse(responseBody.isNull("disabledAt"))
   }
 
   @Test
   def shouldUpdateTag(): Unit = {
     val id = createTag(isEnabled = false)
 
-    val url = s"http://localhost:$randomServerPort/v1/tags/$id"
+    val url = s"http://localhost:$randomServerPort/v2/tags/$id"
     val request = s"""{"isEnabled": true}"""
     val response = client.send(
       HttpRequest.newBuilder()
@@ -114,14 +116,15 @@ class TagsV1ControllerIntegrationTest @Autowired()(private val tagsV1Repository:
 
     val responseBody = JSONObject(response.body())
     assertEquals(id, responseBody.getString("id"))
-    assertTrue(responseBody.getBoolean("isEnabled"))
+    assertFalse(responseBody.isNull("enabledAt"))
+    assertTrue(responseBody.isNull("disabledAt"))
   }
 
   @Test
   def shouldGetTag(): Unit = {
     val id = createTag(isEnabled = true)
 
-    val url = s"http://localhost:$randomServerPort/v1/tags/$id"
+    val url = s"http://localhost:$randomServerPort/v2/tags/$id"
     val response = client.send(
       HttpRequest.newBuilder()
         .uri(URI(url))
@@ -136,14 +139,15 @@ class TagsV1ControllerIntegrationTest @Autowired()(private val tagsV1Repository:
 
     val responseBody = JSONObject(response.body())
     assertEquals(id, responseBody.getString("id"))
-    assertTrue(responseBody.getBoolean("isEnabled"))
+    assertFalse(responseBody.isNull("enabledAt"))
+    assertTrue(responseBody.isNull("disabledAt"))
   }
 
   @Test
   def shouldNotFoundTagOnFindOperation(): Unit = {
     val id = UUID.randomUUID().toString
 
-    val url = s"http://localhost:$randomServerPort/v1/tags/$id"
+    val url = s"http://localhost:$randomServerPort/v2/tags/$id"
     val response = client.send(
       HttpRequest.newBuilder()
         .uri(URI(url))
@@ -165,7 +169,7 @@ class TagsV1ControllerIntegrationTest @Autowired()(private val tagsV1Repository:
   def shouldDeleteTag(): Unit = {
     val id = createTag(isEnabled = true)
 
-    val url = s"http://localhost:$randomServerPort/v1/tags/$id"
+    val url = s"http://localhost:$randomServerPort/v2/tags/$id"
     val response = client.send(
       HttpRequest.newBuilder()
         .uri(URI(url))
@@ -180,14 +184,15 @@ class TagsV1ControllerIntegrationTest @Autowired()(private val tagsV1Repository:
 
     val responseBody = JSONObject(response.body())
     assertEquals(id, responseBody.getString("id"))
-    assertTrue(responseBody.getBoolean("isEnabled"))
+    assertFalse(responseBody.isNull("enabledAt"))
+    assertTrue(responseBody.isNull("disabledAt"))
   }
 
   @Test
   def shouldNotFoundTagOnDeleteOperation(): Unit = {
     val id = UUID.randomUUID().toString
 
-    val url = s"http://localhost:$randomServerPort/v1/tags/$id"
+    val url = s"http://localhost:$randomServerPort/v2/tags/$id"
     val response = client.send(
       HttpRequest.newBuilder()
         .uri(URI(url))
@@ -209,7 +214,7 @@ class TagsV1ControllerIntegrationTest @Autowired()(private val tagsV1Repository:
   private def createTag(isEnabled: Boolean = true): String = {
     val id = UUID.randomUUID().toString
     val request = s"""{"isEnabled": $isEnabled}"""
-    val url = s"http://localhost:$randomServerPort/v1/tags/$id"
+    val url = s"http://localhost:$randomServerPort/v2/tags/$id"
     ids.addOne(id)
 
     val response = client.send(
@@ -226,7 +231,6 @@ class TagsV1ControllerIntegrationTest @Autowired()(private val tagsV1Repository:
     assertNotNull(response.body())
     val responseBody = JSONObject(response.body())
     assertEquals(id, responseBody.getString("id"))
-    assertEquals(isEnabled, responseBody.getBoolean("isEnabled"))
     id
   }
 
