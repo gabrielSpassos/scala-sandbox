@@ -8,6 +8,7 @@ import org.springframework.data.jdbc.core.JdbcAggregateTemplate
 import org.springframework.stereotype.Service
 
 import java.time.OffsetDateTime
+import scala.jdk.CollectionConverters.*
 import scala.jdk.OptionConverters.*
 
 @Service
@@ -43,6 +44,16 @@ class TagsV2Service @Autowired()(private val tagsV2Repository: TagsV2Repository,
     } catch {
       case e: Exception =>
         Left(InternalErrorDTO(s"Failed to find tag by id: $id"))
+    }
+  }
+
+  def findByIds(ids: Seq[String]): Either[ErrorDTO, Seq[TagsV2Entity]] = {
+    try {
+      val entities = tagsV2Repository.findAllById(ids.asJava).asScala.toSeq
+      Right(entities)
+    } catch {
+      case e: Exception =>
+        Left(InternalErrorDTO(s"Failed to find tags by ids"))
     }
   }
   

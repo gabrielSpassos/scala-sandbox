@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.{HttpStatus, ResponseEntity}
 import org.springframework.web.bind.annotation.*
 
+import java.util
+import scala.jdk.CollectionConverters.*
+
 @RestController
 @RequestMapping(Array("/v1/tags"))
 class TagsV1Controller @Autowired()(private val tagsContract: TagsV1ContractImpl) {
@@ -24,6 +27,12 @@ class TagsV1Controller @Autowired()(private val tagsContract: TagsV1ContractImpl
   def getTag(@PathVariable(name = "id", required = true) id: String): ResponseEntity[TagsResponse] = {
     val tagsResponse = tagsContract.getTag(id)
     ResponseEntity.status(HttpStatus.OK).body(tagsResponse)
+  }
+
+  @GetMapping
+  def getTags(@RequestParam(name = "ids", required = true) ids: util.List[String]): ResponseEntity[util.List[TagsResponse]] = {
+    val tagsResponses = tagsContract.getTags(ids)
+    ResponseEntity.status(HttpStatus.OK).body(tagsResponses)
   }
 
   @DeleteMapping(Array("/{id}"))

@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
 
+import java.util
+import scala.jdk.CollectionConverters.*
+
 @Component
 class TagsV1ContractImpl @Autowired(private val tagsV1Service: TagsV1Service) extends TagsContract {
   override def upsertTag(id: String, isEnabled: Boolean): TagsResponse = {
@@ -33,6 +36,20 @@ class TagsV1ContractImpl @Autowired(private val tagsV1Service: TagsV1Service) ex
         response.setId(tagEntity.id)
         response.setIsEnabled(tagEntity.enabled)
         response
+    }
+  }
+
+  override def getTags(ids: util.List[String]): util.List[TagsResponse] = {
+    tagsV1Service.findByIds(ids.asScala.toSeq) match {
+      case Left(error) =>
+        throw HttpException(message = error.getMessage, httpStatus = error.getStatus)
+      case Right(entities) =>
+        entities.map { tagEntity =>
+          val response = TagsResponse()
+          response.setId(tagEntity.id)
+          response.setIsEnabled(tagEntity.enabled)
+          response
+        }.toList.asJava
     }
   }
 

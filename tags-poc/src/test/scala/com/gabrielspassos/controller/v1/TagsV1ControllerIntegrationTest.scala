@@ -2,8 +2,8 @@ package com.gabrielspassos.controller.v1
 
 import com.gabrielspassos.repository.v1.TagsV1Repository
 import com.gabrielspassos.{Application, BaseIntegrationTest}
-import org.json.JSONObject
-import org.junit.jupiter.api.Assertions.{assertEquals, assertFalse, assertNotNull, assertTrue}
+import org.json.{JSONArray, JSONObject}
+import org.junit.jupiter.api.Assertions.{assertEquals, assertFalse, assertNotNull, assertTrue, fail}
 import org.junit.jupiter.api.{AfterEach, Test, TestInstance}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -159,6 +159,64 @@ class TagsV1ControllerIntegrationTest @Autowired()(private val tagsV1Repository:
     val responseBody = JSONObject(response.body())
     assertNotNull(responseBody.getString("code"))
     assertNotNull(responseBody.getString("message"))
+  }
+
+  @Test
+  def shouldGetTags(): Unit = {
+    val id1 = createTag(isEnabled = true)
+    val id2 = createTag(isEnabled = false)
+
+    val url = s"http://localhost:$randomServerPort/v1/tags?ids=$id1,$id2"
+    val response = client.send(
+      HttpRequest.newBuilder()
+        .uri(URI(url))
+        .header(ACCEPT, APPLICATION_JSON_VALUE)
+        .GET()
+        .build(),
+      HttpResponse.BodyHandlers.ofString()
+    )
+
+    assertEquals(200, response.statusCode())
+    assertNotNull(response.body())
+
+    val responseBody = JSONArray(response.body())
+    assertEquals(2, responseBody.length())
+    val object1 = responseBody.getJSONObject(0)
+    val object2 = responseBody.getJSONObject(1)
+
+    object1.getString("id") match {
+      case `id1` => assertTrue(object1.getBoolean("isEnabled"))
+      case `id2` => assertFalse(object1.getBoolean("isEnabled"))
+      case _ => fail("unexpected id")
+    }
+
+    object2.getString("id") match {
+      case `id1` => assertTrue(object2.getBoolean("isEnabled"))
+      case `id2` => assertFalse(object2.getBoolean("isEnabled"))
+      case _ => fail("unexpected id")
+    }
+  }
+
+  @Test
+  def shouldGetEmptyTags(): Unit = {
+    val id1 = UUID.randomUUID()
+    val id2 = UUID.randomUUID()
+
+    val url = s"http://localhost:$randomServerPort/v1/tags?ids=$id1,$id2"
+    val response = client.send(
+      HttpRequest.newBuilder()
+        .uri(URI(url))
+        .header(ACCEPT, APPLICATION_JSON_VALUE)
+        .GET()
+        .build(),
+      HttpResponse.BodyHandlers.ofString()
+    )
+
+    assertEquals(200, response.statusCode())
+    assertNotNull(response.body())
+
+    val responseBody = JSONArray(response.body())
+    assertEquals(0, responseBody.length())
   }
 
   @Test

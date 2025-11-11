@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.jdbc.core.JdbcAggregateTemplate
 import org.springframework.stereotype.Service
 
+import scala.jdk.CollectionConverters.*
 import scala.jdk.OptionConverters.*
 
 @Service
@@ -40,6 +41,16 @@ class TagsV1Service @Autowired()(private val tagsV1Repository: TagsV1Repository,
     } catch {
       case e: Exception =>
         Left(InternalErrorDTO(s"Failed to find tag by id: $id"))
+    }
+  }
+
+  def findByIds(ids: Seq[String]): Either[ErrorDTO, Seq[TagsV1Entity]] = {
+    try {
+      val entities = tagsV1Repository.findAllById(ids.asJava).asScala.toSeq
+      Right(entities)
+    } catch {
+      case e: Exception =>
+        Left(InternalErrorDTO(s"Failed to find tags by ids"))
     }
   }
   

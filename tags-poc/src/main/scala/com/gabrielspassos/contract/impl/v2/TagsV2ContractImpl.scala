@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
 
+import java.util
+import scala.jdk.CollectionConverters.*
+
 @Component
 class TagsV2ContractImpl @Autowired(private val tagsV2Service: TagsV2Service) extends TagsContract {
   override def upsertTag(id: String, isEnabled: Boolean): TagsResponse = {
@@ -28,6 +31,15 @@ class TagsV2ContractImpl @Autowired(private val tagsV2Service: TagsV2Service) ex
         throw HttpException(message = "Not found tag", httpStatus = HttpStatus.NOT_FOUND.value())
       case Right(Some(tagEntity)) =>
         buildV2Response(tagEntity)
+    }
+  }
+
+  override def getTags(ids: util.List[String]): util.List[TagsResponse] = {
+    tagsV2Service.findByIds(ids.asScala.toSeq) match {
+      case Left(error) =>
+        throw HttpException(message = error.getMessage, httpStatus = error.getStatus)
+      case Right(entities) =>
+        entities.map { tagEntity => buildV2Response(tagEntity) }.toList.asJava
     }
   }
 
