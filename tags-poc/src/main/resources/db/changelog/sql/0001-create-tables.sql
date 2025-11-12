@@ -15,4 +15,11 @@ create table if not exists tags_v2 (
     created_at   timestamp not null default now(),
     updated_at   timestamp not null default now()
 );
+
+create table if not exists tags_v3 (
+    id           text not null primary key,
+    value        text not null,
+    created_at   timestamp not null default now(),
+    updated_at   timestamp not null default now()
+);
 --rollback drop table tags_v1;
