@@ -116,6 +116,58 @@ curl -X DELETE "http://localhost:8080/v1/tags/${ID}" \
 }
 ```
 
+#### V3
+
+* Upsert Tag
+```
+curl -X PUT "http://localhost:8080/v3/tags/${ID}/${ON|OFF}" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json"
+
+200 OK
+{
+  "id": "${ID}",
+  "value": "ON"
+}
+
+```
+
+* Get Tag by Id
+```
+curl -X GET "http://localhost:8080/v3/tags/${ID}" \
+  -H "Accept: application/json"
+
+200 OK
+{
+  "id": "${ID}",
+  "value": "ON"
+}
+```
+
+* Get Tags by Ids
+```
+curl -X GET "http://localhost:8080/v3/tags?ids=${ID1},${ID2}" \
+  -H "Accept: application/json"
+
+200 OK
+[
+  { "id": "${ID1}", "value": "ON" },
+  { "id": "${ID2}", "value": "OFF" }
+]
+```
+
+* Delete Tag
+```
+curl -X DELETE "http://localhost:8080/v3/tags/${ID}" \
+-H "Accept: application/json"
+
+200 OK
+{
+"id": "${ID}",
+"value": "ON"
+}
+```
+
 ## Tests
 
 ```bash
