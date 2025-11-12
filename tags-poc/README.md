@@ -168,9 +168,60 @@ curl -X DELETE "http://localhost:8080/v3/tags/${ID}" \
 }
 ```
 
+#### V4
+* Upsert Tag
+```
+curl -X PUT "http://localhost:8080/v4/tags/${ID}" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d '{"value":"${anyValue}"}'
+  
+200 OK
+{
+  "id": "${ID}",
+  "value": "${anyValue}"
+}
+```
+
+* Get Tag by Id
+```
+curl -X GET "http://localhost:8080/v4/tags/${ID}" \
+  -H "Accept: application/json"
+
+200 OK
+{
+  "id": "${ID}",
+  "value": "${anyValue}"
+}
+```
+
+* Get Tags by Ids
+```
+curl -X GET "http://localhost:8080/v4/tags?ids=${ID1},${ID2}" \
+  -H "Accept: application/json"
+
+200 OK
+[
+  { "id": "${ID1}", "value": "${anyValue}" },
+  { "id": "${ID2}", "value": "${anyValue}" }
+]
+```
+
+* Delete Tag
+```
+curl -X DELETE "http://localhost:8080/v4/tags/${ID}" \
+-H "Accept: application/json"
+
+200 OK
+{
+"id": "${ID}",
+"value": "${anyValue}"
+}
+```
+
 ## Tests
 
 ```bash
-[info] Passed: Total 25, Failed 0, Errors 0, Passed 25
-[success] Total time: 23 s, completed 11 de nov. de 2025 09:56:55
+[info] Passed: Total 35, Failed 0, Errors 0, Passed 35
+[success] Total time: 25 s, completed 12 de nov. de 2025 09:49:18
 ```
