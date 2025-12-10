@@ -1,7 +1,6 @@
-# Spring Webflux 
+# Spring WebFlux 
 
 ```
-curl -X POST http://localhost:8085/messages \
-     -H "Content-Type: application/json" \
-     -d '{"topic":"test", "key":"abc", "value":"hello"}'
+curl --request POST \
+  --url 'http://localhost:8085/v1/messages?key=reactive-key-1&message=test'
 ```
