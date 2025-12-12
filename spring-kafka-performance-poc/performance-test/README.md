@@ -135,18 +135,6 @@ reactive_request_duration......: avg=29.11ms min=1.36ms med=10.41ms max=568.36ms
 web_request_duration...........: avg=43.33ms min=1.32ms med=13.47ms max=707.65ms p(90)=95.65ms p(95)=210.17ms
 ```
 
-```
-```
-
-```
-```
-
-```
-```
-
-```
-```
-
 ### Usage 
 
 ```shell
