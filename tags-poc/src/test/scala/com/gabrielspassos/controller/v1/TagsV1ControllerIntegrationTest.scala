@@ -3,7 +3,7 @@ package com.gabrielspassos.controller.v1
 import com.gabrielspassos.repository.v1.TagsV1Repository
 import com.gabrielspassos.{Application, BaseIntegrationTest}
 import org.json.{JSONArray, JSONObject}
-import org.junit.jupiter.api.Assertions.{assertEquals, assertFalse, assertNotNull, assertTrue, fail}
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.{AfterEach, Test, TestInstance}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
