@@ -18,13 +18,13 @@ libraryDependencies ++= Seq(
   "org.springframework.boot" % "spring-boot-starter-jdbc" % springBootVersion exclude("com.fasterxml.jackson.core", "jackson-databind"),
   "org.springframework.boot" % "spring-boot-starter-data-jdbc" % springBootVersion exclude("com.fasterxml.jackson.core", "jackson-databind"),
   "org.springframework.boot" % "spring-boot-starter-test" % springBootVersion % Test exclude("com.fasterxml.jackson.core", "jackson-databind"),
+  "org.springframework.boot" % "spring-boot-testcontainers" % springBootVersion % Test exclude("com.fasterxml.jackson.core", "jackson-databind"),
+  "org.testcontainers" % "postgresql" % "1.21.4" % Test,
+  "org.testcontainers" % "junit-jupiter" % "1.21.4" % Test,
   "com.github.sbt.junit" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % Test,
   "org.mockito" % "mockito-core" % "5.21.0" % Test,
   "net.bytebuddy" % "byte-buddy" % "1.18.2" % Test,
   "net.bytebuddy" % "byte-buddy-agent" % "1.18.2" % Test,
-  "org.testcontainers" % "testcontainers" % testContainersVersion % Test,
-  "org.testcontainers" % "postgresql" % testContainersVersion % Test,
-  "org.testcontainers" % "junit-jupiter" % testContainersVersion % Test
 )
 
 javacOptions ++= Seq(

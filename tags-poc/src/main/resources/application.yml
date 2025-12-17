@@ -4,6 +4,15 @@ spring:
     username: sa
     password: test
     driver-class-name: org.postgresql.Driver
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+
+logging:
+  level:
+    liquibase: INFO
+    org.springframework.boot.autoconfigure.liquibase: DEBUG
+
 
 liquibase:
   change-log: classpath:db/changelog/db.changelog-master.yaml

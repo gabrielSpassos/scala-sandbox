@@ -7,7 +7,7 @@ import java.time.OffsetDateTime
 import java.util.UUID
 import scala.annotation.meta.field
 
-@Table(name = "tags_v3")
+@Table(name = "tags")
 case class TagsEntity(
   @(Id @field)
   id: UUID = null,
