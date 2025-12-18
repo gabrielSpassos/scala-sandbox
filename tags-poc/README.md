@@ -3,7 +3,7 @@
 ## Stack
 - Scala 3.7.3
 - Java 25
-- Spring Boot 3.5.7
+- Spring Boot 4.0.0
 - SBT 1.11.7
 - POSTGRES
 
@@ -219,9 +219,53 @@ curl -X DELETE "http://localhost:8080/v4/tags/${ID}" \
 }
 ```
 
+#### V5
+
+* `$key` => `tagName:entityId` (e.g., `featureX:12345`)'
+
+* Upsert Tag
+```
+curl -X PUT "http://localhost:8080/v5/tags" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d '{"$key":"ON"}'
+  
+200 OK
+{
+  "tagName:entityId": {
+    "value": "ON",
+    "createdAt": "${someDateTime}",
+    "updatedAt": "${someDateTime}"
+  }
+}
+```
+
+* Get Tags by Keys
+```
+curl -X GET "http://localhost:8080/v5/tags?keys=$key" \
+  -H "Accept: application/json"
+
+200 OK
+{
+  "$key": {
+    "value": "ON",
+    "createdAt": "${someDateTime}",
+    "updatedAt": "${someDateTime}"
+  }
+}
+```
+
+* Delete Tag
+```
+curl -X DELETE "http://localhost:8080/v5/tags/$key" \
+-H "Accept: application/json"
+
+204 No Content
+```
+
 ## Tests
 
 ```bash
-[info] Passed: Total 35, Failed 0, Errors 0, Passed 35
-[success] Total time: 25 s, completed 12 de nov. de 2025 09:49:18
+[info] Passed: Total 42, Failed 0, Errors 0, Passed 42
+[success] Total time: 37 s, completed 18 de dez. de 2025 10:52:16
 ```
