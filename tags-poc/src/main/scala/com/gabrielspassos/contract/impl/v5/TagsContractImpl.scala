@@ -8,7 +8,7 @@ import com.gabrielspassos.service.TagsService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
-import java.util
+import java.{lang, util}
 import scala.jdk.CollectionConverters.*
 
 @Component
@@ -20,6 +20,24 @@ class TagsContractImpl @Autowired(private val tagsService: TagsService) extends 
         throw HttpException(message = error.getMessage, httpStatus = error.getStatus)
       case Right(tags) =>
         buildTagsResponse(tags)
+    }
+  }
+
+  override def getTags(keys: util.List[String]): util.Map[String, TagsValueResponse] = {
+    tagsService.getTags(keys.asScala.toList) match {
+      case Left(error) =>
+        throw HttpException(message = error.getMessage, httpStatus = error.getStatus)
+      case Right(tags) =>
+        buildTagsResponse(tags)
+    }
+  }
+
+  override def deleteTag(key: String): lang.Boolean = {
+    tagsService.deleteTag(key) match {
+      case Left(error) =>
+        throw HttpException(message = error.getMessage, httpStatus = error.getStatus)
+      case Right(result) =>
+        result
     }
   }
   

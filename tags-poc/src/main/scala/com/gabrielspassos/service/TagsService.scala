@@ -2,13 +2,15 @@ package com.gabrielspassos.service
 
 import com.gabrielspassos.dto.{ErrorDTO, InternalErrorDTO}
 import com.gabrielspassos.entity.TagsEntity
-import com.gabrielspassos.repository.TagsRepository
+import com.gabrielspassos.repository.{TagsRepository, tagsRowMapper}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.jdbc.core.JdbcAggregateTemplate
 import org.springframework.jdbc.core.namedparam.{MapSqlParameterSource, NamedParameterJdbcTemplate}
 import org.springframework.stereotype.Service
+import org.springframework.jdbc.core.BeanPropertyRowMapper
 
 import scala.jdk.CollectionConverters.*
+import scala.jdk.OptionConverters.*
 
 @Service
 class TagsService @Autowired()(private val tagsRepository: TagsRepository,
@@ -43,22 +45,42 @@ class TagsService @Autowired()(private val tagsRepository: TagsRepository,
     }
   }
 
-  private def validateTagsKeys(keys: List[String]): Either[ErrorDTO, List[(String, String)]] = {
-    def validate(key: String): Either[ErrorDTO, (String, String)] = {
-      val splitKey = key.split(":")
-
-      if (splitKey.length != 2) {
-        return Left(InternalErrorDTO(s"Invalid tag key format: $key"))
+  def deleteTag(key: String): Either[ErrorDTO, Boolean] = {
+    for {
+      (tagName, entityId) <- validateTagKey(key)
+      result <- tagsRepository.findByNameAndEntityId(tagName, entityId).toScala match {
+        case None => Right(false)
+        case Some(tagEntity) =>
+          tagsRepository.delete(tagEntity)
+          Right(true)
       }
+    } yield result
+  }
 
-      val tagName = splitKey(0).trim
-      val entityId = splitKey(1).trim
+  def getTags(keys: List[String]): Either[ErrorDTO, List[TagsEntity]] = {
+    for {
+      tagKeys <- validateTagsKeys(keys)
+      tagsEntity <- findByTagNameAndEntityId(tagKeys)
+    } yield tagsEntity
+  }
 
-      //todo: further validations can be added here
-      Right((tagName, entityId))
-    }
-    val results = keys.map(validate)
+  private def validateTagsKeys(keys: List[String]): Either[ErrorDTO, List[(String, String)]] = {
+    val results = keys.map(validateTagKey)
     sequence(results)
+  }
+
+  private def validateTagKey(key: String): Either[ErrorDTO, (String, String)] = {
+    val splitKey = key.split(":")
+
+    if (splitKey.length != 2) {
+      return Left(InternalErrorDTO(s"Invalid tag key format: $key"))
+    }
+
+    val tagName = splitKey(0).trim
+    val entityId = splitKey(1).trim
+
+    //todo: further validations can be added here
+    Right((tagName, entityId))
   }
 
   private def sequence[A](eithers: List[Either[ErrorDTO, A]]): Either[ErrorDTO, List[A]] = {
@@ -79,11 +101,7 @@ class TagsService @Autowired()(private val tagsRepository: TagsRepository,
       params.addValue("entityId", entityId)
     }
 
-    val queryResults = namedParameterJdbcTemplate.queryForList(
-      sql.toString(),
-      params,
-      classOf[TagsEntity]
-    )
+    val queryResults = namedParameterJdbcTemplate.query(sql.toString(), params, tagsRowMapper)
     
     //todo: proper handle failures here
     Right(queryResults.asScala.toList)

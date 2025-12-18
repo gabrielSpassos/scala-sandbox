@@ -8,7 +8,6 @@ import org.springframework.http.{HttpStatus, ResponseEntity}
 import org.springframework.web.bind.annotation.*
 
 import java.util
-import scala.jdk.CollectionConverters.*
 
 @RestController
 @RequestMapping(Array("/v2/tags"))

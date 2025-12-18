@@ -19,7 +19,6 @@ import java.util.UUID
 import scala.collection.mutable.ListBuffer
 import scala.jdk.OptionConverters.*
 
-
 @SpringBootTest(
   webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
   classes = Array(classOf[Application])
@@ -61,6 +60,9 @@ class TagsV5ControllerIntegrationTest @Autowired()(private val tagsRepository: T
         "$keyC": "ON"
       }
       """.stripMargin
+    keys.addOne(("keyA", entityId1))
+    keys.addOne(("keyB", entityId1))
+    keys.addOne(("keyC", entityId2))
 
     val response = client.send(
       HttpRequest.newBuilder()
@@ -93,6 +95,174 @@ class TagsV5ControllerIntegrationTest @Autowired()(private val tagsRepository: T
     assertEquals("ON", jsonKeyC.getString("value"))
     assertNotNull(jsonKeyC.getString("createdAt"))
     assertNotNull(jsonKeyC.getString("updatedAt"))
+  }
+
+  @Test
+  def shouldUpdateTag(): Unit = {
+    val url = s"http://localhost:$randomServerPort/v5/tags"
+    val entityId = UUID.randomUUID().toString
+    val key = upsertTag("tagName", entityId, "OFF")
+
+    val request = s"""{"$key": "ON"}""".stripMargin
+    val response = client.send(
+      HttpRequest.newBuilder()
+        .uri(URI(url))
+        .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+        .header(ACCEPT, APPLICATION_JSON_VALUE)
+        .PUT(HttpRequest.BodyPublishers.ofString(request))
+        .build(),
+      HttpResponse.BodyHandlers.ofString()
+    )
+
+    assertEquals(200, response.statusCode())
+    assertNotNull(response.body())
+    val responseBody = JSONObject(response.body())
+    val jsonKey = responseBody.getJSONObject(key)
+    assertNotNull(jsonKey)
+    assertEquals("ON", jsonKey.getString("value"))
+    assertNotNull(jsonKey.getString("createdAt"))
+    assertNotNull(jsonKey.getString("updatedAt"))
+  }
+
+  @Test
+  def getTag(): Unit = {
+    val entityId = UUID.randomUUID().toString
+    val key = upsertTag("tagName", entityId, "ON")
+
+    val url = s"http://localhost:$randomServerPort/v5/tags?keys=$key"
+    val response = client.send(
+      HttpRequest.newBuilder()
+        .uri(URI(url))
+        .header(ACCEPT, APPLICATION_JSON_VALUE)
+        .GET()
+        .build(),
+      HttpResponse.BodyHandlers.ofString()
+    )
+
+    assertEquals(200, response.statusCode())
+    assertNotNull(response.body())
+    val responseBody = JSONObject(response.body())
+    val jsonKey = responseBody.getJSONObject(key)
+    assertNotNull(jsonKey)
+    assertEquals("ON", jsonKey.getString("value"))
+    assertNotNull(jsonKey.getString("createdAt"))
+    assertNotNull(jsonKey.getString("updatedAt"))
+  }
+
+  @Test
+  def getTags(): Unit = {
+    val entityId1 = UUID.randomUUID().toString
+    val key1 = upsertTag("tagName1", entityId1, "OFF")
+    val entityId2 = UUID.randomUUID().toString
+    val key2 = upsertTag("tagName2", entityId2, "ON")
+    val key3 = "nonExistentTag:someEntityId"
+
+    val url = s"http://localhost:$randomServerPort/v5/tags?keys=$key1,$key2,$key3"
+    val response = client.send(
+      HttpRequest.newBuilder()
+        .uri(URI(url))
+        .header(ACCEPT, APPLICATION_JSON_VALUE)
+        .GET()
+        .build(),
+      HttpResponse.BodyHandlers.ofString()
+    )
+
+    assertEquals(200, response.statusCode())
+    assertNotNull(response.body())
+    val responseBody = JSONObject(response.body())
+
+    val jsonKey1 = responseBody.getJSONObject(key1)
+    assertNotNull(jsonKey1)
+    assertEquals("OFF", jsonKey1.getString("value"))
+    assertNotNull(jsonKey1.getString("createdAt"))
+    assertNotNull(jsonKey1.getString("updatedAt"))
+
+    val jsonKey2 = responseBody.getJSONObject(key2)
+    assertNotNull(jsonKey2)
+    assertEquals("ON", jsonKey2.getString("value"))
+    assertNotNull(jsonKey2.getString("createdAt"))
+    assertNotNull(jsonKey2.getString("updatedAt"))
+
+    assertFalse(responseBody.has(key3))
+  }
+
+  @Test
+  def shouldNotFoundTag(): Unit = {
+    val key = "nonExistentTag:someEntityId"
+
+    val url = s"http://localhost:$randomServerPort/v5/tags?keys=$key"
+    val response = client.send(
+      HttpRequest.newBuilder()
+        .uri(URI(url))
+        .header(ACCEPT, APPLICATION_JSON_VALUE)
+        .GET()
+        .build(),
+      HttpResponse.BodyHandlers.ofString()
+    )
+
+    assertEquals(200, response.statusCode())
+    assertNotNull(response.body())
+    assertEquals("{}", response.body())
+  }
+
+  @Test
+  def shouldDeleteTag(): Unit = {
+    val key = upsertTag("tagName", UUID.randomUUID().toString, "ON")
+
+    val url = s"http://localhost:$randomServerPort/v5/tags/$key"
+    val response = client.send(
+      HttpRequest.newBuilder()
+        .uri(URI(url))
+        .header(ACCEPT, APPLICATION_JSON_VALUE)
+        .DELETE()
+        .build(),
+      HttpResponse.BodyHandlers.ofString()
+    )
+
+    assertEquals(204, response.statusCode())
+  }
+
+  @Test
+  def shouldDeleteNonExistingTag(): Unit = {
+    val key = "nonExistentTag:someEntityId"
+
+    val url = s"http://localhost:$randomServerPort/v5/tags/$key"
+    val response = client.send(
+      HttpRequest.newBuilder()
+        .uri(URI(url))
+        .header(ACCEPT, APPLICATION_JSON_VALUE)
+        .DELETE()
+        .build(),
+      HttpResponse.BodyHandlers.ofString()
+    )
+
+    assertEquals(204, response.statusCode())
+  }
+
+  private def upsertTag(tagName: String, entityId: String, value: String): String = {
+    val request = s"""{"$tagName:$entityId": "$value"}""".stripMargin
+    keys.addOne((tagName, entityId))
+
+    val url = s"http://localhost:$randomServerPort/v5/tags"
+    val response = client.send(
+      HttpRequest.newBuilder()
+        .uri(URI(url))
+        .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+        .header(ACCEPT, APPLICATION_JSON_VALUE)
+        .PUT(HttpRequest.BodyPublishers.ofString(request))
+        .build(),
+      HttpResponse.BodyHandlers.ofString()
+    )
+
+    assertEquals(200, response.statusCode())
+    assertNotNull(response.body())
+    val responseBody = JSONObject(response.body())
+    val tagResponse = responseBody.getJSONObject(s"$tagName:$entityId")
+    assertNotNull(tagResponse)
+    assertEquals(value, tagResponse.getString("value"))
+    assertNotNull(tagResponse.getString("createdAt"))
+    assertNotNull(tagResponse.getString("updatedAt"))
+    s"$tagName:$entityId"
   }
 
 }
