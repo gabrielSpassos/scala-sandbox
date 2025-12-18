@@ -12,13 +12,12 @@ val testContainersVersion = "1.21.3"
 
 libraryDependencies ++= Seq(
   "org.postgresql" % "postgresql" % "42.7.8",
-  "org.liquibase" % "liquibase-core" % "5.0.1",
   "com.google.code.gson" % "gson" % "2.13.2",
   "org.springframework.boot" % "spring-boot-starter-web" % springBootVersion exclude("com.fasterxml.jackson.core", "jackson-databind"),
   "org.springframework.boot" % "spring-boot-starter-jdbc" % springBootVersion exclude("com.fasterxml.jackson.core", "jackson-databind"),
   "org.springframework.boot" % "spring-boot-starter-data-jdbc" % springBootVersion exclude("com.fasterxml.jackson.core", "jackson-databind"),
   "org.springframework.boot" % "spring-boot-starter-test" % springBootVersion % Test exclude("com.fasterxml.jackson.core", "jackson-databind"),
-  "org.springframework.boot" % "spring-boot-testcontainers" % springBootVersion % Test exclude("com.fasterxml.jackson.core", "jackson-databind"),
+  "org.testcontainers" % "testcontainers" % "1.21.4" % Test,
   "org.testcontainers" % "postgresql" % "1.21.4" % Test,
   "org.testcontainers" % "junit-jupiter" % "1.21.4" % Test,
   "com.github.sbt.junit" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % Test,

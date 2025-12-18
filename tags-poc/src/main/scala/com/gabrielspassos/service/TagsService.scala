@@ -2,12 +2,12 @@ package com.gabrielspassos.service
 
 import com.gabrielspassos.dto.{ErrorDTO, InternalErrorDTO}
 import com.gabrielspassos.entity.TagsEntity
-import com.gabrielspassos.repository.{TagsRepository, tagsRowMapper}
+import com.gabrielspassos.repository.TagsRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.jdbc.core.JdbcAggregateTemplate
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
+import org.springframework.jdbc.core.namedparam.{MapSqlParameterSource, NamedParameterJdbcTemplate}
 import org.springframework.stereotype.Service
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
+
 import scala.jdk.CollectionConverters.*
 
 @Service
@@ -38,6 +38,7 @@ class TagsService @Autowired()(private val tagsRepository: TagsRepository,
       } yield result
     } catch {
       case e: Exception =>
+        e.printStackTrace()
         Left(InternalErrorDTO(s"Failed to upsert tags"))
     }
   }
@@ -73,7 +74,7 @@ class TagsService @Autowired()(private val tagsRepository: TagsRepository,
     val params = MapSqlParameterSource()
 
     tagKeys.foreach { (tagName, entityId) =>
-      sql.append(" OR (tag_name = :tagName AND entity_id = :entityId)")
+      sql.append(" OR (name = :tagName AND entity_id = :entityId)")
       params.addValue("tagName", tagName)
       params.addValue("entityId", entityId)
     }

@@ -16,15 +16,14 @@ object BaseIntegrationTest {
   postgresContainer.withPassword("test")
   postgresContainer.withDatabaseName("it-test-db")
   postgresContainer.withExposedPorts(5432)
-
-  postgresContainer.start()
+  postgresContainer.withInitScript("schema.sql")
 
   @DynamicPropertySource
   def configureProperties(registry: DynamicPropertyRegistry): Unit = {
+    postgresContainer.start()
+
     registry.add("spring.datasource.url", () => postgresContainer.getJdbcUrl)
     registry.add("spring.datasource.username", () => postgresContainer.getUsername)
     registry.add("spring.datasource.password", () => postgresContainer.getPassword)
-    registry.add("spring.liquibase.enabled", () => "true")
-    registry.add("liquibase.enabled", () => "true")
   }
 }

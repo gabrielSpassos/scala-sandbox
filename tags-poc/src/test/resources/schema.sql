@@ -1,6 +1,3 @@
--- liquibase formatted sql
-
--- changeset gpassos:0001-create-tables
 create table if not exists tags_v1 (
     id           text not null primary key,
     enabled      boolean not null,
@@ -32,7 +29,4 @@ create table if not exists tags (
     updated_at   timestamp not null default now()
 );
 
---rollback drop table tags_v1;
---rollback drop table tags_v2;
---rollback drop table tags_v3;
---rollback drop table tags;
+create unique index if not exists uq_tags_name_entity_id on tags (name, entity_id);
