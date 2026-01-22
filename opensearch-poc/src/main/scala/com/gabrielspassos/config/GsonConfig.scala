@@ -3,7 +3,14 @@ package com.gabrielspassos.config
 import com.gabrielspassos.gson.{ListAdapter, LocalDateAdapter}
 import com.google.gson.{Gson, GsonBuilder}
 import org.springframework.context.annotation.{Bean, Configuration}
+import com.google.gson.Gson
+import jakarta.json.spi.JsonProvider
+import jakarta.json.stream.{JsonGenerator, JsonParser}
+import org.opensearch.client.json.{JsonpDeserializer, JsonpMapper, JsonpMapperBase}
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Component
 
+import java.io.{Reader, Writer}
 import java.time.LocalDate
 
 @Configuration
@@ -16,4 +23,26 @@ class GsonConfig {
       .registerTypeAdapter(classOf[LocalDate], new LocalDateAdapter())
       .create()
   }
+}
+
+@Component
+class GsonJsonpMapper @Autowired()(gson: Gson) extends JsonpMapperBase {
+
+  private val provider = JsonProvider.provider()
+
+  override def serialize[T](value: T, generator: JsonGenerator): Unit = {
+    val json = gson.toJson(value)
+    generator.write(json)
+  }
+
+  override def deserialize[T](parser: JsonParser, clazz: Class[T]): T = {
+    val structure = parser.getValue
+    gson.fromJson(structure.toString, clazz)
+  }
+
+  override def getDefaultDeserializer[T](clazz: Class[T]): JsonpDeserializer[T] = {
+    JsonpDeserializer.of(clazz)
+  }
+
+  override def jsonProvider(): JsonProvider = provider
 }

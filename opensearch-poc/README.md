@@ -6,6 +6,11 @@
 - Spring Boot 4.0.1
 - SBT 1.11.7
 
+## Links
+
+* OpenSearch: curl http://localhost:9200
+* OpenSearch Dashboard: http://localhost:5601
+
 ## Tests
 
 ```bash

@@ -1,6 +1,5 @@
 package com.gabrielspassos.gson
 
-import com.gabrielspassos.contracts.v1.request.TagsRequest
 import com.google.gson.reflect.TypeToken
 import com.google.gson.{Gson, GsonBuilder}
 import org.junit.jupiter.api.Assertions.*

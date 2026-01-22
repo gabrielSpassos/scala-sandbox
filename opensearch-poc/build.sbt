@@ -13,9 +13,9 @@ val testContainersVersion = "1.21.3"
 libraryDependencies ++= Seq(
   "com.google.code.gson" % "gson" % "2.13.2",
   "org.springframework.boot" % "spring-boot-starter-web" % springBootVersion exclude("com.fasterxml.jackson.core", "jackson-databind"),
-  "org.springframework.boot" % "spring-boot-starter-jdbc" % springBootVersion exclude("com.fasterxml.jackson.core", "jackson-databind"),
-  "org.springframework.boot" % "spring-boot-starter-data-jdbc" % springBootVersion exclude("com.fasterxml.jackson.core", "jackson-databind"),
   "org.springframework.boot" % "spring-boot-starter-test" % springBootVersion % Test exclude("com.fasterxml.jackson.core", "jackson-databind"),
+  "org.opensearch.client" % "opensearch-rest-client" % "3.4.0",
+  "org.opensearch.client" % "opensearch-java" % "3.5.0",
   "com.github.sbt.junit" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % Test,
   "org.mockito" % "mockito-core" % "5.21.0" % Test,
   "net.bytebuddy" % "byte-buddy" % "1.18.2" % Test,
