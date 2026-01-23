@@ -24,7 +24,7 @@ class GsonConfig {
 }
 
 @Component
-class GsonJsonpMapper @Autowired()(gson: Gson) extends JsonpMapperBase {
+class GsonJsonpMapper @Autowired()(private val gson: Gson) extends JsonpMapperBase {
 
   private val provider = JsonProvider.provider()
 

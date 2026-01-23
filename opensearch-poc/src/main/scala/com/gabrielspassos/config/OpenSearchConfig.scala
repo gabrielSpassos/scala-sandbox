@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.{Bean, Configuration}
 
 @Configuration
-class OpenSearchConfig @Autowired()(gsonJsonpMapper: GsonJsonpMapper) {
+class OpenSearchConfig @Autowired()(private val gsonJsonpMapper: GsonJsonpMapper) {
 
   @Bean
   def openSearchClient(): OpenSearchClient = {
