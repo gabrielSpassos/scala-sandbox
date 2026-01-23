@@ -1,5 +1,6 @@
 package com.gabrielspassos.gson
 
+import com.gabrielspassos.dto.DocumentDTO
 import com.google.gson.reflect.TypeToken
 import com.google.gson.{Gson, GsonBuilder}
 import org.junit.jupiter.api.Assertions.*
@@ -12,51 +13,60 @@ class GsonTest {
   @Test
   def shouldReadJsonSuccessfully(): Unit = {
     // given
-    val json = """{"isEnabled":true}"""
+    val json = """{"id":"1","title":"foo","content":"bar"}"""
     val gson = createGson()
 
     // when
-    val request = gson.fromJson(json, classOf[TagsRequest])
+    val parsed = gson.fromJson(json, classOf[DocumentDTO])
 
     // then
-    assertTrue(request.getIsEnabled)
+    assertNotNull(parsed)
+    assertEquals("1", parsed.id)
+    assertEquals("foo", parsed.title)
+    assertEquals("bar", parsed.content)
   }
 
   @Test
   def shouldReadJsonSuccessfullyWithNullValue(): Unit = {
     // given
-    val json = """{"isEnabled":null}"""
+    val json = """{"id":"1","title":"foo","content":null}"""
     val gson = createGson()
 
     // when
-    val request = gson.fromJson(json, classOf[TagsRequest])
+    val parsed = gson.fromJson(json, classOf[DocumentDTO])
 
     // then
-    assertNull(request.getIsEnabled)
+    assertNotNull(parsed)
+    assertEquals("1", parsed.id)
+    assertEquals("foo", parsed.title)
+    assertNull(parsed.content)
   }
 
   @Test
   def shouldReadJsonSuccessfullyWithImplicitNullValue(): Unit = {
     // given
-    val json = """{}"""
+    val json = """{"id":"1","content":"bar"}"""
     val gson = createGson()
 
     // when
-    val request = gson.fromJson(json, classOf[TagsRequest])
+    val parsed = gson.fromJson(json, classOf[DocumentDTO])
 
     // then
-    assertNull(request.getIsEnabled)
+    assertNotNull(parsed)
+    assertEquals("1", parsed.id)
+    assertNull(parsed.title)
+    assertEquals("bar", parsed.content)
   }
 
   @Test
   def shouldParseToJsonSuccessfully(): Unit = {
     // given
-    val request = TagsRequest(false)
-    val expectedJson = """{"isEnabled":false}"""
+    val documentDTO = DocumentDTO("1", "foo", "bar")
+    val expectedJson = """{"id":"1","title":"foo","content":"bar"}"""
     val gson = createGson()
 
     // when
-    val json = gson.toJson(request)
+    val json = gson.toJson(documentDTO)
 
     // then
     assertEquals(expectedJson, json)
@@ -65,12 +75,12 @@ class GsonTest {
   @Test
   def shouldParseToJsonSuccessfullyWithNullValue(): Unit = {
     // given
-    val request = TagsRequest(null)
-    val expectedJson = """{}"""
+    val documentDTO = DocumentDTO("1", "foo", null)
+    val expectedJson = """{"id":"1","title":"foo"}"""
     val gson = createGson()
 
     // when
-    val json = gson.toJson(request)
+    val json = gson.toJson(documentDTO)
 
     // then
     assertEquals(expectedJson, json)
@@ -78,16 +88,16 @@ class GsonTest {
 
   @Test
   def shouldParseList(): Unit = {
-    val json = """[{"isEnabled":true},{"isEnabled":false}]"""
+    val json = """[{"id":"1","title":"foo"},{"id":"2","title":"tar"}]"""
     val gson = createGson()
 
-    val collectionType = new TypeToken[List[TagsRequest]]() {}.getType
-    val requests: List[TagsRequest] = gson.fromJson(json, collectionType)
+    val collectionType = new TypeToken[List[DocumentDTO]]() {}.getType
+    val dtos: List[DocumentDTO] = gson.fromJson(json, collectionType)
 
-    assertNotNull(requests)
-    assertEquals(2, requests.length)
-    assertTrue(requests.head.getIsEnabled)
-    assertFalse(requests.last.getIsEnabled)
+    assertNotNull(dtos)
+    assertEquals(2, dtos.length)
+    assertEquals("1", dtos.head.id)
+    assertEquals("2", dtos.last.id)
   }
 
   private def createGson(): Gson = {

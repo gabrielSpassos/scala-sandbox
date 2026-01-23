@@ -2,15 +2,13 @@ package com.gabrielspassos.config
 
 import com.gabrielspassos.gson.{ListAdapter, LocalDateAdapter}
 import com.google.gson.{Gson, GsonBuilder}
-import org.springframework.context.annotation.{Bean, Configuration}
-import com.google.gson.Gson
 import jakarta.json.spi.JsonProvider
 import jakarta.json.stream.{JsonGenerator, JsonParser}
-import org.opensearch.client.json.{JsonpDeserializer, JsonpMapper, JsonpMapperBase}
+import org.opensearch.client.json.{JsonpDeserializer, JsonpMapperBase}
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.annotation.{Bean, Configuration}
 import org.springframework.stereotype.Component
 
-import java.io.{Reader, Writer}
 import java.time.LocalDate
 
 @Configuration
