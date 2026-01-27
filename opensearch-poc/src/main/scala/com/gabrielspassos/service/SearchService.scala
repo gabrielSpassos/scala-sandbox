@@ -5,8 +5,6 @@ import org.opensearch.client.opensearch.OpenSearchClient
 import org.opensearch.client.opensearch._types.query_dsl.MatchQuery
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import org.opensearch.client.opensearch._types.FieldValue
-import org.opensearch.client.opensearch._types.query_dsl.MatchQuery
 
 import scala.jdk.CollectionConverters.*
 
