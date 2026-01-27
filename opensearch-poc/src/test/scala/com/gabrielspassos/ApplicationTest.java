@@ -10,5 +10,5 @@ class ApplicationTest {
     void shouldStartService() {
 
     }
-    
+
 }
