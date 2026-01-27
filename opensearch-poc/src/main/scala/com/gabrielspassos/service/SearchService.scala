@@ -13,19 +13,21 @@ class SearchService @Autowired()(private val openSearchClient: OpenSearchClient)
 
   private val index = "documents"
 
-  def createIndex(): Unit = {
-    openSearchClient.indices().create(_.index(index))
+  def createIndex(): String = {
+    val response = openSearchClient.indices().create(_.index(index))
+    response.index()
   }
 
-  def save(doc: DocumentDTO): Unit = {
-    openSearchClient.index[DocumentDTO](
+  def save(doc: DocumentDTO): String = {
+    val saved = openSearchClient.index[DocumentDTO](
       _.index(index)
         .id(doc.id)
         .document(doc)
     )
+    saved.index()
   }
 
-  def search(text: String): List[DocumentDTO] =
+  def search(text: String): List[DocumentDTO] = {
     val response = openSearchClient.search[DocumentDTO](
       _.index(index).query(q =>
         q.`match`((m: MatchQuery.Builder) =>
@@ -39,6 +41,6 @@ class SearchService @Autowired()(private val openSearchClient: OpenSearchClient)
     response.hits().hits().asScala
       .flatMap(hit => Option(hit.source()))
       .toList
-
+  }
 
 }
