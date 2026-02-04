@@ -4,7 +4,6 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.{Column, Table}
 
 import java.time.Instant
-import java.util.UUID
 import scala.annotation.meta.field
 
 @Table("items")
