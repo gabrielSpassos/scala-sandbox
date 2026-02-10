@@ -10,6 +10,28 @@
 
 ## Output
 
+* Upsert depends on SQL constraint
+
+```sql
+CREATE TABLE IF NOT EXISTS items(
+  id            TEXT PRIMARY KEY,
+  external_id   TEXT NOT NULL UNIQUE,
+  value         TEXT NOT NULL,
+  updated_at    TIMESTAMP NOT NULL
+);
+```
+
+* Scala code upsert uses sql
+```sql
+INSERT INTO items(external_id, value, updated_at)
+VALUES (:externalId, :value, :ts)
+ON CONFLICT(external_id)
+DO UPDATE
+SET value = EXCLUDED.value,
+    updated_at = EXCLUDED.updated_at
+WHERE items.updated_at <= EXCLUDED.updated_at
+```
+
 ## Tests
 ```
 

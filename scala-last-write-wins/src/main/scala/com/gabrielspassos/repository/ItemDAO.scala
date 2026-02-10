@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Repository
 
 import java.sql.Timestamp
+import java.util.UUID
 import scala.jdk.CollectionConverters.*
 
 @Repository
@@ -12,9 +13,9 @@ class ItemDAO (jdbc: NamedParameterJdbcTemplate) extends ItemRepository {
 
   override def upsert(item: ItemEntity): Boolean = {
     val sql = """
-      INSERT INTO items(id, value, updated_at)
-      VALUES (:id, :value, :ts)
-      ON CONFLICT(id)
+      INSERT INTO items(external_id, value, updated_at)
+      VALUES (:externalId, :value, :ts)
+      ON CONFLICT(external_id)
       DO UPDATE
         SET value = EXCLUDED.value,
             updated_at = EXCLUDED.updated_at
@@ -22,7 +23,7 @@ class ItemDAO (jdbc: NamedParameterJdbcTemplate) extends ItemRepository {
       """
 
       val params = Map(
-        "id" -> item.id,
+        "externalId" -> item.externalId,
         "value" -> item.value,
         "ts" -> Timestamp.from(item.updatedAt)
       ).asJava
@@ -30,17 +31,18 @@ class ItemDAO (jdbc: NamedParameterJdbcTemplate) extends ItemRepository {
       jdbc.update(sql, params) > 0
   }
 
-  override def findById(id: String): Option[ItemEntity] = {
-    val sql = "SELECT id,value,updated_at FROM items WHERE id=:id"
+  override def findByExternalId(externalId: String): Option[ItemEntity] = {
+    val sql = "SELECT id,external_id,value,updated_at FROM items WHERE external_id=:externalId"
 
-    val params = Map("id" -> id).asJava
+    val params = Map("externalId" -> externalId).asJava
 
     val list = jdbc.query(
         sql,
         params,
         (rs, _) =>
           ItemEntity(
-            rs.getString("id"),
+            UUID.fromString(rs.getString("id")),
+            rs.getString("external_id"),
             rs.getString("value"),
             rs.getTimestamp("updated_at").toInstant
           )

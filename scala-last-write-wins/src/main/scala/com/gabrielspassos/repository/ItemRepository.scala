@@ -6,6 +6,6 @@ trait ItemRepository {
 
   def upsert(item: ItemEntity): Boolean
 
-  def findById(id: String): Option[ItemEntity]
+  def findByExternalId(externalId: String): Option[ItemEntity]
   
 }

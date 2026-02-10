@@ -28,18 +28,18 @@ class ItemServiceIntegrationTest @Autowired()(
   
   @Test
   def shouldFindCardsByInstitutionNameSuccessfully(): Unit = {
-    val id = UUID.randomUUID().toString
+    val externalId = UUID.randomUUID().toString
     val updatedAt = Instant.now()
 
-    val older = ItemEntity(id, "OLD", updatedAt)
-    val newer = ItemEntity(id, "NEW", updatedAt.plusSeconds(5))
+    val older = ItemEntity(id = null, externalId = externalId, value = "OLD", updatedAt = updatedAt)
+    val newer = ItemEntity(id = null, externalId = externalId, value = "NEW", updatedAt = updatedAt.plusSeconds(5))
 
     val f1 = Future(itemService.upsert(older))
     val f2 = Future(itemService.upsert(newer))
 
     Await.result(Future.sequence(List(f1, f2)), 5.seconds)
 
-    val result = itemService.findById(id).get
+    val result = itemService.findByExternalId(externalId).get
 
     assert(result.value == "NEW")
   }

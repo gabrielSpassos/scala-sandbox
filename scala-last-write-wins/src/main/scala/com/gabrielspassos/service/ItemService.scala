@@ -11,7 +11,7 @@ class ItemService (repo: ItemRepository) {
     repo.upsert(item)
   }
   
-  def findById(id: String): Option[ItemEntity] = {
-    repo.findById(id)
+  def findByExternalId(externalId: String): Option[ItemEntity] = {
+    repo.findByExternalId(externalId)
   }
 }
