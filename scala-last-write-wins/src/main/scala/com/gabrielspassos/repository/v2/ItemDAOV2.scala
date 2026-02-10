@@ -10,10 +10,6 @@ class ItemDAOV2(repo: ItemRepositoryV2) {
   def save(itemEntity: ItemEntity): ItemEntity = {
     val result = repo.upsert(itemEntity)
 
-//    if (!result) {
-//      throw new IllegalStateException("fail to save item")
-//    }
-
     findByExternalId(itemEntity.externalId).get
   }
 
