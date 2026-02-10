@@ -34,5 +34,6 @@ WHERE items.updated_at <= EXCLUDED.updated_at
 
 ## Tests
 ```
-
+[info] Passed: Total 2, Failed 0, Errors 0, Passed 2
+[success] Total time: 17 s, completed 10 de fev. de 2026 09:11:38
 ```
