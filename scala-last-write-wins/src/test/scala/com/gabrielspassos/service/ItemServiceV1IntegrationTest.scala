@@ -20,14 +20,12 @@ import scala.concurrent.{Await, ExecutionContext, Future}
 @EnableAutoConfiguration
 @ComponentScan(Array("com.*"))
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class ItemServiceIntegrationTest @Autowired()(
-  private val itemService: ItemService,
-) extends BaseIntegrationTest {
+class ItemServiceV1IntegrationTest @Autowired()(private val itemService: ItemServiceV1) extends BaseIntegrationTest {
 
   given ExecutionContext = ExecutionContext.global
   
   @Test
-  def shouldFindCardsByInstitutionNameSuccessfully(): Unit = {
+  def shouldUpsertSuccessfully(): Unit = {
     val externalId = UUID.randomUUID().toString
     val updatedAt = Instant.now()
 

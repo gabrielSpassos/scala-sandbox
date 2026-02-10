@@ -1,8 +1,8 @@
-package com.gabrielspassos.repository
+package com.gabrielspassos.repository.v1
 
 import com.gabrielspassos.entity.ItemEntity
 
-trait ItemRepository {
+trait ItemRepositoryV1 {
 
   def upsert(item: ItemEntity): Boolean
 

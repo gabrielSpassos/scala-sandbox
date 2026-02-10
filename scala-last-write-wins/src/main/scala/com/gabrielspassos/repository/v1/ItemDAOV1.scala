@@ -1,6 +1,7 @@
-package com.gabrielspassos.repository
+package com.gabrielspassos.repository.v1
 
 import com.gabrielspassos.entity.ItemEntity
+import com.gabrielspassos.repository.v1.ItemRepositoryV1
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Repository
 
@@ -9,7 +10,7 @@ import java.util.UUID
 import scala.jdk.CollectionConverters.*
 
 @Repository
-class ItemDAO (jdbc: NamedParameterJdbcTemplate) extends ItemRepository {
+class ItemDAOV1(jdbc: NamedParameterJdbcTemplate) extends ItemRepositoryV1 {
 
   override def upsert(item: ItemEntity): Boolean = {
     val sql = """
@@ -22,13 +23,13 @@ class ItemDAO (jdbc: NamedParameterJdbcTemplate) extends ItemRepository {
       WHERE items.updated_at <= EXCLUDED.updated_at
       """
 
-      val params = Map(
-        "externalId" -> item.externalId,
-        "value" -> item.value,
-        "ts" -> Timestamp.from(item.updatedAt)
-      ).asJava
+    val params = Map(
+      "externalId" -> item.externalId,
+      "value" -> item.value,
+      "ts" -> Timestamp.from(item.updatedAt)
+    ).asJava
 
-      jdbc.update(sql, params) > 0
+    jdbc.update(sql, params) > 0
   }
 
   override def findByExternalId(externalId: String): Option[ItemEntity] = {
