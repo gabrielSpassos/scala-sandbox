@@ -5,7 +5,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Repository
 
 import java.sql.Timestamp
-import java.util.Optional
 import scala.jdk.CollectionConverters.*
 
 @Repository

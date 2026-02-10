@@ -10,9 +10,8 @@ import org.springframework.context.annotation.ComponentScan
 
 import java.time.Instant
 import java.util.UUID
-import scala.concurrent.{Await, Future}
 import scala.concurrent.duration.*
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{Await, ExecutionContext, Future}
 
 @SpringBootTest(
   webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
