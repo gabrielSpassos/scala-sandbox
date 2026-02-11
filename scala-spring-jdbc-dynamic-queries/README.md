@@ -1,9 +1,9 @@
 # Scala - Spring Boot - JDBC - Dynamic Query - POC
 
 ## Stack
-- Scala 3.7.3
+- Scala 3.8.1
 - Java 25
-- Spring Boot 3.5.6
+- Spring Boot 4.0.2
 - SBT 1.11.7
 - GSON
 - POSTGRES
@@ -13,6 +13,6 @@
 
 ## Tests
 ```
-[info] Passed: Total 28, Failed 0, Errors 0, Passed 28
-[success] Total time: 53 s, completed 7 de jul. de 2025 19:33:22
+[info] Passed: Total 29, Failed 0, Errors 0, Passed 29
+[success] Total time: 16 s, completed 11 de fev. de 2026 08:26:37
 ```

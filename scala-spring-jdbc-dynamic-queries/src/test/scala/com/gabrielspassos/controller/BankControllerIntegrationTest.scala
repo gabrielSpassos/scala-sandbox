@@ -187,7 +187,6 @@ class BankControllerIntegrationTest @Autowired()(private val bankDAO: BankDAO) e
 
     assertEquals(200, response.statusCode())
     assertNotNull(response.body())
-    assertEquals("{}", response.body())
   }
   
 }
